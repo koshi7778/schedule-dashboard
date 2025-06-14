@@ -1408,8 +1408,7 @@
                 countDiv.style.fontSize = '11px';
                 countDiv.style.fontWeight = 'bold';
                 countDiv.style.color = '#2d3748';
-                countDiv.style.cursor = 'pointer';
-                countDiv.title = 'ダブルクリックで手動タスクを追加';
+                countDiv.title = 'ダブルクリックで手動タスクを追加 | チケット詳細はツールチップで確認';
                 cell.appendChild(countDiv);
             }
         }
@@ -1434,21 +1433,11 @@
                 showCellDropdown(cell, worker, dateStr);
             });
 
-            // シングルクリックでRedmineリンクに遷移（チケットタスクがあり、手動タスクがない場合のみ）
+            // シングルクリックは無効化（Redmineリンクには飛ばない）
             cell.addEventListener('click', (e) => {
                 e.stopPropagation();
-                
-                const ticketTasks = tasks.filter(task => !task.isManualEntry);
-                const manualTasks = tasks.filter(task => task.isManualEntry);
-                
-                // 手動タスクがない場合のみチケットリンクに遷移
-                if (ticketTasks.length > 0 && manualTasks.length === 0) {
-                    const ticketTask = ticketTasks.find(task => task.redmineUrl);
-                    if (ticketTask) {
-                        window.open(ticketTask.redmineUrl, '_blank');
-                    }
-                }
-                // 手動タスクがある場合は何もしない（ダブルクリックでプルダウンを促す）
+                e.preventDefault();
+                // 何もしない - ダブルクリックでのみプルダウンを表示
             });
 
             // 手動で追加されたタスクの場合はドラッグ可能にする
