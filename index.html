@@ -563,8 +563,8 @@
         let draggedTask = null;
         let pendingChanges = [];
 
-        // モックデータ - 実際にはRedmine APIから取得
-        const mockTasks = {
+        // モックデータ - CSVから読み込まれるまでの仮データ
+        let mockTasks = {
             '2025-06': [
                 {
                     id: 'RDM-001',
@@ -576,39 +576,6 @@
                     estimatedHours: 3,
                     description: 'ユーザー管理画面の機能改修作業',
                     redmineUrl: 'https://redmine.example.com/issues/001'
-                },
-                {
-                    id: 'RDM-002',
-                    title: 'データベース設計',
-                    worker: '村田 祐馬',
-                    date: '2025-06-05',
-                    status: 'assigned',
-                    type: 'planned',
-                    estimatedHours: 8,
-                    description: '新機能用のデータベース設計作業',
-                    redmineUrl: 'https://redmine.example.com/issues/002'
-                },
-                {
-                    id: 'RDM-003',
-                    title: 'API開発',
-                    worker: '紫藤 正之',
-                    date: '2025-06-03',
-                    status: 'completed',
-                    type: 'ad-hoc',
-                    estimatedHours: 2,
-                    description: 'REST API エンドポイントの開発',
-                    redmineUrl: 'https://redmine.example.com/issues/003'
-                },
-                {
-                    id: 'RDM-004',
-                    title: 'テスト実施',
-                    worker: '塚本 祐太',
-                    date: '2025-06-07',
-                    status: 'assigned',
-                    type: 'planned',
-                    estimatedHours: 8,
-                    description: 'システム全体のテスト実施',
-                    redmineUrl: 'https://redmine.example.com/issues/004'
                 },
                 {
                     id: 'RDM-005',
@@ -631,28 +598,6 @@
                     estimatedHours: 4,
                     description: 'ユーザーインターフェースの改善作業',
                     redmineUrl: 'https://redmine.example.com/issues/006'
-                },
-                {
-                    id: 'RDM-007',
-                    title: '新機能開発',
-                    worker: '',
-                    date: '',
-                    status: 'unassigned',
-                    type: 'planned',
-                    estimatedHours: 8,
-                    description: '新しい機能の開発作業',
-                    redmineUrl: 'https://redmine.example.com/issues/007'
-                },
-                {
-                    id: 'RDM-008',
-                    title: 'ドキュメント作成',
-                    worker: '',
-                    date: '',
-                    status: 'unassigned',
-                    type: 'ad-hoc',
-                    estimatedHours: 3,
-                    description: 'システムドキュメントの作成',
-                    redmineUrl: 'https://redmine.example.com/issues/008'
                 }
             ]
         };
@@ -666,14 +611,237 @@
             '木暮 誉貴'
         ];
 
+        // CSV読み込み関連の関数
+        function getCSVFileNames() {
+            const today = new Date();
+            const possibleFileNames = [];
+            
+            // 今日から過去7日分のファイル名を生成
+            for (let i = 0; i <= 7; i++) {
+                const targetDate = new Date(today);
+                targetDate.setDate(today.getDate() - i);
+                
+                const year = targetDate.getFullYear();
+                const month = String(targetDate.getMonth() + 1).padStart(2, '0');
+                const day = String(targetDate.getDate()).padStart(2, '0');
+                
+                possibleFileNames.push(`redmine_issues_${year}_${month}_${day}.csv`);
+            }
+            
+            // フォールバック用の固定ファイル名も追加
+            possibleFileNames.push('redmine_issues_latest.csv');
+            
+            return possibleFileNames;
+        }
+
+        async function loadDataFromCSV() {
+            const possibleFileNames = getCSVFileNames();
+            
+            showNotification('CSVファイルを検索中...', 'info');
+            
+            for (const fileName of possibleFileNames) {
+                try {
+                    console.log(`試行中のファイル名: ${fileName}`);
+                    
+                    const csvUrl = `https://raw.githubusercontent.com/koshi7778/schedule-dashboard/main/${fileName}`;
+                    
+                    const response = await fetch(csvUrl);
+                    if (response.ok) {
+                        console.log(`成功: ${fileName} が見つかりました`);
+                        
+                        const csvText = await response.text();
+                        
+                        const result = Papa.parse(csvText, {
+                            header: true,
+                            skipEmptyLines: true,
+                            encoding: 'UTF-8'
+                        });
+                        
+                        if (result.errors.length > 0) {
+                            console.error('CSV解析エラー:', result.errors);
+                        }
+                        
+                        const tickets = transformCSVToTickets(result.data);
+                        const monthlyData = groupTicketsByMonth(tickets);
+                        
+                        // 既存のmockTasksを置き換え
+                        mockTasks = monthlyData;
+                        
+                        generateCalendar();
+                        
+                        showNotification(`${fileName} から ${tickets.length}件のチケットを読み込みました`, 'success');
+                        return;
+                        
+                    } else {
+                        console.log(`${fileName} が見つかりません (${response.status})`);
+                    }
+                    
+                } catch (error) {
+                    console.log(`${fileName} の読み込みエラー:`, error);
+                }
+            }
+            
+            showNotification('CSVファイルが見つかりません。モックデータで表示します。', 'error');
+            console.error('利用可能なファイル名:', possibleFileNames);
+        }
+
+        function transformCSVToTickets(csvData) {
+            return csvData.map(row => {
+                const assignedWorker = mapWorkerName(row['TSET作業者']);
+                const workDate = getFirstValidWorkDate(row);
+                const status = determineStatus(row, assignedWorker, workDate);
+                const type = determineWorkType(row);
+                
+                return {
+                    id: `RDM-${row['Issue ID']}`,
+                    title: row['Subject'] || 'タイトルなし',
+                    worker: assignedWorker,
+                    date: workDate,
+                    status: status,
+                    type: type,
+                    estimatedHours: calculateEstimatedHours(row),
+                    description: `顧客: ${row['お客様名'] || 'なし'}\nリモート: ${row['リモート有無'] || 'なし'}`,
+                    redmineUrl: row['URL'] || '',
+                    customerName: row['お客様名'] || '',
+                    remoteFlag: row['リモート有無'] || '',
+                    tsetStatus: row['TSETステータス'] || '',
+                    assignStatus: row['TSETアサイン状態'] || '',
+                    createdDate: row['作成日'] || '',
+                    assignHopeDate: row['アサイン希望日'] || '',
+                    startDate: row['作業開始可能日'] || '',
+                    dueDate: row['作業完了期限日'] || ''
+                };
+            }).filter(ticket => ticket.id !== 'RDM-' && ticket.title !== 'タイトルなし');
+        }
+
+        function mapWorkerName(csvWorkerName) {
+            if (!csvWorkerName || csvWorkerName === 'null' || csvWorkerName.trim() === '') {
+                return '';
+            }
+            
+            const matchedWorker = workers.find(worker => 
+                worker.includes(csvWorkerName) || 
+                csvWorkerName.includes(worker.replace(' ', '')) ||
+                worker.replace(' ', '').includes(csvWorkerName.replace(' ', ''))
+            );
+            
+            return matchedWorker || csvWorkerName;
+        }
+
+        function getFirstValidWorkDate(row) {
+            for (let i = 1; i <= 5; i++) {
+                const dateField = `作業日${['①', '②', '③', '④', '⑤'][i-1]}`;
+                const date = row[dateField];
+                if (date && date.trim() !== '' && date !== 'null') {
+                    return formatDate(date);
+                }
+            }
+            
+            return formatDate(row['アサイン希望日']) || 
+                   formatDate(row['作業開始可能日']) || 
+                   '';
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr || dateStr.trim() === '' || dateStr === 'null') {
+                return '';
+            }
+            
+            try {
+                const date = new Date(dateStr);
+                if (isNaN(date.getTime())) {
+                    return '';
+                }
+                return date.toISOString().split('T')[0];
+            } catch (error) {
+                return '';
+            }
+        }
+
+        function determineStatus(row, assignedWorker, workDate) {
+            const tsetStatus = row['TSETステータス'] || '';
+            const assignStatus = row['TSETアサイン状態'] || '';
+            
+            if (tsetStatus.includes('完了') || tsetStatus.includes('終了') || tsetStatus.includes('Closed')) {
+                return 'completed';
+            }
+            
+            if (assignedWorker && workDate) {
+                return 'assigned';
+            }
+            
+            return 'unassigned';
+        }
+
+        function determineWorkType(row) {
+            let workDayCount = 0;
+            for (let i = 1; i <= 5; i++) {
+                const dateField = `作業日${['①', '②', '③', '④', '⑤'][i-1]}`;
+                if (row[dateField] && row[dateField].trim() !== '' && row[dateField] !== 'null') {
+                    workDayCount++;
+                }
+            }
+            
+            if (workDayCount > 1 || 
+                (row['Subject'] && (
+                    row['Subject'].includes('環境構築') ||
+                    row['Subject'].includes('移行') ||
+                    row['Subject'].includes('プロジェクト') ||
+                    row['Subject'].includes('設計') ||
+                    row['Subject'].includes('開発')
+                ))) {
+                return 'planned';
+            }
+            
+            return 'ad-hoc';
+        }
+
+        function calculateEstimatedHours(row) {
+            let totalHours = 0;
+            
+            for (let i = 1; i <= 5; i++) {
+                const timeField = `作業日${['①', '②', '③', '④', '⑤'][i-1]}_時間`;
+                const timeStr = row[timeField];
+                
+                if (timeStr && timeStr.trim() !== '' && timeStr !== 'null') {
+                    const hours = parseFloat(timeStr.replace(/[^\d.]/g, ''));
+                    if (!isNaN(hours)) {
+                        totalHours += hours;
+                    }
+                }
+            }
+            
+            return totalHours || 4;
+        }
+
+        function groupTicketsByMonth(tickets) {
+            const monthlyData = {};
+            
+            tickets.forEach(ticket => {
+                if (ticket.date) {
+                    const monthKey = ticket.date.substring(0, 7);
+                    if (!monthlyData[monthKey]) {
+                        monthlyData[monthKey] = [];
+                    }
+                    monthlyData[monthKey].push(ticket);
+                } else {
+                    const currentMonthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+                    if (!monthlyData[currentMonthKey]) {
+                        monthlyData[currentMonthKey] = [];
+                    }
+                    monthlyData[currentMonthKey].push(ticket);
+                }
+            });
+            
+            return monthlyData;
+        }
+
         function generateCalendar() {
             const calendar = document.getElementById('calendar');
             calendar.innerHTML = '';
 
-            // 月の日数を取得
             const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
-            // ヘッダー行を作成
             const headerRow = document.createElement('div');
             headerRow.className = 'worker-header';
             headerRow.textContent = '作業者';
@@ -686,200 +854,24 @@
                 calendar.appendChild(dateHeader);
             }
 
-            // 各作業者の行を作成
             workers.forEach(worker => {
-                // 作業者名
                 const workerCell = document.createElement('div');
                 workerCell.className = 'worker-name';
                 workerCell.textContent = worker;
                 calendar.appendChild(workerCell);
 
-                // 各日のセルを作成
                 for (let day = 1; day <= daysInMonth; day++) {
                     const dayCell = document.createElement('div');
                     dayCell.className = 'day-cell';
                     dayCell.dataset.worker = worker;
                     dayCell.dataset.date = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                     
-                    // ドロップイベントリスナーを追加
                     setupDropZone(dayCell);
                     
-                    // その日のタスクを取得
                     const currentDateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                     const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
                     const tasksForDay = mockTasks[monthKey]?.filter(task => 
                         task.worker === worker && task.date === currentDateStr
                     ) || [];
 
-                    // タスクを表示
-                    tasksForDay.forEach(task => {
-                        const taskElement = createTaskElement(task);
-                        dayCell.appendChild(taskElement);
-                    });
-
-                    calendar.appendChild(dayCell);
-                }
-            });
-
-            generateUnassignedTasks();
-            updateStats();
-        }
-
-        function createTaskElement(task) {
-            const taskElement = document.createElement('div');
-            taskElement.className = `task-item task-${task.status}`;
-            taskElement.textContent = task.type === 'planned' ? `計画: ${task.title}` : task.title;
-            taskElement.dataset.taskId = task.id;
-            
-            // 未アサインタスクの場合はドラッグ可能にする
-            if (task.status === 'unassigned') {
-                taskElement.draggable = true;
-                setupDragEvents(taskElement, task);
-            } else {
-                taskElement.onclick = () => showTaskDetail(task);
-            }
-            
-            return taskElement;
-        }
-
-        function generateUnassignedTasks() {
-            const container = document.getElementById('unassignedTasks');
-            container.innerHTML = '';
-
-            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
-            const unassignedTasks = mockTasks[monthKey]?.filter(task => task.status === 'unassigned') || [];
-
-            unassignedTasks.forEach(task => {
-                const taskElement = createTaskElement(task);
-                taskElement.classList.add('in-panel');
-                container.appendChild(taskElement);
-            });
-        }
-
-        function setupDragEvents(element, task) {
-            element.addEventListener('dragstart', (e) => {
-                draggedTask = task;
-                element.classList.add('dragging');
-                e.dataTransfer.effectAllowed = 'move';
-                e.dataTransfer.setData('text/html', element.outerHTML);
-            });
-
-            element.addEventListener('dragend', (e) => {
-                element.classList.remove('dragging');
-                draggedTask = null;
-            });
-        }
-
-        function setupDropZone(dayCell) {
-            dayCell.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                e.dataTransfer.dropEffect = 'move';
-                
-                if (draggedTask && canDropTask(dayCell, draggedTask)) {
-                    dayCell.classList.add('drag-over');
-                } else {
-                    dayCell.classList.add('invalid-drop');
-                }
-            });
-
-            dayCell.addEventListener('dragleave', (e) => {
-                dayCell.classList.remove('drag-over', 'invalid-drop');
-            });
-
-            dayCell.addEventListener('drop', (e) => {
-                e.preventDefault();
-                dayCell.classList.remove('drag-over', 'invalid-drop');
-                
-                if (draggedTask && canDropTask(dayCell, draggedTask)) {
-                    dropTask(dayCell, draggedTask);
-                } else {
-                    showNotification('この場所にはタスクを配置できません', 'error');
-                }
-            });
-        }
-
-        function canDropTask(dayCell, task) {
-            const worker = dayCell.dataset.worker;
-            const date = dayCell.dataset.date;
-            
-            // 計画作業の場合、同じ日に他の計画作業があるかチェック
-            if (task.type === 'planned') {
-                const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
-                const existingPlannedTasks = mockTasks[monthKey]?.filter(t => 
-                    t.worker === worker && 
-                    t.date === date && 
-                    t.type === 'planned' && 
-                    t.id !== task.id
-                ) || [];
-                
-                if (existingPlannedTasks.length > 0) {
-                    return false;
-                }
-            }
-            
-            return true;
-        }
-
-        function dropTask(dayCell, task) {
-            const worker = dayCell.dataset.worker;
-            const date = dayCell.dataset.date;
-            
-            // タスクの情報を更新
-            const change = {
-                taskId: task.id,
-                oldWorker: task.worker,
-                oldDate: task.date,
-                newWorker: worker,
-                newDate: date
-            };
-            
-            pendingChanges.push(change);
-            
-            // 元の場所からタスクを削除
-            if (task.worker && task.date) {
-                removeTaskFromCalendar(task.id);
-            } else {
-                removeTaskFromUnassigned(task.id);
-            }
-            
-            // 新しい場所にタスクを追加
-            task.worker = worker;
-            task.date = date;
-            task.status = 'assigned';
-            
-            const taskElement = createTaskElement(task);
-            dayCell.appendChild(taskElement);
-            
-            updateStats();
-            showNotification(`${task.title} を ${worker} の ${date} にアサインしました`, 'success');
-        }
-
-        function removeTaskFromCalendar(taskId) {
-            const taskElements = document.querySelectorAll(`[data-task-id="${taskId}"]`);
-            taskElements.forEach(el => el.remove());
-        }
-
-        function removeTaskFromUnassigned(taskId) {
-            const unassignedContainer = document.getElementById('unassignedTasks');
-            const taskElement = unassignedContainer.querySelector(`[data-task-id="${taskId}"]`);
-            if (taskElement) {
-                taskElement.remove();
-            }
-        }
-
-        function saveAssignments() {
-            if (pendingChanges.length === 0) {
-                showNotification('保存する変更がありません', 'error');
-                return;
-            }
-            
-            // 実際のAPIコール（現在はモック）
-            console.log('Saving assignments:', pendingChanges);
-            
-            // 変更をmockTasksに反映
-            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
-            pendingChanges.forEach(change => {
-                const task = mockTasks[monthKey]?.find(t => t.id === change.taskId);
-                if (task) {
-                    task.worker = change.newWorker;
-                    task.date = change.newDate
+                    tas
