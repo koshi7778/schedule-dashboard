@@ -1488,69 +1488,92 @@
             
             cell.classList.add('has-tasks');
             
-            // 計画作業、事前準備、その他の種別をチェック
+            // タスクの種別分類
+            const vacationTasks = tasks.filter(task => task.taskType === 'vacation');
+            const meetingTasks = tasks.filter(task => task.taskType === 'meeting');
             const planningTasks = tasks.filter(task => task.isPlanningTask);
             const preparationTasks = tasks.filter(task => task.isPreparationTask);
-            const otherTasks = tasks.filter(task => !task.isPlanningTask && !task.isPreparationTask);
+            const workTasks = tasks.filter(task => task.taskType === 'work' || isWorkTask(task));
+            const otherTasks = tasks.filter(task => 
+                task.taskType === 'other' || 
+                task.taskType === 'training' ||
+                (!task.isPlanningTask && !task.isPreparationTask && task.taskType !== 'vacation' && task.taskType !== 'meeting' && task.taskType !== 'work' && !isWorkTask(task))
+            );
             
             console.log('分類結果:', { 
+                vacation: vacationTasks.length,
+                meeting: meetingTasks.length, 
                 planning: planningTasks.length, 
-                preparation: preparationTasks.length, 
-                other: otherTasks.length 
+                preparation: preparationTasks.length,
+                work: workTasks.length,
+                other: otherTasks.length
             });
             
-            // タスクの種別を判定（計画作業以外で）
-            const hasWorkTasks = otherTasks.some(task => isWorkTask(task));
-            const hasOnlyNonWorkTasks = otherTasks.every(task => !isWorkTask(task)) && otherTasks.length > 0;
+            // 優先順位に基づいて表示内容を決定
+            let primaryTask, displayLabel, shouldShowText = true;
             
-            // 優先順位: 計画作業 > 事前準備 > その他
-            let primaryTask = tasks[0];
-            let displayLabel = '';
-            
-            if (planningTasks.length > 0) {
+            if (vacationTasks.length > 0) {
+                primaryTask = vacationTasks[0];
+                displayLabel = '休暇';
+                shouldShowText = false; // 休暇は色のみ表示
+                console.log('休暇として表示（文字なし）');
+            } else if (meetingTasks.length > 0) {
+                primaryTask = meetingTasks[0];
+                displayLabel = '会議';
+                shouldShowText = false; // 会議も色のみ表示
+                console.log('会議として表示（文字なし）');
+            } else if (planningTasks.length > 0) {
                 primaryTask = planningTasks[0];
                 displayLabel = '計画作業';
                 console.log('計画作業として表示');
-                makeCellDraggable(cell, primaryTask);
             } else if (preparationTasks.length > 0) {
                 primaryTask = preparationTasks[0];
                 displayLabel = '事前準備';
                 console.log('事前準備として表示');
-                makeCellDraggable(cell, primaryTask);
-            } else if (hasWorkTasks) {
+            } else if (workTasks.length > 0) {
+                primaryTask = workTasks[0];
                 displayLabel = '随時作業';
                 console.log('随時作業として表示');
-            } else if (hasOnlyNonWorkTasks) {
-                // 休暇/MTG/その他のみの場合は文字表示なし
-                console.log('休暇等として表示（文字なし）');
-                const typeConfig = taskTypeConfig[primaryTask.taskType] || taskTypeConfig.other;
-                cell.style.backgroundColor = typeConfig.color;
-                cell.style.color = typeConfig.textColor;
-                makeCellDraggable(cell, primaryTask);
-                console.log('=== renderCellContent 完了（色のみ） ===');
-                return;
+            } else if (otherTasks.length > 0) {
+                primaryTask = otherTasks[0];
+                displayLabel = 'その他';
+                shouldShowText = false; // その他も色のみ表示
+                console.log('その他として表示（文字なし）');
+            } else {
+                primaryTask = tasks[0];
+                displayLabel = 'その他';
+                shouldShowText = false;
+                console.log('デフォルトとして表示（文字なし）');
             }
             
-            const typeConfig = taskTypeConfig[primaryTask.taskType] || taskTypeConfig.work;
+            const typeConfig = taskTypeConfig[primaryTask.taskType] || taskTypeConfig.other;
             console.log('使用する色設定:', typeConfig);
             
             // セルの背景色と文字色を設定
             cell.style.backgroundColor = typeConfig.color;
             cell.style.color = typeConfig.textColor;
             
-            // 件数表示
-            const countDiv = document.createElement('div');
-            countDiv.className = 'task-count';
-            countDiv.textContent = tasks.length;
-            cell.appendChild(countDiv);
-            console.log('件数表示を追加:', tasks.length);
+            // ドラッグ可能にする（手動入力のタスクのみ）
+            if (primaryTask.isManualEntry) {
+                makeCellDraggable(cell, primaryTask);
+            }
             
-            // ラベル表示
-            const typeDiv = document.createElement('div');
-            typeDiv.className = 'task-type-label';
-            typeDiv.textContent = displayLabel || typeConfig.label;
-            cell.appendChild(typeDiv);
-            console.log('ラベル表示を追加:', displayLabel || typeConfig.label);
+            // 文字表示が必要な場合のみ表示
+            if (shouldShowText) {
+                // 件数表示
+                const countDiv = document.createElement('div');
+                countDiv.className = 'task-count';
+                countDiv.textContent = tasks.length;
+                cell.appendChild(countDiv);
+                console.log('件数表示を追加:', tasks.length);
+                
+                // ラベル表示
+                const typeDiv = document.createElement('div');
+                typeDiv.className = 'task-type-label';
+                typeDiv.textContent = displayLabel;
+                cell.appendChild(typeDiv);
+                console.log('ラベル表示を追加:', displayLabel);
+            }
             
             console.log('=== renderCellContent 完了 ===');
         }
@@ -1786,7 +1809,7 @@
             tasks.forEach((task, index) => {
                 const hours = task.estimatedHours || 0;
                 tooltipContent += `
-                    <div class="tooltip-task">
+                    <div class="tooltip-task" data-task-id="${task.id}">
                         <div class="tooltip-title">${task.title}</div>
                         <div class="tooltip-details">
                             ID: ${task.id} | 作業時間: ${hours}h<br>
@@ -1814,10 +1837,124 @@
             }
         }
 
+        // クリック可能なツールチップを表示
+        function showClickableTooltip(event, tasks, cell) {
+            hideTooltip(); // 通常のツールチップを隠す
+            
+            const clickableTooltip = document.createElement('div');
+            clickableTooltip.className = 'tooltip';
+            clickableTooltip.id = 'clickable-tooltip';
+            clickableTooltip.style.pointerEvents = 'auto'; // クリック可能にする
+            
+            let tooltipContent = '<div style="font-weight: bold; margin-bottom: 8px; color: #68d391;">チケットを選択してください</div>';
+            
+            tasks.forEach((task, index) => {
+                const hours = task.estimatedHours || 0;
+                const hasLink = task.redmineUrl && task.redmineUrl.trim() !== '';
+                const taskClass = hasLink ? 'tooltip-task' : 'tooltip-task';
+                const linkIcon = hasLink ? ' 🔗' : '';
+                
+                tooltipContent += `
+                    <div class="${taskClass}" data-task-id="${task.id}" style="cursor: pointer;">
+                        <div class="tooltip-title">${task.title}${linkIcon}</div>
+                        <div class="tooltip-details">
+                            ID: ${task.id} | 作業時間: ${hours}h<br>
+                            顧客: ${task.customerName || 'なし'} | リモート: ${task.remoteFlag || 'なし'}
+                            ${hasLink ? '<br><small>📄 クリックでRedmineを開く</small>' : '<br><small>⚠️ Redmineリンクなし</small>'}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // 追加オプション
+            tooltipContent += `
+                <div style="border-top: 1px solid #4a5568; margin-top: 8px; padding-top: 8px;">
+                    <div class="tooltip-task" data-action="add" style="color: #68d391;">
+                        ➕ タスクを追加
+                    </div>
+                    <div class="tooltip-task" data-action="close" style="color: #a0aec0;">
+                        ❌ 閉じる
+                    </div>
+                </div>
+            `;
+            
+            clickableTooltip.innerHTML = tooltipContent;
+            
+            // 位置調整
+            const rect = cell.getBoundingClientRect();
+            clickableTooltip.style.position = 'fixed';
+            clickableTooltip.style.left = `${rect.right + 10}px`;
+            clickableTooltip.style.top = `${rect.top}px`;
+            clickableTooltip.style.zIndex = '2000';
+            
+            document.body.appendChild(clickableTooltip);
+            
+            // 画面外に出る場合の調整
+            const tooltipRect = clickableTooltip.getBoundingClientRect();
+            if (tooltipRect.right > window.innerWidth) {
+                clickableTooltip.style.left = `${rect.left - tooltipRect.width - 10}px`;
+            }
+            if (tooltipRect.bottom > window.innerHeight) {
+                clickableTooltip.style.top = `${rect.bottom - tooltipRect.height}px`;
+            }
+            
+            // クリックイベントを追加
+            clickableTooltip.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const taskElement = e.target.closest('[data-task-id], [data-action]');
+                
+                if (taskElement) {
+                    const taskId = taskElement.getAttribute('data-task-id');
+                    const action = taskElement.getAttribute('data-action');
+                    
+                    if (taskId) {
+                        // 特定のタスクのリンクを開く
+                        const task = tasks.find(t => t.id === taskId);
+                        if (task && task.redmineUrl && task.redmineUrl.trim() !== '') {
+                            window.open(task.redmineUrl, '_blank');
+                        } else {
+                            showNotification('このタスクにはRedmineリンクがありません', 'info');
+                        }
+                    } else if (action === 'add') {
+                        // タスク追加
+                        const worker = cell.closest('tr')?.querySelector('.worker-name')?.textContent;
+                        const dateStr = getDateFromCell(cell);
+                        if (worker && dateStr) {
+                            hideClickableTooltip();
+                            showCellDropdown(cell, worker, dateStr);
+                            return;
+                        }
+                    } else if (action === 'close') {
+                        // 閉じる
+                        hideClickableTooltip();
+                        return;
+                    }
+                    
+                    hideClickableTooltip();
+                }
+            });
+            
+            // 外側クリックで閉じる
+            setTimeout(() => {
+                document.addEventListener('click', hideClickableTooltip);
+            }, 100);
+        }
+
+        function hideClickableTooltip() {
+            const clickableTooltip = document.getElementById('clickable-tooltip');
+            if (clickableTooltip) {
+                clickableTooltip.remove();
+                document.removeEventListener('click', hideClickableTooltip);
+            }
+        }
+
         // ツールチップ非表示
         function hideTooltip() {
             const tooltip = document.getElementById('tooltip');
             tooltip.classList.remove('show');
+            
+            // クリック可能ツールチップも隠す
+            hideClickableTooltip();
         }
 
         // 統計更新
@@ -2047,14 +2184,42 @@
         }
 
         function determineTaskType(assignStatus, subject) {
-            if (assignStatus && assignStatus.includes('休暇')) return 'vacation';
-            if (assignStatus && assignStatus.includes('MTG')) return 'meeting';
-            if (assignStatus && assignStatus.includes('その他')) return 'other';
-            
+            // まずタイトル(Subject)をチェック
             if (subject) {
                 const lowerSubject = subject.toLowerCase();
-                if (lowerSubject.includes('研修') || lowerSubject.includes('勉強')) return 'training';
-                if (lowerSubject.includes('会議') || lowerSubject.includes('mtg')) return 'meeting';
+                if (lowerSubject.includes('休暇') || 
+                    lowerSubject.includes('休み') || 
+                    lowerSubject.includes('有給') || 
+                    lowerSubject.includes('年休') ||
+                    lowerSubject.includes('特休') ||
+                    lowerSubject.includes('代休')) {
+                    return 'vacation';
+                }
+                if (lowerSubject.includes('会議') || 
+                    lowerSubject.includes('mtg') || 
+                    lowerSubject.includes('ミーティング') ||
+                    lowerSubject.includes('打合') ||
+                    lowerSubject.includes('打ち合わせ')) {
+                    return 'meeting';
+                }
+                if (lowerSubject.includes('研修') || 
+                    lowerSubject.includes('勉強') || 
+                    lowerSubject.includes('学習') ||
+                    lowerSubject.includes('セミナー') ||
+                    lowerSubject.includes('講習')) {
+                    return 'training';
+                }
+                if (lowerSubject.includes('準備') || 
+                    lowerSubject.includes('事前')) {
+                    return 'preparation';
+                }
+            }
+            
+            // 次にアサイン状態をチェック
+            if (assignStatus) {
+                if (assignStatus.includes('休暇')) return 'vacation';
+                if (assignStatus.includes('MTG')) return 'meeting';
+                if (assignStatus.includes('その他')) return 'other';
             }
             
             return 'work';
