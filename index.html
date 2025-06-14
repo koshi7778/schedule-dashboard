@@ -1364,19 +1364,7 @@
             const ticketTasks = tasks.filter(task => !task.isManualEntry);
             const manualTasks = tasks.filter(task => task.isManualEntry);
             
-            // チケット系タスクがある場合は件数のみ表示
-            if (ticketTasks.length > 0) {
-                const countDiv = document.createElement('div');
-                countDiv.className = 'task-count';
-                countDiv.textContent = ticketTasks.length;
-                countDiv.style.fontSize = '11px';
-                countDiv.style.fontWeight = 'bold';
-                countDiv.style.color = '#2d3748';
-                countDiv.style.marginBottom = '2px';
-                cell.appendChild(countDiv);
-            }
-            
-            // 手動入力されたタスクがある場合はラベルも表示
+            // 手動タスクがある場合は手動タスクを優先表示
             if (manualTasks.length > 0) {
                 // 最初の手動タスクの種別で色とラベルを決定
                 const primaryTask = manualTasks[0];
@@ -1394,14 +1382,35 @@
                 labelDiv.style.fontSize = '9px';
                 cell.appendChild(labelDiv);
                 
+                // チケット件数がある場合は小さく表示
+                if (ticketTasks.length > 0) {
+                    const ticketCountDiv = document.createElement('div');
+                    ticketCountDiv.className = 'ticket-count';
+                    ticketCountDiv.textContent = `(${ticketTasks.length})`;
+                    ticketCountDiv.style.fontSize = '8px';
+                    ticketCountDiv.style.opacity = '0.7';
+                    cell.appendChild(ticketCountDiv);
+                }
+                
                 // 複数の手動タスクがある場合は件数も表示
                 if (manualTasks.length > 1) {
                     const manualCountDiv = document.createElement('div');
                     manualCountDiv.className = 'task-count';
-                    manualCountDiv.textContent = `+${manualTasks.length}`;
+                    manualCountDiv.textContent = `+${manualTasks.length - 1}`;
                     manualCountDiv.style.fontSize = '8px';
                     cell.appendChild(manualCountDiv);
                 }
+            } else if (ticketTasks.length > 0) {
+                // 手動タスクがない場合のみチケット件数を表示
+                const countDiv = document.createElement('div');
+                countDiv.className = 'task-count';
+                countDiv.textContent = ticketTasks.length;
+                countDiv.style.fontSize = '11px';
+                countDiv.style.fontWeight = 'bold';
+                countDiv.style.color = '#2d3748';
+                countDiv.style.cursor = 'pointer';
+                countDiv.title = 'ダブルクリックで手動タスクを追加';
+                cell.appendChild(countDiv);
             }
         }
 
@@ -1418,21 +1427,28 @@
                 hideTooltip();
             });
 
-            // ダブルクリックでプルダウン表示
+            // ダブルクリックでプルダウン表示（最優先）
             cell.addEventListener('dblclick', (e) => {
                 e.stopPropagation();
+                e.preventDefault();
                 showCellDropdown(cell, worker, dateStr);
             });
 
-            // シングルクリックでRedmineリンクに遷移（チケットタスクがある場合のみ）
+            // シングルクリックでRedmineリンクに遷移（チケットタスクがあり、手動タスクがない場合のみ）
             cell.addEventListener('click', (e) => {
                 e.stopPropagation();
                 
-                // チケット系タスクでRedmineリンクがある場合は遷移
-                const ticketTask = tasks.find(task => !task.isManualEntry && task.redmineUrl);
-                if (ticketTask) {
-                    window.open(ticketTask.redmineUrl, '_blank');
+                const ticketTasks = tasks.filter(task => !task.isManualEntry);
+                const manualTasks = tasks.filter(task => task.isManualEntry);
+                
+                // 手動タスクがない場合のみチケットリンクに遷移
+                if (ticketTasks.length > 0 && manualTasks.length === 0) {
+                    const ticketTask = ticketTasks.find(task => task.redmineUrl);
+                    if (ticketTask) {
+                        window.open(ticketTask.redmineUrl, '_blank');
+                    }
                 }
+                // 手動タスクがある場合は何もしない（ダブルクリックでプルダウンを促す）
             });
 
             // 手動で追加されたタスクの場合はドラッグ可能にする
