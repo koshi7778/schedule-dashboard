@@ -272,10 +272,35 @@
         .task-cell {
             cursor: pointer;
             position: relative;
-            height: 30px;
+            height: 40px;
             font-size: 10px;
             line-height: 1.2;
             background: white;
+            display: flex;
+            flex-direction: column;
+            padding: 2px;
+        }
+
+        .cell-upper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            font-weight: bold;
+            border-bottom: 1px solid #e2e8f0;
+            min-height: 18px;
+        }
+
+        .cell-lower {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+            color: #2d3748;
+            min-height: 18px;
         }
 
         .task-cell:hover {
@@ -1349,68 +1374,58 @@
             return matchingTasks;
         }
 
-        // セル内容をレンダリング（修正版）
+        // セル内容をレンダリング（2分割表示版）
         function renderCellContent(cell, tasks) {
             // セルをクリア
             cell.innerHTML = '';
             cell.style.backgroundColor = '';
             cell.style.color = '';
             
-            if (tasks.length === 0) {
-                return;
-            }
-            
             // チケット系タスク（CSV読み込み）と手動タスクを分離
             const ticketTasks = tasks.filter(task => !task.isManualEntry);
             const manualTasks = tasks.filter(task => task.isManualEntry);
             
-            // 手動タスクがある場合は手動タスクを優先表示
+            // 上段（手動タスク表示エリア）
+            const upperDiv = document.createElement('div');
+            upperDiv.className = 'cell-upper';
+            
+            // 下段（チケット件数表示エリア）
+            const lowerDiv = document.createElement('div');
+            lowerDiv.className = 'cell-lower';
+            
+            // 手動タスクがある場合は上段に表示
             if (manualTasks.length > 0) {
-                // 最初の手動タスクの種別で色とラベルを決定
                 const primaryTask = manualTasks[0];
                 const typeConfig = taskTypeConfig[primaryTask.taskType] || taskTypeConfig.other;
                 
-                // セルの背景色と文字色を設定
-                cell.style.backgroundColor = typeConfig.color;
-                cell.style.color = typeConfig.textColor;
-                
-                // ラベルを表示
-                const labelDiv = document.createElement('div');
-                labelDiv.className = 'task-type-label';
-                labelDiv.textContent = typeConfig.label;
-                labelDiv.style.fontWeight = 'bold';
-                labelDiv.style.fontSize = '9px';
-                cell.appendChild(labelDiv);
-                
-                // チケット件数がある場合は小さく表示
-                if (ticketTasks.length > 0) {
-                    const ticketCountDiv = document.createElement('div');
-                    ticketCountDiv.className = 'ticket-count';
-                    ticketCountDiv.textContent = `(${ticketTasks.length})`;
-                    ticketCountDiv.style.fontSize = '8px';
-                    ticketCountDiv.style.opacity = '0.7';
-                    cell.appendChild(ticketCountDiv);
-                }
+                // 上段の背景色と文字色を設定
+                upperDiv.style.backgroundColor = typeConfig.color;
+                upperDiv.style.color = typeConfig.textColor;
+                upperDiv.textContent = typeConfig.label;
                 
                 // 複数の手動タスクがある場合は件数も表示
                 if (manualTasks.length > 1) {
-                    const manualCountDiv = document.createElement('div');
-                    manualCountDiv.className = 'task-count';
-                    manualCountDiv.textContent = `+${manualTasks.length - 1}`;
-                    manualCountDiv.style.fontSize = '8px';
-                    cell.appendChild(manualCountDiv);
+                    upperDiv.textContent += ` (${manualTasks.length})`;
                 }
-            } else if (ticketTasks.length > 0) {
-                // 手動タスクがない場合のみチケット件数を表示
-                const countDiv = document.createElement('div');
-                countDiv.className = 'task-count';
-                countDiv.textContent = ticketTasks.length;
-                countDiv.style.fontSize = '11px';
-                countDiv.style.fontWeight = 'bold';
-                countDiv.style.color = '#2d3748';
-                countDiv.title = 'ダブルクリックで手動タスクを追加 | チケット詳細はツールチップで確認';
-                cell.appendChild(countDiv);
+            } else {
+                // 手動タスクがない場合は薄いグレー
+                upperDiv.style.backgroundColor = '#f7fafc';
+                upperDiv.style.color = '#a0aec0';
+                upperDiv.textContent = '';
             }
+            
+            // チケット件数を下段に表示
+            if (ticketTasks.length > 0) {
+                lowerDiv.textContent = ticketTasks.length;
+                lowerDiv.style.backgroundColor = '#edf2f7';
+            } else {
+                lowerDiv.textContent = '';
+                lowerDiv.style.backgroundColor = 'white';
+            }
+            
+            // セルに上段・下段を追加
+            cell.appendChild(upperDiv);
+            cell.appendChild(lowerDiv);
         }
 
         // セルのイベント設定（修正版）
