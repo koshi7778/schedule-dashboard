@@ -641,7 +641,6 @@
                     <button class="month-btn" onclick="changeMonth(1)">▶</button>
                 </div>
                 <button class="csv-btn" onclick="loadDataFromCSV()">CSV読込</button>
-                <button class="csv-btn" onclick="fillEmptyCellsWithWork()" style="background: #805ad5;">空欄に随時作業</button>
             </div>
         </div>
 
@@ -776,6 +775,7 @@
             // オプションの定義
             const options = [
                 { type: 'planning', label: '計画作業', icon: '#e53e3e' },
+                { type: 'work', label: '随時作業', icon: '#744210' },
                 { type: 'vacation', label: '休暇', icon: '#702459' },
                 { type: 'preparation', label: '事前準備', icon: '#2b6cb0' },
                 { type: 'cancel', label: 'キャンセル', icon: null }
@@ -855,7 +855,8 @@
                 createdDate: new Date().toISOString().split('T')[0],
                 isManualEntry: true,
                 isPlanningTask: taskType === 'planning',
-                isPreparationTask: taskType === 'preparation'
+                isPreparationTask: taskType === 'preparation',
+                isWorkTask: taskType === 'work'
             };
             
             // 現在表示中の月のキーを使用
@@ -1317,37 +1318,48 @@
                 return;
             }
             
-            // 手動入力されたタスクのみ表示する
+            // チケット系タスク（CSV読み込み）と手動タスクを分離
+            const ticketTasks = tasks.filter(task => !task.isManualEntry);
             const manualTasks = tasks.filter(task => task.isManualEntry);
             
-            if (manualTasks.length === 0) {
-                // 手動入力されたタスクがない場合は何も表示しない
-                return;
-            }
-            
-            // 最初の手動タスクの種別で色とラベルを決定
-            const primaryTask = manualTasks[0];
-            const typeConfig = taskTypeConfig[primaryTask.taskType] || taskTypeConfig.other;
-            
-            // セルの背景色と文字色を設定
-            cell.style.backgroundColor = typeConfig.color;
-            cell.style.color = typeConfig.textColor;
-            
-            // ラベルを表示
-            const labelDiv = document.createElement('div');
-            labelDiv.className = 'task-type-label';
-            labelDiv.textContent = typeConfig.label;
-            labelDiv.style.fontWeight = 'bold';
-            labelDiv.style.fontSize = '9px';
-            cell.appendChild(labelDiv);
-            
-            // 複数の手動タスクがある場合は件数も表示
-            if (manualTasks.length > 1) {
+            // チケット系タスクがある場合は件数のみ表示
+            if (ticketTasks.length > 0) {
                 const countDiv = document.createElement('div');
                 countDiv.className = 'task-count';
-                countDiv.textContent = manualTasks.length;
-                countDiv.style.fontSize = '10px';
+                countDiv.textContent = ticketTasks.length;
+                countDiv.style.fontSize = '11px';
+                countDiv.style.fontWeight = 'bold';
+                countDiv.style.color = '#2d3748';
+                countDiv.style.marginBottom = '2px';
                 cell.appendChild(countDiv);
+            }
+            
+            // 手動入力されたタスクがある場合はラベルも表示
+            if (manualTasks.length > 0) {
+                // 最初の手動タスクの種別で色とラベルを決定
+                const primaryTask = manualTasks[0];
+                const typeConfig = taskTypeConfig[primaryTask.taskType] || taskTypeConfig.other;
+                
+                // セルの背景色と文字色を設定
+                cell.style.backgroundColor = typeConfig.color;
+                cell.style.color = typeConfig.textColor;
+                
+                // ラベルを表示
+                const labelDiv = document.createElement('div');
+                labelDiv.className = 'task-type-label';
+                labelDiv.textContent = typeConfig.label;
+                labelDiv.style.fontWeight = 'bold';
+                labelDiv.style.fontSize = '9px';
+                cell.appendChild(labelDiv);
+                
+                // 複数の手動タスクがある場合は件数も表示
+                if (manualTasks.length > 1) {
+                    const manualCountDiv = document.createElement('div');
+                    manualCountDiv.className = 'task-count';
+                    manualCountDiv.textContent = `+${manualTasks.length}`;
+                    manualCountDiv.style.fontSize = '8px';
+                    cell.appendChild(manualCountDiv);
+                }
             }
         }
 
@@ -1370,26 +1382,28 @@
                 showCellDropdown(cell, worker, dateStr);
             });
 
-            // シングルクリックでRedmineリンクに遷移
+            // シングルクリックでRedmineリンクに遷移（チケットタスクがある場合のみ）
             cell.addEventListener('click', (e) => {
                 e.stopPropagation();
                 
-                // Redmineリンクがある場合は遷移
-                if (tasks.length > 0 && tasks[0].redmineUrl) {
-                    window.open(tasks[0].redmineUrl, '_blank');
+                // チケット系タスクでRedmineリンクがある場合は遷移
+                const ticketTask = tasks.find(task => !task.isManualEntry && task.redmineUrl);
+                if (ticketTask) {
+                    window.open(ticketTask.redmineUrl, '_blank');
                 }
             });
 
             // 手動で追加されたタスクの場合はドラッグ可能にする
-            if (tasks.some(task => task.isManualEntry)) {
-                makeCellDraggable(cell, tasks.find(task => task.isManualEntry));
+            const manualTask = tasks.find(task => task.isManualEntry);
+            if (manualTask) {
+                makeCellDraggable(cell, manualTask);
             }
         }
 
         // 空のセルのイベント設定（修正版）
         function setupEmptyCellEvents(cell, worker, dateStr) {
-            // 単一クリックでプルダウン表示
-            cell.addEventListener('click', (e) => {
+            // ダブルクリックでプルダウン表示
+            cell.addEventListener('dblclick', (e) => {
                 e.stopPropagation();
                 showCellDropdown(cell, worker, dateStr);
             });
@@ -1503,7 +1517,7 @@
                         });
                         
                         if (result.errors.length > 0) {
-                            console.error('CSV解析エラー:', result.errors);
+                            // エラーがあっても処理を続行
                         }
                         
                         const tickets = transformCSVToTickets(result.data);
@@ -1736,6 +1750,64 @@
             });
             
             return monthlyData;
+        }
+
+        // 空のセルに随時作業を追加する機能
+        function fillEmptyCellsWithWork() {
+            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            let addedCount = 0;
+            
+            if (!taskData[monthKey]) {
+                taskData[monthKey] = [];
+            }
+            
+            workers.forEach(worker => {
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    
+                    // 平日のみ対象とする
+                    const date = new Date(currentYear, currentMonth, day);
+                    const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+                    
+                    if (!isWeekend) {
+                        // 既存のタスクをチェック（手動入力されたもののみ）
+                        const existingManualTasks = taskData[monthKey].filter(task => 
+                            task.worker === worker && 
+                            task.date === dateStr && 
+                            task.isManualEntry
+                        );
+                        
+                        // 手動入力されたタスクがない場合のみ随時作業を追加
+                        if (existingManualTasks.length === 0) {
+                            const workTask = {
+                                id: `WORK-${Date.now()}-${addedCount}`,
+                                title: '随時作業',
+                                worker: worker,
+                                date: dateStr,
+                                estimatedHours: 8,
+                                description: '随時作業（一括追加）',
+                                taskType: 'work',
+                                redmineUrl: '',
+                                customerName: '',
+                                remoteFlag: '',
+                                tsetStatus: '',
+                                assignStatus: '随時作業',
+                                createdDate: new Date().toISOString().split('T')[0],
+                                isManualEntry: true,
+                                isPlanningTask: false,
+                                isPreparationTask: false
+                            };
+                            
+                            taskData[monthKey].push(workTask);
+                            addedCount++;
+                        }
+                    }
+                }
+            });
+            
+            generateTable();
+            showNotification(`${addedCount}件の随時作業を追加しました`, 'success');
         }
 
         // 初期化
