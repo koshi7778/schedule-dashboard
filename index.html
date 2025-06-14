@@ -82,6 +82,21 @@
             background: #2f855a;
         }
 
+        .add-planning-btn {
+            background: #805ad5;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+
+        .add-planning-btn:hover {
+            background: #6b46c1;
+        }
+
         /* タブナビゲーション */
         .tab-navigation {
             background: #e2e8f0;
@@ -217,6 +232,44 @@
         .task-cell.editing {
             background: #fff3cd !important;
             border: 2px solid #ffc107;
+        }
+
+        .task-cell.drag-over {
+            background: #e6fffa !important;
+            border: 2px dashed #38b2ac;
+        }
+
+        .planning-task {
+            background: #e53e3e !important;
+            color: white !important;
+            cursor: move;
+            position: relative;
+        }
+
+        .planning-task:hover {
+            background: #c53030 !important;
+            transform: scale(1.05);
+        }
+
+        .planning-task.dragging {
+            opacity: 0.5;
+            transform: rotate(5deg);
+        }
+
+        .planning-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #f56565;
+            color: white;
+            border-radius: 50%;
+            width: 15px;
+            height: 15px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
         }
 
         .direct-input {
@@ -535,6 +588,7 @@
                     <button class="month-btn" onclick="changeMonth(1)">▶</button>
                 </div>
                 <button class="csv-btn" onclick="loadDataFromCSV()">CSV読込</button>
+                <button class="add-planning-btn" onclick="addPlanningTask()">計画作業追加</button>
             </div>
         </div>
 
@@ -624,6 +678,8 @@
         // データ
         let taskData = {};
         let editingQuickTask = null;
+        let planningTaskCounter = 1;
+        let draggedTask = null;
 
         // 種別別の色とラベル
         const taskTypeConfig = {
@@ -631,7 +687,8 @@
             meeting: { label: '会議', color: '#bee3f8', textColor: '#2a4365' },
             training: { label: '研修', color: '#c6f6d5', textColor: '#22543d' },
             other: { label: 'その他', color: '#e2e8f0', textColor: '#4a5568' },
-            work: { label: '随時作業', color: '#fefcbf', textColor: '#744210' }
+            work: { label: '随時作業', color: '#fefcbf', textColor: '#744210' },
+            planning: { label: '計画作業', color: '#e53e3e', textColor: 'white' }
         };
 
         // 作業者リスト
