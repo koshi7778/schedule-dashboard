@@ -858,3 +858,493 @@
             cell.addEventListener('click', (e) => {
                 setTimeout(() => {
                     if (e.detail === 1 && tasks.length > 0 && tasks[0].redmineUrl) {
+                        window.open(tasks[0].redmineUrl, '_blank');
+                    }
+                }, 200);
+            });
+        }
+
+        // 空のセルにもイベントを追加
+        function setupEmptyCellEvents(cell) {
+            // 単一クリックで直接入力モード
+            cell.addEventListener('click', (e) => {
+                if (e.detail === 1) {
+                    setTimeout(() => {
+                        startDirectEdit(cell);
+                    }, 200);
+                }
+            });
+        }
+
+        // セル内直接入力機能
+        function startDirectEdit(cell) {
+            if (cell.querySelector('.direct-input')) return; // 既に編集中の場合は無視
+
+            const worker = cell.closest('tr').querySelector('.worker-name').textContent;
+            const dateStr = getDateFromCell(cell);
+            
+            cell.classList.add('editing');
+            
+            const input = document.createElement('input');
+            input.className = 'direct-input';
+            input.type = 'text';
+            input.placeholder = '休暇、会議など';
+            input.value = '';
+            
+            cell.innerHTML = '';
+            cell.appendChild(input);
+            input.focus();
+            
+            // Enterで保存
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    saveDirectEdit(cell, worker, dateStr, input.value);
+                } else if (e.key === 'Escape') {
+                    cancelDirectEdit(cell);
+                }
+            });
+            
+            // フォーカスが外れたら保存
+            input.addEventListener('blur', () => {
+                if (input.value.trim()) {
+                    saveDirectEdit(cell, worker, dateStr, input.value);
+                } else {
+                    cancelDirectEdit(cell);
+                }
+            });
+        }
+
+        function saveDirectEdit(cell, worker, date, inputValue) {
+            if (!inputValue.trim()) {
+                cancelDirectEdit(cell);
+                return;
+            }
+            
+            // 入力内容から種別を自動判定
+            let taskType = 'other';
+            const lowerValue = inputValue.toLowerCase();
+            
+            if (lowerValue.includes('休暇') || lowerValue.includes('有給') || lowerValue.includes('休み')) {
+                taskType = 'vacation';
+            } else if (lowerValue.includes('会議') || lowerValue.includes('mtg') || lowerValue.includes('ミーティング')) {
+                taskType = 'meeting';
+            } else if (lowerValue.includes('研修') || lowerValue.includes('勉強') || lowerValue.includes('学習')) {
+                taskType = 'training';
+            }
+            
+            const newTask = {
+                id: `DIRECT-${Date.now()}`,
+                title: inputValue.trim(),
+                worker: worker,
+                date: date,
+                estimatedHours: 8,
+                description: '直接入力で追加',
+                taskType: taskType,
+                redmineUrl: '',
+                customerName: '',
+                remoteFlag: '',
+                tsetStatus: '',
+                assignStatus: taskType === 'vacation' ? '休暇/MTG/その他' : '',
+                createdDate: new Date().toISOString().split('T')[0],
+                isManualEntry: true,
+                isDirectEntry: true
+            };
+            
+            const monthKey = date.substring(0, 7);
+            if (!taskData[monthKey]) {
+                taskData[monthKey] = [];
+            }
+            
+            taskData[monthKey].push(newTask);
+            
+            cell.classList.remove('editing');
+            
+            // セルを再描画
+            const tasksForCell = getTasksForCell(worker, date);
+            renderCellContent(cell, tasksForCell);
+            setupCellEvents(cell, tasksForCell);
+            
+            showNotification(`${inputValue}を追加しました`, 'success');
+        }
+
+        function cancelDirectEdit(cell) {
+            cell.classList.remove('editing');
+            cell.innerHTML = '';
+            setupEmptyCellEvents(cell);
+        }
+
+        // 日付をセルから取得
+        function getDateFromCell(cell) {
+            const table = cell.closest('table');
+            const headerRow = table.querySelector('tr');
+            const cellIndex = Array.from(cell.parentNode.children).indexOf(cell);
+            const dayHeaders = headerRow.querySelectorAll('.date-header');
+            
+            if (cellIndex > 0 && dayHeaders[cellIndex - 1]) {
+                const day = dayHeaders[cellIndex - 1].textContent.split('\n')[0];
+                return `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            }
+            return '';
+        }
+
+        // ツールチップ表示
+        function showTooltip(event, tasks) {
+            const tooltip = document.getElementById('tooltip');
+            
+            let tooltipContent = '';
+            tasks.forEach((task, index) => {
+                const hours = task.estimatedHours || 0;
+                tooltipContent += `
+                    <div class="tooltip-task">
+                        <div class="tooltip-title">${task.title}</div>
+                        <div class="tooltip-details">
+                            ID: ${task.id} | 作業時間: ${hours}h<br>
+                            顧客: ${task.customerName || 'なし'} | リモート: ${task.remoteFlag || 'なし'}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            tooltip.innerHTML = tooltipContent;
+            tooltip.classList.add('show');
+            
+            // ツールチップの位置調整
+            const rect = event.target.getBoundingClientRect();
+            tooltip.style.left = `${rect.right + 10}px`;
+            tooltip.style.top = `${rect.top}px`;
+            
+            // 画面外に出る場合の調整
+            const tooltipRect = tooltip.getBoundingClientRect();
+            if (tooltipRect.right > window.innerWidth) {
+                tooltip.style.left = `${rect.left - tooltipRect.width - 10}px`;
+            }
+            if (tooltipRect.bottom > window.innerHeight) {
+                tooltip.style.top = `${rect.bottom - tooltipRect.height}px`;
+            }
+        }
+
+        // ツールチップ非表示
+        function hideTooltip() {
+            const tooltip = document.getElementById('tooltip');
+            tooltip.classList.remove('show');
+        }
+
+        // 統計更新
+        function updateStats() {
+            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+            const tasks = taskData[monthKey] || [];
+            
+            const totalTasks = tasks.length;
+            const assignedTasks = tasks.filter(t => 
+                t.tsetStatus === '03.本アサイン' || 
+                t.assignStatus === 'アサイン完了'
+            ).length;
+            const completedTasks = tasks.filter(t => 
+                t.tsetStatus === '22.作業完全終了' || 
+                t.assignStatus === '対応完了'
+            ).length;
+            const cancelledTasks = tasks.filter(t => 
+                t.tsetStatus === '80.キャンセル（依頼者都合）' || 
+                t.assignStatus === '中止'
+            ).length;
+
+            document.getElementById('totalTasks').textContent = totalTasks;
+            document.getElementById('assignedTasks').textContent = assignedTasks;
+            document.getElementById('completedTasks').textContent = completedTasks;
+            document.getElementById('cancelledTasks').textContent = cancelledTasks;
+        }
+
+        // CSV読み込み機能
+        function getCSVFileNames() {
+            const today = new Date();
+            const possibleFileNames = [];
+            
+            for (let i = 0; i <= 7; i++) {
+                const targetDate = new Date(today);
+                targetDate.setDate(today.getDate() - i);
+                
+                const year = targetDate.getFullYear();
+                const month = String(targetDate.getMonth() + 1).padStart(2, '0');
+                const day = String(targetDate.getDate()).padStart(2, '0');
+                
+                possibleFileNames.push(`redmine_issues_${year}_${month}_${day}.csv`);
+            }
+            
+            possibleFileNames.push('redmine_issues_latest.csv');
+            
+            return possibleFileNames;
+        }
+
+        async function loadDataFromCSV() {
+            const possibleFileNames = getCSVFileNames();
+            
+            showNotification('CSVファイルを検索中...', 'info');
+            
+            for (const fileName of possibleFileNames) {
+                try {
+                    console.log(`試行中のファイル名: ${fileName}`);
+                    
+                    const csvUrl = `https://raw.githubusercontent.com/koshi7778/schedule-dashboard/main/${fileName}`;
+                    
+                    const response = await fetch(csvUrl);
+                    if (response.ok) {
+                        console.log(`成功: ${fileName} が見つかりました`);
+                        
+                        const csvText = await response.text();
+                        
+                        const result = Papa.parse(csvText, {
+                            header: true,
+                            skipEmptyLines: true,
+                            encoding: 'UTF-8'
+                        });
+                        
+                        if (result.errors.length > 0) {
+                            console.error('CSV解析エラー:', result.errors);
+                        }
+                        
+                        const tickets = transformCSVToTickets(result.data);
+                        console.log('変換後のチケット数:', tickets.length);
+                        
+                        const monthlyData = groupTicketsByMonth(tickets);
+                        console.log('月別データ:', monthlyData);
+                        
+                        taskData = monthlyData;
+                        
+                        generateTable();
+                        updateDailySchedule();
+                        
+                        showNotification(`${fileName} から ${tickets.length}件のチケットを読み込みました`, 'success');
+                        return;
+                        
+                    } else {
+                        console.log(`${fileName} が見つかりません (${response.status})`);
+                    }
+                    
+                } catch (error) {
+                    console.log(`${fileName} の読み込みエラー:`, error);
+                }
+            }
+            
+            showNotification('CSVファイルが見つかりません。', 'error');
+        }
+
+        // CSV変換関数（作業時間の詳細読み込み対応）
+        function transformCSVToTickets(csvData) {
+            console.log('CSV行数:', csvData.length);
+            
+            const filteredData = csvData.filter(row => {
+                const assignStatus = row['TSETアサイン状態'] || '';
+                const tsetStatus = row['TSETステータス'] || '';
+                
+                const validAssignStatus = [
+                    'アサイン完了', '対応完了', '中止', '休暇', 'MTG', 'その他'
+                ].some(status => assignStatus.includes(status));
+                
+                const validTsetStatus = [
+                    '03.本アサイン', '22.作業完全終了', '80.キャンセル', 'キャンセル（依頼者都合）'
+                ].some(status => tsetStatus.includes(status));
+                
+                return validAssignStatus || validTsetStatus;
+            });
+            
+            console.log('フィルタ後の件数:', filteredData.length);
+            
+            // 作業日ごとにタスクを分割
+            const allTickets = [];
+            
+            filteredData.forEach(row => {
+                const assignedWorker = mapWorkerName(row['TSET作業者']);
+                
+                // 作業日①〜⑤をチェック
+                for (let i = 1; i <= 5; i++) {
+                    const dateField = `作業日${['①', '②', '③', '④', '⑤'][i-1]}`;
+                    const timeField = `作業日${['①', '②', '③', '④', '⑤'][i-1]}_時間`;
+                    
+                    const workDate = formatDate(row[dateField]);
+                    const workHours = parseFloat(row[timeField]) || 0;
+                    
+                    if (workDate && workHours > 0) {
+                        const ticket = {
+                            id: `RDM-${row['Issue ID']}-${i}`,
+                            title: row['Subject'] || 'タイトルなし',
+                            worker: assignedWorker,
+                            date: workDate,
+                            estimatedHours: workHours,
+                            description: `顧客: ${row['お客様名'] || 'なし'}\nリモート: ${row['リモート有無'] || 'なし'}`,
+                            redmineUrl: row['URL'] || '',
+                            customerName: row['お客様名'] || '',
+                            remoteFlag: row['リモート有無'] || '',
+                            tsetStatus: row['TSETステータス'] || '',
+                            assignStatus: row['TSETアサイン状態'] || '',
+                            createdDate: row['作成日'] || '',
+                            assignHopeDate: row['アサイン希望日'] || '',
+                            startDate: row['作業開始可能日'] || '',
+                            dueDate: row['作業完了期限日'] || '',
+                            taskType: determineTaskType(row['TSETアサイン状態'], row['Subject'])
+                        };
+                        
+                        allTickets.push(ticket);
+                    }
+                }
+                
+                // 作業日が設定されていない場合のフォールバック
+                if (!hasAnyWorkDate(row)) {
+                    const fallbackDate = getFirstValidWorkDate(row);
+                    if (fallbackDate && assignedWorker) {
+                        const ticket = {
+                            id: `RDM-${row['Issue ID']}`,
+                            title: row['Subject'] || 'タイトルなし',
+                            worker: assignedWorker,
+                            date: fallbackDate,
+                            estimatedHours: calculateEstimatedHours(row),
+                            description: `顧客: ${row['お客様名'] || 'なし'}\nリモート: ${row['リモート有無'] || 'なし'}`,
+                            redmineUrl: row['URL'] || '',
+                            customerName: row['お客様名'] || '',
+                            remoteFlag: row['リモート有無'] || '',
+                            tsetStatus: row['TSETステータス'] || '',
+                            assignStatus: row['TSETアサイン状態'] || '',
+                            createdDate: row['作成日'] || '',
+                            assignHopeDate: row['アサイン希望日'] || '',
+                            startDate: row['作業開始可能日'] || '',
+                            dueDate: row['作業完了期限日'] || '',
+                            taskType: determineTaskType(row['TSETアサイン状態'], row['Subject'])
+                        };
+                        
+                        allTickets.push(ticket);
+                    }
+                }
+            });
+            
+            return allTickets.filter(ticket => 
+                ticket.id !== 'RDM-' && 
+                ticket.title !== 'タイトルなし' && 
+                ticket.date && 
+                ticket.worker
+            );
+        }
+
+        function hasAnyWorkDate(row) {
+            for (let i = 1; i <= 5; i++) {
+                const dateField = `作業日${['①', '②', '③', '④', '⑤'][i-1]}`;
+                const timeField = `作業日${['①', '②', '③', '④', '⑤'][i-1]}_時間`;
+                
+                const workDate = row[dateField];
+                const workHours = parseFloat(row[timeField]) || 0;
+                
+                if (workDate && workDate.trim() !== '' && workDate !== 'null' && workHours > 0) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function determineTaskType(assignStatus, subject) {
+            if (assignStatus && assignStatus.includes('休暇')) return 'vacation';
+            if (assignStatus && assignStatus.includes('MTG')) return 'meeting';
+            if (assignStatus && assignStatus.includes('その他')) return 'other';
+            
+            if (subject) {
+                const lowerSubject = subject.toLowerCase();
+                if (lowerSubject.includes('研修') || lowerSubject.includes('勉強')) return 'training';
+                if (lowerSubject.includes('会議') || lowerSubject.includes('mtg')) return 'meeting';
+            }
+            
+            return 'work';
+        }
+
+        function mapWorkerName(csvWorkerName) {
+            if (!csvWorkerName || csvWorkerName === 'null' || csvWorkerName.trim() === '') {
+                return '';
+            }
+            
+            let cleanName = csvWorkerName.replace(/^TSET_[A-Z]_/, '');
+            
+            const matchedWorker = workers.find(worker => 
+                worker.includes(cleanName) || 
+                cleanName.includes(worker.replace(' ', '')) ||
+                worker.replace(' ', '').includes(cleanName.replace(' ', '')) ||
+                worker === cleanName
+            );
+            
+            return matchedWorker || cleanName;
+        }
+
+        function getFirstValidWorkDate(row) {
+            for (let i = 1; i <= 5; i++) {
+                const dateField = `作業日${['①', '②', '③', '④', '⑤'][i-1]}`;
+                const date = row[dateField];
+                if (date && date.trim() !== '' && date !== 'null') {
+                    return formatDate(date);
+                }
+            }
+            
+            return formatDate(row['アサイン希望日']) || 
+                   formatDate(row['作業開始可能日']) || 
+                   '';
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr || dateStr.trim() === '' || dateStr === 'null') {
+                return '';
+            }
+            
+            try {
+                const date = new Date(dateStr);
+                if (isNaN(date.getTime())) {
+                    return '';
+                }
+                return date.toISOString().split('T')[0];
+            } catch (error) {
+                return '';
+            }
+        }
+
+        function calculateEstimatedHours(row) {
+            let totalHours = 0;
+            
+            for (let i = 1; i <= 5; i++) {
+                const timeField = `作業日${['①', '②', '③', '④', '⑤'][i-1]}_時間`;
+                const timeStr = row[timeField];
+                
+                if (timeStr && timeStr.trim() !== '' && timeStr !== 'null') {
+                    const hours = parseFloat(timeStr.replace(/[^\d.]/g, ''));
+                    if (!isNaN(hours)) {
+                        totalHours += hours;
+                    }
+                }
+            }
+            
+            return totalHours || 4;
+        }
+
+        function groupTicketsByMonth(tickets) {
+            const monthlyData = {};
+            
+            tickets.forEach(ticket => {
+                if (ticket.date) {
+                    const monthKey = ticket.date.substring(0, 7);
+                    if (!monthlyData[monthKey]) {
+                        monthlyData[monthKey] = [];
+                    }
+                    monthlyData[monthKey].push(ticket);
+                }
+            });
+            
+            return monthlyData;
+        }
+
+        // 初期化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 今日の月を初期表示に設定
+            updateMonthDisplay();
+            generateTable();
+            updateDailySchedule();
+            
+            // 1秒後にCSV自動読み込み
+            setTimeout(() => {
+                loadDataFromCSV();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
