@@ -194,11 +194,11 @@
             background: #fbb6ce !important;
         }
 
-        /* 今日の日付ハイライト */
-        .today {
-            background: #ffd700 !important;
+        /* 今日の日付ハイライト（平日のみ、薄い色） */
+        .today:not(.weekend) {
+            background: #fff3cd !important;
             font-weight: bold;
-            box-shadow: inset 0 0 0 2px #ff8c00;
+            box-shadow: inset 0 0 0 1px #f0c419;
         }
 
         .task-cell {
@@ -297,52 +297,110 @@
             color: #2d3748;
         }
 
-        .worker-schedule-list {
-            display: grid;
-            gap: 15px;
-        }
-
-        .worker-schedule-item {
+        /* 時間軸スケジュール */
+        .timeline-schedule {
             background: white;
-            border: 1px solid #e2e8f0;
             border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
         }
 
-        .worker-name-header {
-            font-size: 14px;
+        .timeline-header {
+            background: #f7fafc;
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
             font-weight: bold;
             color: #2c5282;
-            margin-bottom: 10px;
-            padding-bottom: 5px;
+        }
+
+        .timeline-content {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+        }
+
+        .time-slots {
+            background: #f7fafc;
+            border-right: 1px solid #e2e8f0;
+        }
+
+        .time-slot {
+            padding: 15px 10px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 12px;
+            font-weight: 500;
+            text-align: center;
+            color: #4a5568;
+        }
+
+        .workers-timeline {
+            overflow-x: auto;
+        }
+
+        .worker-timeline-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            min-height: 60px;
             border-bottom: 1px solid #e2e8f0;
         }
 
-        .task-list {
-            display: grid;
-            gap: 8px;
+        .worker-timeline-cell {
+            padding: 8px;
+            border-right: 1px solid #e2e8f0;
+            position: relative;
+            min-height: 60px;
         }
 
-        .task-item {
-            padding: 8px 12px;
-            border-radius: 6px;
+        .worker-name-timeline {
+            position: sticky;
+            left: 0;
+            background: #f7fafc;
+            font-weight: bold;
+            padding: 15px 10px;
+            border-right: 2px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
             font-size: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            color: #2d3748;
+            z-index: 5;
         }
 
-        .task-title {
-            font-weight: 500;
+        .task-timeline-item {
+            background: #3182ce;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            margin-bottom: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            word-wrap: break-word;
         }
 
-        .task-hours {
-            font-size: 11px;
-            color: #4a5568;
-            background: rgba(255, 255, 255, 0.7);
-            padding: 2px 6px;
-            border-radius: 3px;
+        .task-timeline-item:hover {
+            background: #2c5282;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .task-timeline-item.vacation {
+            background: #702459;
+        }
+
+        .task-timeline-item.meeting {
+            background: #2a4365;
+        }
+
+        .task-timeline-item.training {
+            background: #22543d;
+        }
+
+        .task-timeline-item.other {
+            background: #4a5568;
+        }
+
+        .task-timeline-hours {
+            font-size: 9px;
+            opacity: 0.8;
+            margin-top: 2px;
         }
 
         /* ツールチップ */
@@ -454,6 +512,15 @@
                 flex-direction: column;
                 gap: 10px;
             }
+
+            .timeline-content {
+                grid-template-columns: 60px 1fr;
+            }
+
+            .time-slot {
+                padding: 10px 5px;
+                font-size: 10px;
+            }
         }
     </style>
 </head>
@@ -520,8 +587,22 @@
                     </div>
                 </div>
 
-                <div class="worker-schedule-list" id="dailyWorkerList">
-                    <!-- 作業者別スケジュールが動的に生成される -->
+                <!-- 時間軸スケジュール -->
+                <div class="timeline-schedule">
+                    <div class="timeline-header">時間別スケジュール</div>
+                    <div class="timeline-content">
+                        <div class="time-slots">
+                            <div class="time-slot">10-12</div>
+                            <div class="time-slot">12-14</div>
+                            <div class="time-slot">14-16</div>
+                            <div class="time-slot">16-18</div>
+                            <div class="time-slot">18-20</div>
+                            <div class="time-slot">20-22</div>
+                        </div>
+                        <div class="workers-timeline" id="workersTimeline">
+                            <!-- 時間軸スケジュールが動的に生成される -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -550,7 +631,7 @@
             meeting: { label: '会議', color: '#bee3f8', textColor: '#2a4365' },
             training: { label: '研修', color: '#c6f6d5', textColor: '#22543d' },
             other: { label: 'その他', color: '#e2e8f0', textColor: '#4a5568' },
-            work: { label: '作業', color: '#fefcbf', textColor: '#744210' }
+            work: { label: '随時作業', color: '#fefcbf', textColor: '#744210' }
         };
 
         // 作業者リスト
@@ -560,6 +641,16 @@
             '井島 響香', '入江 有香', '李 相旼', '但馬 惟之', '佐治 友里子',
             '中村 龍之介', '小泉 祐稀', '小菅 祐馬', '矢野 俊介', '末廣 太一',
             '木暮 誉貴'
+        ];
+
+        // 時間軸の定義
+        const timeSlots = [
+            { label: '10-12', start: 10, end: 12 },
+            { label: '12-14', start: 12, end: 14 },
+            { label: '14-16', start: 14, end: 16 },
+            { label: '16-18', start: 16, end: 18 },
+            { label: '18-20', start: 18, end: 20 },
+            { label: '20-22', start: 20, end: 22 }
         ];
 
         // タブ切り替え
@@ -621,6 +712,13 @@
                    day === today.getDate();
         }
 
+        // 平日かどうかを判定
+        function isWeekday(year, month, day) {
+            const date = new Date(year, month, day);
+            const dayOfWeek = date.getDay();
+            return dayOfWeek !== 0 && dayOfWeek !== 6; // 0=日曜, 6=土曜
+        }
+
         // テーブル生成
         function generateTable() {
             const table = document.getElementById('scheduleTable');
@@ -651,8 +749,8 @@
                     dayHeader.classList.add('weekend');
                 }
 
-                // 今日の日付をハイライト
-                if (isToday(currentYear, currentMonth, day)) {
+                // 今日の日付をハイライト（平日のみ）
+                if (isToday(currentYear, currentMonth, day) && isWeekday(currentYear, currentMonth, day)) {
                     dayHeader.classList.add('today');
                 }
                 
@@ -684,8 +782,8 @@
                         dayCell.classList.add('weekend');
                     }
 
-                    // 今日の日付をハイライト
-                    if (isToday(currentYear, currentMonth, day)) {
+                    // 今日の日付をハイライト（平日のみ）
+                    if (isToday(currentYear, currentMonth, day) && isWeekday(currentYear, currentMonth, day)) {
                         dayCell.classList.add('today');
                     }
                     
@@ -734,48 +832,84 @@
             }
             document.getElementById('upcomingTasks').textContent = upcomingCount;
 
-            // 作業者別のスケジュールを表示
-            const workerListContainer = document.getElementById('dailyWorkerList');
-            workerListContainer.innerHTML = '';
+            // 時間軸スケジュールを更新
+            updateTimelineSchedule(allTasks);
+        }
 
-            workers.forEach(worker => {
+        // 時間軸スケジュールの更新
+        function updateTimelineSchedule(allTasks) {
+            const workersTimeline = document.getElementById('workersTimeline');
+            workersTimeline.innerHTML = '';
+
+            // その日にタスクがある作業者のみ表示
+            const workersWithTasks = workers.filter(worker => 
+                allTasks.some(task => task.worker === worker)
+            );
+
+            if (workersWithTasks.length === 0) {
+                workersTimeline.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #4a5568;">この日に予定されている作業はありません</div>';
+                return;
+            }
+
+            workersWithTasks.forEach(worker => {
                 const workerTasks = allTasks.filter(task => task.worker === worker);
                 
-                if (workerTasks.length > 0) {
-                    const workerItem = document.createElement('div');
-                    workerItem.className = 'worker-schedule-item';
+                // 作業者名
+                const workerNameDiv = document.createElement('div');
+                workerNameDiv.className = 'worker-name-timeline';
+                workerNameDiv.textContent = worker;
+                workersTimeline.appendChild(workerNameDiv);
+
+                // 各時間帯のセル
+                timeSlots.forEach(timeSlot => {
+                    const timeCell = document.createElement('div');
+                    timeCell.className = 'worker-timeline-cell';
                     
-                    const workerHeader = document.createElement('div');
-                    workerHeader.className = 'worker-name-header';
-                    workerHeader.textContent = worker;
-                    workerItem.appendChild(workerHeader);
-                    
-                    const taskList = document.createElement('div');
-                    taskList.className = 'task-list';
-                    
-                    workerTasks.forEach(task => {
-                        const taskItem = document.createElement('div');
-                        taskItem.className = 'task-item';
-                        
-                        const typeConfig = taskTypeConfig[task.taskType] || taskTypeConfig.work;
-                        taskItem.style.backgroundColor = typeConfig.color;
-                        taskItem.style.color = typeConfig.textColor;
-                        
-                        taskItem.innerHTML = `
-                            <div class="task-title">${task.title}</div>
-                            <div class="task-hours">${task.estimatedHours || 0}h</div>
-                        `;
-                        
-                        taskList.appendChild(taskItem);
+                    // この時間帯のタスクを探す
+                    const tasksInTimeSlot = workerTasks.filter(task => {
+                        const taskTime = getTaskTimeSlot(task);
+                        return taskTime && taskTime.start >= timeSlot.start && taskTime.end <= timeSlot.end;
                     });
                     
-                    workerItem.appendChild(taskList);
-                    workerListContainer.appendChild(workerItem);
-                }
+                    tasksInTimeSlot.forEach(task => {
+                        const taskItem = document.createElement('div');
+                        taskItem.className = `task-timeline-item ${task.taskType}`;
+                        taskItem.innerHTML = `
+                            <div>${task.title}</div>
+                            <div class="task-timeline-hours">${task.estimatedHours}h</div>
+                        `;
+                        
+                        // クリックでRedmineリンクに遷移
+                        if (task.redmineUrl) {
+                            taskItem.style.cursor = 'pointer';
+                            taskItem.addEventListener('click', () => {
+                                window.open(task.redmineUrl, '_blank');
+                            });
+                        }
+                        
+                        timeCell.appendChild(taskItem);
+                    });
+                    
+                    workersTimeline.appendChild(timeCell);
+                });
             });
+        }
 
-            if (workerListContainer.children.length === 0) {
-                workerListContainer.innerHTML = '<div style="text-align: center; padding: 40px; color: #4a5568;">この日に予定されている作業はありません</div>';
+        // タスクの時間帯を取得（作業時間から推定）
+        function getTaskTimeSlot(task) {
+            // 作業時間が設定されている場合は、その時間から推定
+            if (task.workTimeSlot) {
+                return task.workTimeSlot;
+            }
+            
+            // 作業時間に基づいて時間帯を推定
+            const hours = task.estimatedHours || 0;
+            if (hours <= 2) {
+                return { start: 14, end: 16 }; // 短時間作業は14-16
+            } else if (hours <= 4) {
+                return { start: 10, end: 14 }; // 半日作業は10-14
+            } else {
+                return { start: 10, end: 18 }; // 一日作業は10-18
             }
         }
 
@@ -808,12 +942,16 @@
             );
         }
 
-        // セル内容をレンダリング（種別対応）
+        // セル内容をレンダリング（改善版）
         function renderCellContent(cell, tasks) {
             cell.innerHTML = '';
             cell.classList.add('has-tasks');
             
             if (tasks.length === 0) return;
+            
+            // タスクの種別を判定
+            const hasWorkTasks = tasks.some(task => isWorkTask(task));
+            const hasOnlyNonWorkTasks = tasks.every(task => !isWorkTask(task));
             
             // 最初のタスクの種別に応じて色を設定
             const task = tasks[0];
@@ -821,6 +959,11 @@
             
             cell.style.backgroundColor = typeConfig.color;
             cell.style.color = typeConfig.textColor;
+            
+            // 休暇/MTG/その他のみの場合は文字表示なし
+            if (hasOnlyNonWorkTasks) {
+                return; // 色のみ設定して終了
+            }
             
             // 件数表示
             const countDiv = document.createElement('div');
@@ -832,13 +975,29 @@
             const typeDiv = document.createElement('div');
             typeDiv.className = 'task-type-label';
             
-            if (task.taskType && task.taskType !== 'work') {
+            if (hasWorkTasks) {
+                // 本アサインや作業完了が含まれている場合は「随時作業」
                 typeDiv.textContent = typeConfig.label;
             } else {
-                typeDiv.textContent = '作業';
+                typeDiv.textContent = typeConfig.label;
             }
             
             cell.appendChild(typeDiv);
+        }
+
+        // 作業タスクかどうかを判定
+        function isWorkTask(task) {
+            const workStatuses = [
+                '03.本アサイン',
+                '22.作業完全終了',
+                'アサイン完了',
+                '対応完了'
+            ];
+            
+            return workStatuses.some(status => 
+                task.tsetStatus?.includes(status) || 
+                task.assignStatus?.includes(status)
+            );
         }
 
         // セルのイベント設定
@@ -1180,7 +1339,8 @@
                             assignHopeDate: row['アサイン希望日'] || '',
                             startDate: row['作業開始可能日'] || '',
                             dueDate: row['作業完了期限日'] || '',
-                            taskType: determineTaskType(row['TSETアサイン状態'], row['Subject'])
+                            taskType: determineTaskType(row['TSETアサイン状態'], row['Subject']),
+                            workTimeSlot: parseWorkTimeSlot(row[`作業日${['①', '②', '③', '④', '⑤'][i-1]}_時間`])
                         };
                         
                         allTickets.push(ticket);
@@ -1221,6 +1381,22 @@
                 ticket.date && 
                 ticket.worker
             );
+        }
+
+        // 作業時間から時間帯を解析
+        function parseWorkTimeSlot(timeStr) {
+            if (!timeStr) return null;
+            
+            // "16-18"のような形式を探す
+            const timeMatch = timeStr.match(/(\d+)-(\d+)/);
+            if (timeMatch) {
+                return {
+                    start: parseInt(timeMatch[1]),
+                    end: parseInt(timeMatch[2])
+                };
+            }
+            
+            return null;
         }
 
         function hasAnyWorkDate(row) {
