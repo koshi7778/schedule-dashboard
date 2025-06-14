@@ -740,7 +740,7 @@
             training: { label: '研修', color: '#c6f6d5', textColor: '#22543d' },
             other: { label: 'その他', color: '#e2e8f0', textColor: '#4a5568' },
             work: { label: '随時作業', color: '#fefcbf', textColor: '#744210' },
-            planning: { label: '計画作業', color: '#e53e3e', textColor: 'white' },
+            planning: { label: '計画作業', color: '#fed7d7', textColor: '#e53e3e' },
             preparation: { label: '事前準備', color: '#bee3f8', textColor: '#2b6cb0' }
         };
 
@@ -763,7 +763,7 @@
             { label: '20-22', start: 20, end: 22 }
         ];
 
-        // セルクリック時のプルダウン表示
+        // セルクリック時のプルダウン表示（修正版）
         function showCellDropdown(cell, worker, dateStr) {
             console.log('showCellDropdown 呼び出し:', { worker, dateStr });
             
@@ -838,6 +838,7 @@
             }
         }
 
+        // タスク追加機能（修正版）
         function addTaskToCell(worker, dateStr, taskType, taskLabel) {
             console.log('=== addTaskToCell 開始 ===');
             console.log('引数:', { worker, dateStr, taskType, taskLabel });
@@ -867,7 +868,6 @@
             // 現在表示中の月のキーを使用
             const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
             console.log('使用する月キー:', monthKey);
-            console.log('currentYear:', currentYear, 'currentMonth:', currentMonth);
             
             // taskDataの初期化
             if (!taskData[monthKey]) {
@@ -878,9 +878,8 @@
             // タスクを追加
             taskData[monthKey].push(newTask);
             console.log('タスク追加後のデータ:', taskData[monthKey]);
-            console.log('全taskData:', Object.keys(taskData));
             
-            // 強制的にテーブルを再生成
+            // テーブルを再生成
             console.log('テーブル再生成開始...');
             generateTable();
             
@@ -1027,124 +1026,6 @@
             }
         }
 
-        // 計画作業追加
-        function addPlanningTask() {
-            console.log('計画作業追加ボタンがクリックされました');
-            
-            const taskId = `PLANNING-${planningTaskCounter++}`;
-            const newTask = {
-                id: taskId,
-                title: `計画作業${planningTaskCounter - 1}`,
-                worker: workers[0], // 最初の作業者に仮配置
-                date: `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-01`, // 月初に仮配置
-                estimatedHours: 4,
-                description: '計画作業（ドラッグで移動可能）',
-                taskType: 'planning',
-                redmineUrl: '',
-                customerName: '',
-                remoteFlag: '',
-                tsetStatus: '',
-                assignStatus: '計画中',
-                createdDate: new Date().toISOString().split('T')[0],
-                isManualEntry: true,
-                isPlanningTask: true,
-                isFloating: false // 仮配置状態
-            };
-            
-            console.log('作成された計画作業:', newTask);
-            
-            // 現在の月のデータに追加
-            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
-            if (!taskData[monthKey]) {
-                taskData[monthKey] = [];
-            }
-            taskData[monthKey].push(newTask);
-            
-            console.log('taskData更新後:', taskData[monthKey]);
-            
-            // テーブルを再生成
-            generateTable();
-            
-            showNotification(`計画作業${planningTaskCounter - 1}を追加しました。赤いセルをドラッグして移動してください。`, 'success');
-        }
-
-        // ドラッグ&ドロップ機能
-        function makeCellDroppable(cell, worker, dateStr) {
-            cell.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                cell.classList.add('drag-over');
-            });
-
-            cell.addEventListener('dragleave', (e) => {
-                cell.classList.remove('drag-over');
-            });
-
-            cell.addEventListener('drop', (e) => {
-                e.preventDefault();
-                cell.classList.remove('drag-over');
-                
-                if (draggedTask && draggedTask.isPlanningTask) {
-                    // 計画作業をこのセルに移動
-                    movePlanningTaskToCell(draggedTask, worker, dateStr);
-                }
-            });
-        }
-
-        function makePlanningTaskDraggable(taskElement, task) {
-            taskElement.draggable = true;
-            taskElement.classList.add('planning-task');
-            
-            // 計画作業バッジを追加
-            const badge = document.createElement('div');
-            badge.className = 'planning-badge';
-            badge.textContent = 'P';
-            taskElement.appendChild(badge);
-            
-            taskElement.addEventListener('dragstart', (e) => {
-                draggedTask = task;
-                taskElement.classList.add('dragging');
-                e.dataTransfer.effectAllowed = 'move';
-            });
-
-            taskElement.addEventListener('dragend', (e) => {
-                taskElement.classList.remove('dragging');
-                draggedTask = null;
-            });
-
-            // ダブルクリックで削除
-            taskElement.addEventListener('dblclick', (e) => {
-                e.stopPropagation();
-                removePlanningTask(task);
-            });
-        }
-
-        function movePlanningTaskToCell(task, worker, dateStr) {
-            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
-            
-            // 既存の位置から削除（もし配置済みの場合）
-            if (taskData[monthKey]) {
-                const taskIndex = taskData[monthKey].findIndex(t => t.id === task.id);
-                if (taskIndex !== -1) {
-                    taskData[monthKey][taskIndex].worker = worker;
-                    taskData[monthKey][taskIndex].date = dateStr;
-                    taskData[monthKey][taskIndex].isFloating = false;
-                }
-            }
-            
-            generateTable();
-            showNotification(`計画作業を${worker}の${dateStr}に配置しました`, 'success');
-        }
-
-        function removePlanningTask(task) {
-            if (confirm('この計画作業を削除しますか？')) {
-                const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
-                if (taskData[monthKey]) {
-                    taskData[monthKey] = taskData[monthKey].filter(t => t.id !== task.id);
-                }
-                generateTable();
-                showNotification('計画作業を削除しました', 'info');
-            }
-        }
         function switchTab(tabName) {
             // すべてのタブボタンとコンテンツから active クラスを削除
             document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
@@ -1210,7 +1091,7 @@
             return dayOfWeek !== 0 && dayOfWeek !== 6; // 0=日曜, 6=土曜
         }
 
-        // テーブル生成
+        // テーブル生成（修正版）
         function generateTable() {
             console.log('=== テーブル生成開始 ===');
             console.log('現在の年月:', currentYear, currentMonth + 1);
@@ -1289,11 +1170,11 @@
                     if (tasksForCell.length > 0) {
                         console.log(`✅ タスクあり - ${worker} ${dateStr}: ${tasksForCell.length}件`);
                         renderCellContent(dayCell, tasksForCell);
-                        setupCellEvents(dayCell, tasksForCell);
+                        setupCellEvents(dayCell, tasksForCell, worker, dateStr);
                     } else {
                         console.log(`❌ タスクなし - ${worker} ${dateStr}`);
                         // 空のセルにもイベントを追加
-                        setupEmptyCellEvents(dayCell);
+                        setupEmptyCellEvents(dayCell, worker, dateStr);
                     }
                     
                     // すべてのセルをドロップ可能にする
@@ -1434,7 +1315,7 @@
             return taskData[monthKey].filter(task => task.date === dateStr);
         }
 
-        // セル内のタスクを取得（簡略化・デバッグ強化版）
+        // セル内のタスクを取得（修正版）
         function getTasksForCell(worker, date) {
             console.log('=== getTasksForCell 呼び出し ===');
             console.log('検索条件:', { worker, date });
@@ -1463,7 +1344,7 @@
             return matchingTasks;
         }
 
-        // セル内容をレンダリング（デバッグ強化版）
+        // セル内容をレンダリング（修正版）
         function renderCellContent(cell, tasks) {
             console.log('=== renderCellContent 開始 ===');
             console.log('対象セル:', cell);
@@ -1472,99 +1353,47 @@
             
             // セルをクリア
             cell.innerHTML = '';
-            cell.classList.remove('has-tasks');
+            cell.style.backgroundColor = '';
+            cell.style.color = '';
             
             if (tasks.length === 0) {
                 console.log('タスクなし、レンダリング終了');
                 return;
             }
             
-            cell.classList.add('has-tasks');
+            // 最初のタスクの種別で色とラベルを決定
+            const primaryTask = tasks[0];
+            const typeConfig = taskTypeConfig[primaryTask.taskType] || taskTypeConfig.other;
             
-            // 計画作業、事前準備、その他の種別をチェック
-            const planningTasks = tasks.filter(task => task.isPlanningTask);
-            const preparationTasks = tasks.filter(task => task.isPreparationTask);
-            const otherTasks = tasks.filter(task => !task.isPlanningTask && !task.isPreparationTask);
-            
-            console.log('分類結果:', { 
-                planning: planningTasks.length, 
-                preparation: preparationTasks.length, 
-                other: otherTasks.length 
-            });
-            
-            // タスクの種別を判定（計画作業以外で）
-            const hasWorkTasks = otherTasks.some(task => isWorkTask(task));
-            const hasOnlyNonWorkTasks = otherTasks.every(task => !isWorkTask(task)) && otherTasks.length > 0;
-            
-            // 優先順位: 計画作業 > 事前準備 > その他
-            let primaryTask = tasks[0];
-            let displayLabel = '';
-            
-            if (planningTasks.length > 0) {
-                primaryTask = planningTasks[0];
-                displayLabel = '計画作業';
-                console.log('計画作業として表示');
-                makeCellDraggable(cell, primaryTask);
-            } else if (preparationTasks.length > 0) {
-                primaryTask = preparationTasks[0];
-                displayLabel = '事前準備';
-                console.log('事前準備として表示');
-                makeCellDraggable(cell, primaryTask);
-            } else if (hasWorkTasks) {
-                displayLabel = '随時作業';
-                console.log('随時作業として表示');
-            } else if (hasOnlyNonWorkTasks) {
-                // 休暇/MTG/その他のみの場合は文字表示なし
-                console.log('休暇等として表示（文字なし）');
-                const typeConfig = taskTypeConfig[primaryTask.taskType] || taskTypeConfig.other;
-                cell.style.backgroundColor = typeConfig.color;
-                cell.style.color = typeConfig.textColor;
-                makeCellDraggable(cell, primaryTask);
-                console.log('=== renderCellContent 完了（色のみ） ===');
-                return;
-            }
-            
-            const typeConfig = taskTypeConfig[primaryTask.taskType] || taskTypeConfig.work;
             console.log('使用する色設定:', typeConfig);
             
             // セルの背景色と文字色を設定
             cell.style.backgroundColor = typeConfig.color;
             cell.style.color = typeConfig.textColor;
             
-            // 件数表示
-            const countDiv = document.createElement('div');
-            countDiv.className = 'task-count';
-            countDiv.textContent = tasks.length;
-            cell.appendChild(countDiv);
-            console.log('件数表示を追加:', tasks.length);
+            // ラベルを表示
+            const labelDiv = document.createElement('div');
+            labelDiv.className = 'task-type-label';
+            labelDiv.textContent = typeConfig.label;
+            labelDiv.style.fontWeight = 'bold';
+            labelDiv.style.fontSize = '9px';
+            cell.appendChild(labelDiv);
             
-            // ラベル表示
-            const typeDiv = document.createElement('div');
-            typeDiv.className = 'task-type-label';
-            typeDiv.textContent = displayLabel || typeConfig.label;
-            cell.appendChild(typeDiv);
-            console.log('ラベル表示を追加:', displayLabel || typeConfig.label);
+            // 複数のタスクがある場合は件数も表示
+            if (tasks.length > 1) {
+                const countDiv = document.createElement('div');
+                countDiv.className = 'task-count';
+                countDiv.textContent = tasks.length;
+                countDiv.style.fontSize = '10px';
+                cell.appendChild(countDiv);
+            }
             
+            console.log('ラベル表示を追加:', typeConfig.label);
             console.log('=== renderCellContent 完了 ===');
         }
 
-        // 作業タスクかどうかを判定
-        function isWorkTask(task) {
-            const workStatuses = [
-                '03.本アサイン',
-                '22.作業完全終了',
-                'アサイン完了',
-                '対応完了'
-            ];
-            
-            return workStatuses.some(status => 
-                task.tsetStatus?.includes(status) || 
-                task.assignStatus?.includes(status)
-            );
-        }
-
-        // セルのイベント設定
-        function setupCellEvents(cell, tasks) {
+        // セルのイベント設定（修正版）
+        function setupCellEvents(cell, tasks, worker, dateStr) {
             // マウスホバーでツールチップ表示
             cell.addEventListener('mouseenter', (e) => {
                 if (tasks.length > 0) {
@@ -1585,177 +1414,23 @@
                     window.open(tasks[0].redmineUrl, '_blank');
                 } else {
                     // プルダウンを表示
-                    const worker = cell.closest('tr')?.querySelector('.worker-name')?.textContent;
-                    const dateStr = getDateFromCell(cell);
-                    
-                    if (worker && dateStr) {
-                        showCellDropdown(cell, worker, dateStr);
-                    }
+                    showCellDropdown(cell, worker, dateStr);
                 }
             });
+
+            // 手動で追加されたタスクの場合はドラッグ可能にする
+            if (tasks.some(task => task.isManualEntry)) {
+                makeCellDraggable(cell, tasks[0]);
+            }
         }
 
-        // 空のセルにもイベントを追加
-        function setupEmptyCellEvents(cell) {
+        // 空のセルのイベント設定（修正版）
+        function setupEmptyCellEvents(cell, worker, dateStr) {
             // 単一クリックでプルダウン表示
             cell.addEventListener('click', (e) => {
                 e.stopPropagation();
-                
-                const worker = cell.closest('tr')?.querySelector('.worker-name')?.textContent;
-                const dateStr = getDateFromCell(cell);
-                
-                if (worker && dateStr) {
-                    showCellDropdown(cell, worker, dateStr);
-                } else {
-                    console.error('作業者または日付の取得に失敗しました', { worker, dateStr });
-                }
+                showCellDropdown(cell, worker, dateStr);
             });
-        }
-
-        // セル内直接入力機能
-        function startDirectEdit(cell) {
-            if (cell.querySelector('.direct-input')) return; // 既に編集中の場合は無視
-
-            const worker = cell.closest('tr')?.querySelector('.worker-name')?.textContent;
-            const dateStr = getDateFromCell(cell);
-            
-            if (!worker || !dateStr) {
-                console.error('作業者または日付の取得に失敗しました');
-                return;
-            }
-            
-            cell.classList.add('editing');
-            
-            const input = document.createElement('input');
-            input.className = 'direct-input';
-            input.type = 'text';
-            input.placeholder = '休暇、会議など';
-            input.value = '';
-            
-            cell.innerHTML = '';
-            cell.appendChild(input);
-            input.focus();
-            
-            // Enterで保存
-            input.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    saveDirectEdit(cell, worker, dateStr, input.value);
-                } else if (e.key === 'Escape') {
-                    cancelDirectEdit(cell);
-                }
-            });
-            
-            // フォーカスが外れたら保存
-            input.addEventListener('blur', () => {
-                if (input.value.trim()) {
-                    saveDirectEdit(cell, worker, dateStr, input.value);
-                } else {
-                    cancelDirectEdit(cell);
-                }
-            });
-        }
-
-        function saveDirectEdit(cell, worker, date, inputValue) {
-            if (!inputValue.trim()) {
-                cancelDirectEdit(cell);
-                return;
-            }
-            
-            // 入力内容から種別を自動判定
-            let taskType = 'other';
-            const lowerValue = inputValue.toLowerCase();
-            
-            if (lowerValue.includes('休暇') || lowerValue.includes('有給') || lowerValue.includes('休み')) {
-                taskType = 'vacation';
-            } else if (lowerValue.includes('会議') || lowerValue.includes('mtg') || lowerValue.includes('ミーティング')) {
-                taskType = 'meeting';
-            } else if (lowerValue.includes('研修') || lowerValue.includes('勉強') || lowerValue.includes('学習')) {
-                taskType = 'training';
-            } else if (lowerValue.includes('計画') || lowerValue.includes('予定')) {
-                taskType = 'planning';
-            } else if (lowerValue.includes('準備') || lowerValue.includes('事前')) {
-                taskType = 'preparation';
-            }
-            
-            const newTask = {
-                id: `DIRECT-${Date.now()}`,
-                title: inputValue.trim(),
-                worker: worker,
-                date: date,
-                estimatedHours: 8,
-                description: '直接入力で追加',
-                taskType: taskType,
-                redmineUrl: '',
-                customerName: '',
-                remoteFlag: '',
-                tsetStatus: '',
-                assignStatus: taskType === 'vacation' ? '休暇/MTG/その他' : '',
-                createdDate: new Date().toISOString().split('T')[0],
-                isManualEntry: true,
-                isDirectEntry: true,
-                isPlanningTask: taskType === 'planning',
-                isPreparationTask: taskType === 'preparation'
-            };
-            
-            const monthKey = date.substring(0, 7);
-            if (!taskData[monthKey]) {
-                taskData[monthKey] = [];
-            }
-            
-            taskData[monthKey].push(newTask);
-            
-            cell.classList.remove('editing');
-            
-            // セルを再描画
-            const tasksForCell = getTasksForCell(worker, date);
-            renderCellContent(cell, tasksForCell);
-            setupCellEvents(cell, tasksForCell);
-            
-            showNotification(`${inputValue}を追加しました`, 'success');
-        }
-
-        function cancelDirectEdit(cell) {
-            cell.classList.remove('editing');
-            cell.innerHTML = '';
-            setupEmptyCellEvents(cell);
-        }
-
-        // 日付をセルから取得
-        function getDateFromCell(cell) {
-            try {
-                const table = cell.closest('table');
-                if (!table) {
-                    console.error('テーブルが見つかりません');
-                    return '';
-                }
-                
-                const headerRow = table.querySelector('tr');
-                if (!headerRow) {
-                    console.error('ヘッダー行が見つかりません');
-                    return '';
-                }
-                
-                const parentRow = cell.parentNode;
-                if (!parentRow) {
-                    console.error('親行が見つかりません');
-                    return '';
-                }
-                
-                const cellIndex = Array.from(parentRow.children).indexOf(cell);
-                const dayHeaders = headerRow.querySelectorAll('.date-header');
-                
-                if (cellIndex > 0 && dayHeaders[cellIndex - 1]) {
-                    const headerText = dayHeaders[cellIndex - 1].textContent;
-                    const day = headerText.split('\n')[0] || headerText.split('<br>')[0];
-                    return `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                }
-                
-                console.error('日付ヘッダーが見つかりません', { cellIndex, dayHeadersLength: dayHeaders.length });
-                return '';
-            } catch (error) {
-                console.error('getDateFromCell でエラーが発生しました:', error);
-                return '';
-            }
         }
 
         // ツールチップ表示
@@ -1899,7 +1574,7 @@
             showNotification('CSVファイルが見つかりません。', 'error');
         }
 
-        // CSV変換関数（作業時間の詳細読み込み対応）
+        // CSV変換関数
         function transformCSVToTickets(csvData) {
             console.log('CSV行数:', csvData.length);
             
@@ -1962,177 +1637,4 @@
                 // 作業日が設定されていない場合のフォールバック
                 if (!hasAnyWorkDate(row)) {
                     const fallbackDate = getFirstValidWorkDate(row);
-                    if (fallbackDate && assignedWorker) {
-                        const ticket = {
-                            id: `RDM-${row['Issue ID']}`,
-                            title: row['Subject'] || 'タイトルなし',
-                            worker: assignedWorker,
-                            date: fallbackDate,
-                            estimatedHours: calculateEstimatedHours(row),
-                            description: `顧客: ${row['お客様名'] || 'なし'}\nリモート: ${row['リモート有無'] || 'なし'}`,
-                            redmineUrl: row['URL'] || '',
-                            customerName: row['お客様名'] || '',
-                            remoteFlag: row['リモート有無'] || '',
-                            tsetStatus: row['TSETステータス'] || '',
-                            assignStatus: row['TSETアサイン状態'] || '',
-                            createdDate: row['作成日'] || '',
-                            assignHopeDate: row['アサイン希望日'] || '',
-                            startDate: row['作業開始可能日'] || '',
-                            dueDate: row['作業完了期限日'] || '',
-                            taskType: determineTaskType(row['TSETアサイン状態'], row['Subject'])
-                        };
-                        
-                        allTickets.push(ticket);
-                    }
-                }
-            });
-            
-            return allTickets.filter(ticket => 
-                ticket.id !== 'RDM-' && 
-                ticket.title !== 'タイトルなし' && 
-                ticket.date && 
-                ticket.worker
-            );
-        }
-
-        // 作業時間から時間帯を解析
-        function parseWorkTimeSlot(timeStr) {
-            if (!timeStr) return null;
-            
-            // "16-18"のような形式を探す
-            const timeMatch = timeStr.match(/(\d+)-(\d+)/);
-            if (timeMatch) {
-                return {
-                    start: parseInt(timeMatch[1]),
-                    end: parseInt(timeMatch[2])
-                };
-            }
-            
-            return null;
-        }
-
-        function hasAnyWorkDate(row) {
-            for (let i = 1; i <= 5; i++) {
-                const dateField = `作業日${['①', '②', '③', '④', '⑤'][i-1]}`;
-                const timeField = `作業日${['①', '②', '③', '④', '⑤'][i-1]}_時間`;
-                
-                const workDate = row[dateField];
-                const workHours = parseFloat(row[timeField]) || 0;
-                
-                if (workDate && workDate.trim() !== '' && workDate !== 'null' && workHours > 0) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        function determineTaskType(assignStatus, subject) {
-            if (assignStatus && assignStatus.includes('休暇')) return 'vacation';
-            if (assignStatus && assignStatus.includes('MTG')) return 'meeting';
-            if (assignStatus && assignStatus.includes('その他')) return 'other';
-            
-            if (subject) {
-                const lowerSubject = subject.toLowerCase();
-                if (lowerSubject.includes('研修') || lowerSubject.includes('勉強')) return 'training';
-                if (lowerSubject.includes('会議') || lowerSubject.includes('mtg')) return 'meeting';
-            }
-            
-            return 'work';
-        }
-
-        function mapWorkerName(csvWorkerName) {
-            if (!csvWorkerName || csvWorkerName === 'null' || csvWorkerName.trim() === '') {
-                return '';
-            }
-            
-            let cleanName = csvWorkerName.replace(/^TSET_[A-Z]_/, '');
-            
-            const matchedWorker = workers.find(worker => 
-                worker.includes(cleanName) || 
-                cleanName.includes(worker.replace(' ', '')) ||
-                worker.replace(' ', '').includes(cleanName.replace(' ', '')) ||
-                worker === cleanName
-            );
-            
-            return matchedWorker || cleanName;
-        }
-
-        function getFirstValidWorkDate(row) {
-            for (let i = 1; i <= 5; i++) {
-                const dateField = `作業日${['①', '②', '③', '④', '⑤'][i-1]}`;
-                const date = row[dateField];
-                if (date && date.trim() !== '' && date !== 'null') {
-                    return formatDate(date);
-                }
-            }
-            
-            return formatDate(row['アサイン希望日']) || 
-                   formatDate(row['作業開始可能日']) || 
-                   '';
-        }
-
-        function formatDate(dateStr) {
-            if (!dateStr || dateStr.trim() === '' || dateStr === 'null') {
-                return '';
-            }
-            
-            try {
-                const date = new Date(dateStr);
-                if (isNaN(date.getTime())) {
-                    return '';
-                }
-                return date.toISOString().split('T')[0];
-            } catch (error) {
-                return '';
-            }
-        }
-
-        function calculateEstimatedHours(row) {
-            let totalHours = 0;
-            
-            for (let i = 1; i <= 5; i++) {
-                const timeField = `作業日${['①', '②', '③', '④', '⑤'][i-1]}_時間`;
-                const timeStr = row[timeField];
-                
-                if (timeStr && timeStr.trim() !== '' && timeStr !== 'null') {
-                    const hours = parseFloat(timeStr.replace(/[^\d.]/g, ''));
-                    if (!isNaN(hours)) {
-                        totalHours += hours;
-                    }
-                }
-            }
-            
-            return totalHours || 4;
-        }
-
-        function groupTicketsByMonth(tickets) {
-            const monthlyData = {};
-            
-            tickets.forEach(ticket => {
-                if (ticket.date) {
-                    const monthKey = ticket.date.substring(0, 7);
-                    if (!monthlyData[monthKey]) {
-                        monthlyData[monthKey] = [];
-                    }
-                    monthlyData[monthKey].push(ticket);
-                }
-            });
-            
-            return monthlyData;
-        }
-
-        // 初期化
-        document.addEventListener('DOMContentLoaded', function() {
-            // 今日の月を初期表示に設定
-            updateMonthDisplay();
-            generateTable();
-            updateDailySchedule();
-            
-            // 1秒後にCSV自動読み込み
-            setTimeout(() => {
-                loadDataFromCSV();
-            }, 1000);
-        });
-    </script>
-</body>
-</html>
+                    if (fallback
