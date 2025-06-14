@@ -13,433 +13,247 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            font-family: 'Segoe UI', 'Meiryo', sans-serif;
+            background: #f5f5f5;
             padding: 20px;
+            font-size: 12px;
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 100%;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
 
         .header {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            background: #2c5282;
             color: white;
-            padding: 30px;
-            text-align: center;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            font-weight: 300;
+            font-size: 18px;
+            font-weight: normal;
         }
 
         .controls {
             display: flex;
-            justify-content: space-between;
+            gap: 15px;
             align-items: center;
-            padding: 20px 30px;
-            background: #f8f9fa;
-            border-bottom: 2px solid #e9ecef;
         }
 
         .month-selector {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
         }
 
         .month-btn {
-            background: #007bff;
+            background: rgba(255, 255, 255, 0.2);
             color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 5px 10px;
+            border-radius: 4px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            font-size: 12px;
         }
 
         .month-btn:hover {
-            background: #0056b3;
-            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.3);
         }
 
-        .legend {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9em;
-        }
-
-        .legend-color {
-            width: 16px;
-            height: 16px;
+        .csv-btn {
+            background: #38a169;
+            color: white;
+            border: none;
+            padding: 6px 12px;
             border-radius: 4px;
-        }
-
-        .main-content {
-            display: flex;
-            gap: 20px;
-            padding: 20px;
-        }
-
-        .unassigned-panel {
-            width: 300px;
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .unassigned-panel h3 {
-            color: #333;
-            margin-bottom: 15px;
-            text-align: center;
-            font-size: 1.2em;
-        }
-
-        .unassigned-tasks {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        .calendar-container {
-            flex: 1;
-        }
-
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: 150px repeat(31, 1fr);
-            gap: 1px;
-            background: #e9ecef;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .worker-header, .date-header {
-            background: #343a40;
-            color: white;
-            padding: 12px 8px;
-            font-weight: 600;
-            text-align: center;
-            font-size: 0.9em;
-        }
-
-        .worker-name {
-            background: #495057;
-            color: white;
-            padding: 12px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            min-height: 60px;
-        }
-
-        .day-cell {
-            background: white;
-            min-height: 60px;
-            padding: 4px;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .day-cell.drag-over {
-            background: #e3f2fd;
-            border: 2px dashed #2196f3;
-            transform: scale(1.02);
-        }
-
-        .day-cell.invalid-drop {
-            background: #ffebee;
-            border: 2px dashed #f44336;
-        }
-
-        .task-item {
-            padding: 6px 8px;
-            border-radius: 6px;
-            font-size: 0.75em;
             cursor: pointer;
-            transition: all 0.3s ease;
-            border-left: 3px solid transparent;
-            user-select: none;
-            position: relative;
+            font-size: 12px;
         }
 
-        .task-item:hover {
-            transform: scale(1.05);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .task-item.dragging {
-            opacity: 0.7;
-            transform: rotate(5deg);
-            z-index: 1000;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .task-assigned {
-            background: #d4edda;
-            border-left-color: #28a745;
-            color: #155724;
-        }
-
-        .task-unassigned {
-            background: #fff3cd;
-            border-left-color: #ffc107;
-            color: #856404;
-            cursor: grab;
-        }
-
-        .task-unassigned:active {
-            cursor: grabbing;
-        }
-
-        .task-unassigned.in-panel {
-            background: #fff3cd;
-            border: 2px solid #ffc107;
-            margin-bottom: 8px;
-            padding: 12px;
-            font-size: 0.9em;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
-        }
-
-        .task-completed {
-            background: #d1ecf1;
-            border-left-color: #17a2b8;
-            color: #0c5460;
-        }
-
-        .task-planned {
-            background: #f8d7da;
-            border-left-color: #dc3545;
-            color: #721c24;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
-        }
-
-        .modal-content {
-            background: white;
-            margin: 5% auto;
-            padding: 30px;
-            border-radius: 15px;
-            width: 80%;
-            max-width: 600px;
-            position: relative;
-            animation: modalSlideIn 0.3s ease;
-        }
-
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .close {
-            position: absolute;
-            right: 20px;
-            top: 20px;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            color: #aaa;
-        }
-
-        .close:hover {
-            color: #000;
-        }
-
-        .task-detail {
-            margin-top: 20px;
-        }
-
-        .task-detail h3 {
-            color: #333;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #eee;
-        }
-
-        .task-info {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .info-item {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid #007bff;
-        }
-
-        .info-label {
-            font-weight: 600;
-            color: #495057;
-            margin-bottom: 5px;
-        }
-
-        .info-value {
-            color: #333;
-        }
-
-        .redmine-link {
-            display: inline-block;
-            background: linear-gradient(135deg, #28a745, #20c997);
-            color: white;
-            padding: 12px 24px;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            margin-top: 15px;
-        }
-
-        .redmine-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        .csv-btn:hover {
+            background: #2f855a;
         }
 
         .stats {
+            background: #edf2f7;
+            padding: 10px 20px;
             display: flex;
-            justify-content: space-around;
-            padding: 20px;
-            background: #f8f9fa;
-            margin: 0 20px 20px 20px;
-            border-radius: 10px;
+            gap: 30px;
+            font-size: 11px;
         }
 
         .stat-item {
-            text-align: center;
-            padding: 15px;
+            color: #4a5568;
         }
 
         .stat-number {
-            font-size: 2em;
             font-weight: bold;
-            color: #007bff;
+            color: #2d3748;
         }
 
-        .stat-label {
-            color: #6c757d;
-            margin-top: 5px;
+        .table-container {
+            overflow-x: auto;
+            max-height: 80vh;
+            overflow-y: auto;
         }
 
-        .drag-hint {
-            background: #e3f2fd;
-            border: 2px dashed #2196f3;
-            padding: 15px;
-            border-radius: 8px;
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+        }
+
+        .schedule-table th,
+        .schedule-table td {
+            border: 1px solid #e2e8f0;
+            padding: 4px 6px;
             text-align: center;
-            color: #1976d2;
-            font-style: italic;
-            margin-bottom: 15px;
+            vertical-align: middle;
+            min-width: 35px;
+            max-width: 35px;
+            overflow: hidden;
         }
 
-        .assignment-controls {
-            display: flex;
-            gap: 10px;
-            margin: 15px 0;
-            justify-content: center;
+        .schedule-table th {
+            background: #f7fafc;
+            font-weight: 600;
+            color: #2d3748;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
-        .control-btn {
-            background: #6c757d;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
+        .worker-name {
+            background: #f7fafc;
+            font-weight: 600;
+            color: #2d3748;
+            text-align: left;
+            padding-left: 8px;
+            min-width: 100px;
+            max-width: 100px;
+            position: sticky;
+            left: 0;
+            z-index: 5;
+        }
+
+        .date-header {
+            writing-mode: vertical-rl;
+            font-size: 10px;
+            height: 60px;
+        }
+
+        .weekend {
+            background: #fed7d7 !important;
+        }
+
+        .holiday {
+            background: #fbb6ce !important;
+        }
+
+        .task-cell {
             cursor: pointer;
-            font-size: 0.9em;
-            transition: all 0.3s ease;
+            position: relative;
+            height: 30px;
+            font-size: 10px;
+            line-height: 1.2;
+            background: white;
         }
 
-        .control-btn:hover {
-            background: #5a6268;
-            transform: translateY(-1px);
+        .task-cell:hover {
+            background: #bee3f8 !important;
         }
 
-        .control-btn.save {
-            background: #28a745;
+        .task-cell.has-tasks {
+            background: #e6fffa;
+            border: 2px solid #38b2ac;
         }
 
-        .control-btn.save:hover {
-            background: #218838;
+        .task-count {
+            font-weight: bold;
+            color: #2d3748;
+            font-size: 11px;
         }
 
-        .control-btn.reset {
-            background: #dc3545;
+        .task-type-label {
+            font-size: 9px;
+            color: #4a5568;
+            margin-top: 2px;
         }
 
-        .control-btn.reset:hover {
-            background: #c82333;
+        /* ツールチップ */
+        .tooltip {
+            position: absolute;
+            background: #1a202c;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            max-width: 300px;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
         }
 
-        .control-btn.csv-load {
-            background: #17a2b8;
+        .tooltip.show {
+            opacity: 1;
         }
 
-        .control-btn.csv-load:hover {
-            background: #138496;
+        .tooltip-task {
+            margin-bottom: 6px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #4a5568;
         }
 
+        .tooltip-task:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .tooltip-title {
+            font-weight: 600;
+            color: #68d391;
+            margin-bottom: 2px;
+        }
+
+        .tooltip-details {
+            font-size: 10px;
+            color: #cbd5e0;
+        }
+
+        /* 通知 */
         .notification {
             position: fixed;
             top: 20px;
             right: 20px;
-            padding: 15px 20px;
-            border-radius: 8px;
+            padding: 12px 16px;
+            border-radius: 4px;
             color: white;
-            font-weight: 500;
+            font-size: 12px;
             z-index: 2000;
             animation: slideInRight 0.3s ease;
         }
 
         .notification.success {
-            background: #28a745;
+            background: #38a169;
         }
 
         .notification.error {
-            background: #dc3545;
+            background: #e53e3e;
         }
 
         .notification.info {
-            background: #007bff;
+            background: #3182ce;
         }
 
         @keyframes slideInRight {
@@ -453,24 +267,25 @@
             }
         }
 
-        @media (max-width: 1200px) {
-            .main-content {
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .stats {
                 flex-direction: column;
+                gap: 5px;
             }
             
-            .unassigned-panel {
-                width: 100%;
-                order: -1;
+            .schedule-table th,
+            .schedule-table td {
+                min-width: 30px;
+                max-width: 30px;
+                font-size: 10px;
+                padding: 2px 3px;
             }
             
-            .unassigned-tasks {
-                flex-direction: row;
-                overflow-x: auto;
-                max-height: none;
-            }
-            
-            .calendar-grid {
-                overflow-x: auto;
+            .worker-name {
+                min-width: 80px;
+                max-width: 80px;
+                font-size: 10px;
             }
         }
     </style>
@@ -479,88 +294,32 @@
     <div class="container">
         <div class="header">
             <h1>作業スケジュール管理ダッシュボード</h1>
-            <p>ドラッグ&ドロップでスケジュールを直感的に管理</p>
-        </div>
-
-        <div class="controls">
-            <div class="month-selector">
-                <button class="month-btn" onclick="changeMonth(-1)">◀ 前月</button>
-                <h2 id="currentMonth">2025年6月</h2>
-                <button class="month-btn" onclick="changeMonth(1)">次月 ▶</button>
-            </div>
-            <div class="legend">
-                <div class="legend-item">
-                    <div class="legend-color" style="background: #d4edda; border-left: 3px solid #28a745;"></div>
-                    <span>本アサイン</span>
+            <div class="controls">
+                <div class="month-selector">
+                    <button class="month-btn" onclick="changeMonth(-1)">◀</button>
+                    <span id="currentMonth">2025年6月</span>
+                    <button class="month-btn" onclick="changeMonth(1)">▶</button>
                 </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: #fff3cd; border-left: 3px solid #ffc107;"></div>
-                    <span>未アサイン</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: #d1ecf1; border-left: 3px solid #17a2b8;"></div>
-                    <span>作業完了</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: #f8d7da; border-left: 3px solid #dc3545;"></div>
-                    <span>計画作業</span>
-                </div>
+                <button class="csv-btn" onclick="loadDataFromCSV()">CSV読込</button>
             </div>
         </div>
 
         <div class="stats">
-            <div class="stat-item">
-                <div class="stat-number" id="totalTasks">0</div>
-                <div class="stat-label">総タスク数</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number" id="assignedTasks">0</div>
-                <div class="stat-label">アサイン済み</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number" id="completedTasks">0</div>
-                <div class="stat-label">完了済み</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number" id="unassignedTasks">0</div>
-                <div class="stat-label">未アサイン</div>
-            </div>
+            <div class="stat-item">総タスク数: <span class="stat-number" id="totalTasks">0</span></div>
+            <div class="stat-item">本アサイン: <span class="stat-number" id="assignedTasks">0</span></div>
+            <div class="stat-item">作業完了: <span class="stat-number" id="completedTasks">0</span></div>
+            <div class="stat-item">キャンセル: <span class="stat-number" id="cancelledTasks">0</span></div>
         </div>
 
-        <div class="main-content">
-            <div class="unassigned-panel">
-                <h3>📋 未アサインタスク</h3>
-                <div class="drag-hint">
-                    未アサインのタスクをドラッグして<br>
-                    カレンダーにドロップしてください
-                </div>
-                <div class="assignment-controls">
-                    <button class="control-btn save" onclick="saveAssignments()">💾 保存</button>
-                    <button class="control-btn reset" onclick="resetAssignments()">🔄 リセット</button>
-                    <button class="control-btn csv-load" onclick="loadDataFromCSV()">📄 CSV読込</button>
-                </div>
-                <div class="unassigned-tasks" id="unassignedTasks">
-                    <!-- 未アサインタスクがここに表示される -->
-                </div>
-            </div>
-
-            <div class="calendar-container">
-                <div class="calendar-grid" id="calendar">
-                    <!-- カレンダーはJavaScriptで動的生成 -->
-                </div>
-            </div>
+        <div class="table-container">
+            <table class="schedule-table" id="scheduleTable">
+                <!-- テーブルはJavaScriptで動的生成 -->
+            </table>
         </div>
     </div>
 
-    <!-- モーダルウィンドウ -->
-    <div id="taskModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <div class="task-detail" id="taskDetail">
-                <!-- タスク詳細がここに表示される -->
-            </div>
-        </div>
-    </div>
+    <!-- ツールチップ -->
+    <div id="tooltip" class="tooltip"></div>
 
     <script>
         // 現在の月
@@ -568,50 +327,10 @@
         let currentYear = currentDate.getFullYear();
         let currentMonth = currentDate.getMonth();
 
-        // ドラッグ中のタスク
-        let draggedTask = null;
-        let pendingChanges = [];
+        // データ
+        let taskData = {};
 
-        // モックデータ - CSVから読み込まれるまでの仮データ
-        let mockTasks = {
-            '2025-06': [
-                {
-                    id: 'RDM-001',
-                    title: 'システム機能改修',
-                    worker: '宮崎 仁',
-                    date: '2025-06-03',
-                    status: 'assigned',
-                    type: 'ad-hoc',
-                    estimatedHours: 3,
-                    description: 'ユーザー管理画面の機能改修作業',
-                    redmineUrl: 'https://redmine.example.com/issues/001'
-                },
-                {
-                    id: 'RDM-005',
-                    title: 'バグ修正',
-                    worker: '',
-                    date: '',
-                    status: 'unassigned',
-                    type: 'ad-hoc',
-                    estimatedHours: 2,
-                    description: 'ログイン機能のバグ修正',
-                    redmineUrl: 'https://redmine.example.com/issues/005'
-                },
-                {
-                    id: 'RDM-006',
-                    title: 'UI改善',
-                    worker: '',
-                    date: '',
-                    status: 'unassigned',
-                    type: 'ad-hoc',
-                    estimatedHours: 4,
-                    description: 'ユーザーインターフェースの改善作業',
-                    redmineUrl: 'https://redmine.example.com/issues/006'
-                }
-            ]
-        };
-
-        // 作業者リスト - 実際の作業者名
+        // 作業者リスト
         const workers = [
             '宮崎 仁', '村田 祐馬', '紫藤 正之', '塚本 祐太', '山口 広生',
             '竹田 愛美', '松岡 隼', '有働 麻耶', '末藤 千奈', '園田 敏雄',
@@ -620,9 +339,8 @@
             '木暮 誉貴'
         ];
 
-        // 通知表示関数
+        // 通知表示
         function showNotification(message, type = 'info') {
-            // 既存の通知を削除
             const existingNotification = document.querySelector('.notification');
             if (existingNotification) {
                 existingNotification.remove();
@@ -633,18 +351,224 @@
             notification.textContent = message;
             document.body.appendChild(notification);
 
-            // 3秒後に自動削除
             setTimeout(() => {
                 notification.remove();
             }, 3000);
         }
 
-        // CSV読み込み関連の関数
+        // 月変更
+        function changeMonth(direction) {
+            currentMonth += direction;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            } else if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            
+            updateMonthDisplay();
+            generateTable();
+        }
+
+        function updateMonthDisplay() {
+            document.getElementById('currentMonth').textContent = 
+                `${currentYear}年${currentMonth + 1}月`;
+        }
+
+        // テーブル生成
+        function generateTable() {
+            const table = document.getElementById('scheduleTable');
+            table.innerHTML = '';
+
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+            // ヘッダー行生成
+            const headerRow = document.createElement('tr');
+            
+            // 作業者列ヘッダー
+            const workerHeader = document.createElement('th');
+            workerHeader.textContent = '作業者';
+            workerHeader.className = 'worker-name';
+            headerRow.appendChild(workerHeader);
+
+            // 日付列ヘッダー
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayHeader = document.createElement('th');
+                const date = new Date(currentYear, currentMonth, day);
+                const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()];
+                
+                dayHeader.innerHTML = `${day}<br>${dayOfWeek}`;
+                dayHeader.className = 'date-header';
+                
+                // 土日祝日の色分け
+                if (date.getDay() === 0 || date.getDay() === 6) {
+                    dayHeader.classList.add('weekend');
+                }
+                
+                headerRow.appendChild(dayHeader);
+            }
+            
+            table.appendChild(headerRow);
+
+            // 作業者行生成
+            workers.forEach(worker => {
+                const workerRow = document.createElement('tr');
+                
+                // 作業者名セル
+                const workerCell = document.createElement('td');
+                workerCell.textContent = worker;
+                workerCell.className = 'worker-name';
+                workerRow.appendChild(workerCell);
+
+                // 各日のセル
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dayCell = document.createElement('td');
+                    dayCell.className = 'task-cell';
+                    
+                    const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    
+                    // 土日の背景色
+                    const date = new Date(currentYear, currentMonth, day);
+                    if (date.getDay() === 0 || date.getDay() === 6) {
+                        dayCell.classList.add('weekend');
+                    }
+                    
+                    // タスクデータがある場合は表示
+                    const tasksForCell = getTasksForCell(worker, dateStr);
+                    
+                    if (tasksForCell.length > 0) {
+                        renderCellContent(dayCell, tasksForCell);
+                        setupCellEvents(dayCell, tasksForCell);
+                    }
+                    
+                    workerRow.appendChild(dayCell);
+                }
+                
+                table.appendChild(workerRow);
+            });
+
+            updateStats();
+        }
+
+        // セル内のタスクを取得
+        function getTasksForCell(worker, date) {
+            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+            if (!taskData[monthKey]) return [];
+            
+            return taskData[monthKey].filter(task => 
+                task.worker === worker && task.date === date
+            );
+        }
+
+        // セル内容をレンダリング
+        function renderCellContent(cell, tasks) {
+            cell.innerHTML = '';
+            cell.classList.add('has-tasks');
+            
+            // 件数表示
+            const countDiv = document.createElement('div');
+            countDiv.className = 'task-count';
+            countDiv.textContent = tasks.length;
+            cell.appendChild(countDiv);
+            
+            // 「随時」表示
+            const typeDiv = document.createElement('div');
+            typeDiv.className = 'task-type-label';
+            typeDiv.textContent = '随時';
+            cell.appendChild(typeDiv);
+        }
+
+        // セルのイベント設定
+        function setupCellEvents(cell, tasks) {
+            // マウスホバーでツールチップ表示
+            cell.addEventListener('mouseenter', (e) => {
+                showTooltip(e, tasks);
+            });
+
+            cell.addEventListener('mouseleave', () => {
+                hideTooltip();
+            });
+
+            // クリックで最初のタスクのURLに遷移
+            cell.addEventListener('click', () => {
+                if (tasks.length > 0 && tasks[0].redmineUrl) {
+                    window.open(tasks[0].redmineUrl, '_blank');
+                }
+            });
+        }
+
+        // ツールチップ表示
+        function showTooltip(event, tasks) {
+            const tooltip = document.getElementById('tooltip');
+            
+            let tooltipContent = '';
+            tasks.forEach((task, index) => {
+                tooltipContent += `
+                    <div class="tooltip-task">
+                        <div class="tooltip-title">${task.title}</div>
+                        <div class="tooltip-details">
+                            ID: ${task.id} | 顧客: ${task.customerName || 'なし'}<br>
+                            リモート: ${task.remoteFlag || 'なし'}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            tooltip.innerHTML = tooltipContent;
+            tooltip.classList.add('show');
+            
+            // ツールチップの位置調整
+            const rect = event.target.getBoundingClientRect();
+            tooltip.style.left = `${rect.right + 10}px`;
+            tooltip.style.top = `${rect.top}px`;
+            
+            // 画面外に出る場合の調整
+            const tooltipRect = tooltip.getBoundingClientRect();
+            if (tooltipRect.right > window.innerWidth) {
+                tooltip.style.left = `${rect.left - tooltipRect.width - 10}px`;
+            }
+            if (tooltipRect.bottom > window.innerHeight) {
+                tooltip.style.top = `${rect.bottom - tooltipRect.height}px`;
+            }
+        }
+
+        // ツールチップ非表示
+        function hideTooltip() {
+            const tooltip = document.getElementById('tooltip');
+            tooltip.classList.remove('show');
+        }
+
+        // 統計更新
+        function updateStats() {
+            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+            const tasks = taskData[monthKey] || [];
+            
+            const totalTasks = tasks.length;
+            const assignedTasks = tasks.filter(t => 
+                t.tsetStatus === '03.本アサイン' || 
+                t.assignStatus === 'アサイン完了'
+            ).length;
+            const completedTasks = tasks.filter(t => 
+                t.tsetStatus === '22.作業完全終了' || 
+                t.assignStatus === '対応完了'
+            ).length;
+            const cancelledTasks = tasks.filter(t => 
+                t.tsetStatus === '80.キャンセル（依頼者都合）' || 
+                t.assignStatus === '中止'
+            ).length;
+
+            document.getElementById('totalTasks').textContent = totalTasks;
+            document.getElementById('assignedTasks').textContent = assignedTasks;
+            document.getElementById('completedTasks').textContent = completedTasks;
+            document.getElementById('cancelledTasks').textContent = cancelledTasks;
+        }
+
+        // CSV読み込み機能
         function getCSVFileNames() {
             const today = new Date();
             const possibleFileNames = [];
             
-            // 今日から過去7日分のファイル名を生成
             for (let i = 0; i <= 7; i++) {
                 const targetDate = new Date(today);
                 targetDate.setDate(today.getDate() - i);
@@ -656,7 +580,6 @@
                 possibleFileNames.push(`redmine_issues_${year}_${month}_${day}.csv`);
             }
             
-            // フォールバック用の固定ファイル名も追加
             possibleFileNames.push('redmine_issues_latest.csv');
             
             return possibleFileNames;
@@ -692,10 +615,9 @@
                         const tickets = transformCSVToTickets(result.data);
                         const monthlyData = groupTicketsByMonth(tickets);
                         
-                        // 既存のmockTasksを置き換え
-                        mockTasks = monthlyData;
+                        taskData = monthlyData;
                         
-                        generateCalendar();
+                        generateTable();
                         
                         showNotification(`${fileName} から ${tickets.length}件のチケットを読み込みました`, 'success');
                         return;
@@ -709,24 +631,38 @@
                 }
             }
             
-            showNotification('CSVファイルが見つかりません。モックデータで表示します。', 'error');
-            console.error('利用可能なファイル名:', possibleFileNames);
+            showNotification('CSVファイルが見つかりません。', 'error');
         }
 
+        // CSV変換関数（フィルタリング条件を追加）
         function transformCSVToTickets(csvData) {
-            return csvData.map(row => {
+            return csvData.filter(row => {
+                // フィルタリング条件
+                const assignStatus = row['TSETアサイン状態'] || '';
+                const tsetStatus = row['TSETステータス'] || '';
+                
+                // TSETアサイン状態のフィルタ
+                const validAssignStatus = [
+                    'アサイン完了', '対応完了', '中止', '休暇/MTG/その他'
+                ].some(status => assignStatus.includes(status));
+                
+                // TSETステータスのフィルタ
+                const validTsetStatus = [
+                    '03.本アサイン', '22.作業完全終了', '80.キャンセル（依頼者都合）'
+                ].some(status => tsetStatus.includes(status));
+                
+                // どちらか一方に有効な値が入っている場合のみ対象
+                return validAssignStatus || validTsetStatus;
+                
+            }).map(row => {
                 const assignedWorker = mapWorkerName(row['TSET作業者']);
                 const workDate = getFirstValidWorkDate(row);
-                const status = determineStatus(row, assignedWorker, workDate);
-                const type = determineWorkType(row);
                 
                 return {
                     id: `RDM-${row['Issue ID']}`,
                     title: row['Subject'] || 'タイトルなし',
                     worker: assignedWorker,
                     date: workDate,
-                    status: status,
-                    type: type,
                     estimatedHours: calculateEstimatedHours(row),
                     description: `顧客: ${row['お客様名'] || 'なし'}\nリモート: ${row['リモート有無'] || 'なし'}`,
                     redmineUrl: row['URL'] || '',
@@ -739,7 +675,7 @@
                     startDate: row['作業開始可能日'] || '',
                     dueDate: row['作業完了期限日'] || ''
                 };
-            }).filter(ticket => ticket.id !== 'RDM-' && ticket.title !== 'タイトルなし');
+            }).filter(ticket => ticket.id !== 'RDM-' && ticket.title !== 'タイトルなし' && ticket.date);
         }
 
         function mapWorkerName(csvWorkerName) {
@@ -786,44 +722,6 @@
             }
         }
 
-        function determineStatus(row, assignedWorker, workDate) {
-            const tsetStatus = row['TSETステータス'] || '';
-            const assignStatus = row['TSETアサイン状態'] || '';
-            
-            if (tsetStatus.includes('完了') || tsetStatus.includes('終了') || tsetStatus.includes('Closed')) {
-                return 'completed';
-            }
-            
-            if (assignedWorker && workDate) {
-                return 'assigned';
-            }
-            
-            return 'unassigned';
-        }
-
-        function determineWorkType(row) {
-            let workDayCount = 0;
-            for (let i = 1; i <= 5; i++) {
-                const dateField = `作業日${['①', '②', '③', '④', '⑤'][i-1]}`;
-                if (row[dateField] && row[dateField].trim() !== '' && row[dateField] !== 'null') {
-                    workDayCount++;
-                }
-            }
-            
-            if (workDayCount > 1 || 
-                (row['Subject'] && (
-                    row['Subject'].includes('環境構築') ||
-                    row['Subject'].includes('移行') ||
-                    row['Subject'].includes('プロジェクト') ||
-                    row['Subject'].includes('設計') ||
-                    row['Subject'].includes('開発')
-                ))) {
-                return 'planned';
-            }
-            
-            return 'ad-hoc';
-        }
-
         function calculateEstimatedHours(row) {
             let totalHours = 0;
             
@@ -852,358 +750,18 @@
                         monthlyData[monthKey] = [];
                     }
                     monthlyData[monthKey].push(ticket);
-                } else {
-                    const currentMonthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
-                    if (!monthlyData[currentMonthKey]) {
-                        monthlyData[currentMonthKey] = [];
-                    }
-                    monthlyData[currentMonthKey].push(ticket);
                 }
             });
             
             return monthlyData;
         }
 
-        function generateCalendar() {
-            const calendar = document.getElementById('calendar');
-            calendar.innerHTML = '';
-
-            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-
-            const headerRow = document.createElement('div');
-            headerRow.className = 'worker-header';
-            headerRow.textContent = '作業者';
-            calendar.appendChild(headerRow);
-
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dateHeader = document.createElement('div');
-                dateHeader.className = 'date-header';
-                dateHeader.textContent = day;
-                calendar.appendChild(dateHeader);
-            }
-
-            workers.forEach(worker => {
-                const workerCell = document.createElement('div');
-                workerCell.className = 'worker-name';
-                workerCell.textContent = worker;
-                calendar.appendChild(workerCell);
-
-                for (let day = 1; day <= daysInMonth; day++) {
-                    const dayCell = document.createElement('div');
-                    dayCell.className = 'day-cell';
-                    dayCell.dataset.worker = worker;
-                    dayCell.dataset.date = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                    
-                    setupDropZone(dayCell);
-                    
-                    const currentDateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                    const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
-                    const tasksForDay = mockTasks[monthKey]?.filter(task => 
-                        task.worker === worker && task.date === currentDateStr
-                    ) || [];
-
-                    tasksForDay.forEach(task => {
-                        const taskElement = createTaskElement(task);
-                        dayCell.appendChild(taskElement);
-                    });
-
-                    calendar.appendChild(dayCell);
-                }
-            });
-
-            generateUnassignedTasks();
-            updateStats();
-        }
-
-        function createTaskElement(task) {
-            const taskElement = document.createElement('div');
-            taskElement.className = `task-item task-${task.status}`;
-            taskElement.textContent = task.type === 'planned' ? `計画: ${task.title}` : task.title;
-            taskElement.dataset.taskId = task.id;
-            
-            if (task.status === 'unassigned') {
-                taskElement.draggable = true;
-                setupDragEvents(taskElement, task);
-            } else {
-                taskElement.onclick = () => showTaskDetail(task);
-            }
-            
-            return taskElement;
-        }
-
-        function generateUnassignedTasks() {
-            const container = document.getElementById('unassignedTasks');
-            container.innerHTML = '';
-
-            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
-            const unassignedTasks = mockTasks[monthKey]?.filter(task => task.status === 'unassigned') || [];
-
-            unassignedTasks.forEach(task => {
-                const taskElement = createTaskElement(task);
-                taskElement.classList.add('in-panel');
-                container.appendChild(taskElement);
-            });
-        }
-
-        function setupDragEvents(element, task) {
-            element.addEventListener('dragstart', (e) => {
-                draggedTask = task;
-                element.classList.add('dragging');
-                e.dataTransfer.effectAllowed = 'move';
-                e.dataTransfer.setData('text/html', element.outerHTML);
-            });
-
-            element.addEventListener('dragend', (e) => {
-                element.classList.remove('dragging');
-                draggedTask = null;
-            });
-        }
-
-        function setupDropZone(dayCell) {
-            dayCell.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                e.dataTransfer.dropEffect = 'move';
-                
-                if (draggedTask && canDropTask(dayCell, draggedTask)) {
-                    dayCell.classList.add('drag-over');
-                } else {
-                    dayCell.classList.add('invalid-drop');
-                }
-            });
-
-            dayCell.addEventListener('dragleave', (e) => {
-                dayCell.classList.remove('drag-over', 'invalid-drop');
-            });
-
-            dayCell.addEventListener('drop', (e) => {
-                e.preventDefault();
-                dayCell.classList.remove('drag-over', 'invalid-drop');
-                
-                if (draggedTask && canDropTask(dayCell, draggedTask)) {
-                    dropTask(dayCell, draggedTask);
-                } else {
-                    showNotification('この場所にはタスクを配置できません', 'error');
-                }
-            });
-        }
-
-        function canDropTask(dayCell, task) {
-            const worker = dayCell.dataset.worker;
-            const date = dayCell.dataset.date;
-            
-            if (task.type === 'planned') {
-                const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
-                const existingPlannedTasks = mockTasks[monthKey]?.filter(t => 
-                    t.worker === worker && 
-                    t.date === date && 
-                    t.type === 'planned' && 
-                    t.id !== task.id
-                ) || [];
-                
-                if (existingPlannedTasks.length > 0) {
-                    return false;
-                }
-            }
-            
-            return true;
-        }
-
-        function dropTask(dayCell, task) {
-            const worker = dayCell.dataset.worker;
-            const date = dayCell.dataset.date;
-            
-            const change = {
-                taskId: task.id,
-                oldWorker: task.worker,
-                oldDate: task.date,
-                newWorker: worker,
-                newDate: date
-            };
-            
-            pendingChanges.push(change);
-            
-            if (task.worker && task.date) {
-                removeTaskFromCalendar(task.id);
-            } else {
-                removeTaskFromUnassigned(task.id);
-            }
-            
-            task.worker = worker;
-            task.date = date;
-            task.status = 'assigned';
-            
-            const taskElement = createTaskElement(task);
-            dayCell.appendChild(taskElement);
-            
-            updateStats();
-            showNotification(`${task.title} を ${worker} の ${date} にアサインしました`, 'success');
-        }
-
-        function removeTaskFromCalendar(taskId) {
-            const taskElements = document.querySelectorAll(`[data-task-id="${taskId}"]`);
-            taskElements.forEach(el => el.remove());
-        }
-
-        function removeTaskFromUnassigned(taskId) {
-            const unassignedContainer = document.getElementById('unassignedTasks');
-            const taskElement = unassignedContainer.querySelector(`[data-task-id="${taskId}"]`);
-            if (taskElement) {
-                taskElement.remove();
-            }
-        }
-
-        function saveAssignments() {
-            if (pendingChanges.length === 0) {
-                showNotification('保存する変更がありません', 'error');
-                return;
-            }
-            
-            console.log('Saving assignments:', pendingChanges);
-            
-            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
-            pendingChanges.forEach(change => {
-                const task = mockTasks[monthKey]?.find(t => t.id === change.taskId);
-                if (task) {
-                    task.worker = change.newWorker;
-                    task.date = change.newDate;
-                    task.status = 'assigned';
-                }
-            });
-            
-            pendingChanges = [];
-            showNotification(`変更を保存しました`, 'success');
-        }
-
-        function resetAssignments() {
-            if (pendingChanges.length === 0) {
-                showNotification('リセットする変更がありません', 'error');
-                return;
-            }
-            
-            pendingChanges.forEach(change => {
-                const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
-                const task = mockTasks[monthKey]?.find(t => t.id === change.taskId);
-                if (task) {
-                    task.worker = change.oldWorker;
-                    task.date = change.oldDate;
-                    task.status = change.oldWorker ? 'assigned' : 'unassigned';
-                }
-            });
-            
-            pendingChanges = [];
-            generateCalendar();
-            showNotification('変更をリセットしました', 'success');
-        }
-
-        function updateStats() {
-            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
-            const tasks = mockTasks[monthKey] || [];
-            
-            const totalTasks = tasks.length;
-            const assignedTasks = tasks.filter(t => t.status === 'assigned').length;
-            const completedTasks = tasks.filter(t => t.status === 'completed').length;
-            const unassignedTasks = tasks.filter(t => t.status === 'unassigned').length;
-
-            document.getElementById('totalTasks').textContent = totalTasks;
-            document.getElementById('assignedTasks').textContent = assignedTasks;
-            document.getElementById('completedTasks').textContent = completedTasks;
-            document.getElementById('unassignedTasks').textContent = unassignedTasks;
-        }
-
-        function showTaskDetail(task) {
-            const modal = document.getElementById('taskModal');
-            const detail = document.getElementById('taskDetail');
-            
-            const statusText = {
-                'assigned': '本アサイン',
-                'unassigned': '未アサイン',
-                'completed': '作業完了'
-            };
-
-            const typeText = {
-                'ad-hoc': '随時作業',
-                'planned': '計画作業'
-            };
-
-            detail.innerHTML = `
-                <h3>${task.title}</h3>
-                <div class="task-info">
-                    <div class="info-item">
-                        <div class="info-label">チケットID</div>
-                        <div class="info-value">${task.id}</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">担当者</div>
-                        <div class="info-value">${task.worker || '未アサイン'}</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">作業日</div>
-                        <div class="info-value">${task.date || '未設定'}</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">ステータス</div>
-                        <div class="info-value">${statusText[task.status]}</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">作業種別</div>
-                        <div class="info-value">${typeText[task.type]}</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">予定時間</div>
-                        <div class="info-value">${task.estimatedHours}時間</div>
-                    </div>
-                </div>
-                <div class="info-item" style="grid-column: 1 / -1; margin-top: 15px;">
-                    <div class="info-label">詳細</div>
-                    <div class="info-value">${task.description}</div>
-                </div>
-                ${task.redmineUrl ? `<a href="${task.redmineUrl}" target="_blank" class="redmine-link">Redmineで詳細を確認 →</a>` : ''}
-            `;
-            
-            modal.style.display = 'block';
-        }
-
-        function closeModal() {
-            document.getElementById('taskModal').style.display = 'none';
-        }
-
-        function changeMonth(direction) {
-            currentMonth += direction;
-            if (currentMonth > 11) {
-                currentMonth = 0;
-                currentYear++;
-            } else if (currentMonth < 0) {
-                currentMonth = 11;
-                currentYear--;
-            }
-            
-            updateMonthDisplay();
-            generateCalendar();
-        }
-
-        function updateMonthDisplay() {
-            const months = [
-                '1月', '2月', '3月', '4月', '5月', '6月',
-                '7月', '8月', '9月', '10月', '11月', '12月'
-            ];
-            document.getElementById('currentMonth').textContent = 
-                `${currentYear}年${months[currentMonth]}`;
-        }
-
-        // モーダルの外側をクリックした時に閉じる
-        window.onclick = function(event) {
-            const modal = document.getElementById('taskModal');
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
-        }
-
-        // 初期化とCSVデータ自動読み込み
+        // 初期化
         document.addEventListener('DOMContentLoaded', function() {
             updateMonthDisplay();
-            generateCalendar();
+            generateTable();
             
-            // ページ読み込み後1秒でCSVデータを自動読み込み
+            // 1秒後にCSV自動読み込み
             setTimeout(() => {
                 loadDataFromCSV();
             }, 1000);
