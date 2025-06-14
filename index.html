@@ -531,13 +531,20 @@
 
         .tooltip-task {
             margin-bottom: 6px;
-            padding-bottom: 6px;
+            padding: 6px 8px;
             border-bottom: 1px solid #4a5568;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .tooltip-task:hover {
+            background-color: #2d3748;
         }
 
         .tooltip-task:last-child {
             margin-bottom: 0;
-            padding-bottom: 0;
+            padding-bottom: 6px;
             border-bottom: none;
         }
 
@@ -1576,15 +1583,28 @@
                 hideTooltip();
             });
 
-            // 単一クリックで最初のタスクのURLに遷移、またはプルダウン表示
+            // 単一クリックの処理
             cell.addEventListener('click', (e) => {
                 e.stopPropagation();
                 
-                // Redmineリンクがある場合は遷移
-                if (tasks.length > 0 && tasks[0].redmineUrl) {
-                    window.open(tasks[0].redmineUrl, '_blank');
+                // 複数タスクがある場合はツールチップを固定表示
+                if (tasks.length > 1) {
+                    showClickableTooltip(e, tasks, cell);
+                } else if (tasks.length === 1) {
+                    // 単一タスクの場合
+                    if (tasks[0].redmineUrl) {
+                        window.open(tasks[0].redmineUrl, '_blank');
+                    } else {
+                        // Redmineリンクがない場合はプルダウン表示
+                        const worker = cell.closest('tr')?.querySelector('.worker-name')?.textContent;
+                        const dateStr = getDateFromCell(cell);
+                        
+                        if (worker && dateStr) {
+                            showCellDropdown(cell, worker, dateStr);
+                        }
+                    }
                 } else {
-                    // プルダウンを表示
+                    // タスクなしの場合はプルダウン表示
                     const worker = cell.closest('tr')?.querySelector('.worker-name')?.textContent;
                     const dateStr = getDateFromCell(cell);
                     
