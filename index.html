@@ -710,7 +710,124 @@
             { label: '20-22', start: 20, end: 22 }
         ];
 
-        // タブ切り替え
+        // 計画作業追加
+        function addPlanningTask() {
+            console.log('計画作業追加ボタンがクリックされました');
+            
+            const taskId = `PLANNING-${planningTaskCounter++}`;
+            const newTask = {
+                id: taskId,
+                title: `計画作業${planningTaskCounter - 1}`,
+                worker: workers[0], // 最初の作業者に仮配置
+                date: `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-01`, // 月初に仮配置
+                estimatedHours: 4,
+                description: '計画作業（ドラッグで移動可能）',
+                taskType: 'planning',
+                redmineUrl: '',
+                customerName: '',
+                remoteFlag: '',
+                tsetStatus: '',
+                assignStatus: '計画中',
+                createdDate: new Date().toISOString().split('T')[0],
+                isManualEntry: true,
+                isPlanningTask: true,
+                isFloating: false // 仮配置状態
+            };
+            
+            console.log('作成された計画作業:', newTask);
+            
+            // 現在の月のデータに追加
+            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+            if (!taskData[monthKey]) {
+                taskData[monthKey] = [];
+            }
+            taskData[monthKey].push(newTask);
+            
+            console.log('taskData更新後:', taskData[monthKey]);
+            
+            // テーブルを再生成
+            generateTable();
+            
+            showNotification(`計画作業${planningTaskCounter - 1}を追加しました。赤いセルをドラッグして移動してください。`, 'success');
+        }
+
+        // ドラッグ&ドロップ機能
+        function makeCellDroppable(cell, worker, dateStr) {
+            cell.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                cell.classList.add('drag-over');
+            });
+
+            cell.addEventListener('dragleave', (e) => {
+                cell.classList.remove('drag-over');
+            });
+
+            cell.addEventListener('drop', (e) => {
+                e.preventDefault();
+                cell.classList.remove('drag-over');
+                
+                if (draggedTask && draggedTask.isPlanningTask) {
+                    // 計画作業をこのセルに移動
+                    movePlanningTaskToCell(draggedTask, worker, dateStr);
+                }
+            });
+        }
+
+        function makePlanningTaskDraggable(taskElement, task) {
+            taskElement.draggable = true;
+            taskElement.classList.add('planning-task');
+            
+            // 計画作業バッジを追加
+            const badge = document.createElement('div');
+            badge.className = 'planning-badge';
+            badge.textContent = 'P';
+            taskElement.appendChild(badge);
+            
+            taskElement.addEventListener('dragstart', (e) => {
+                draggedTask = task;
+                taskElement.classList.add('dragging');
+                e.dataTransfer.effectAllowed = 'move';
+            });
+
+            taskElement.addEventListener('dragend', (e) => {
+                taskElement.classList.remove('dragging');
+                draggedTask = null;
+            });
+
+            // ダブルクリックで削除
+            taskElement.addEventListener('dblclick', (e) => {
+                e.stopPropagation();
+                removePlanningTask(task);
+            });
+        }
+
+        function movePlanningTaskToCell(task, worker, dateStr) {
+            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+            
+            // 既存の位置から削除（もし配置済みの場合）
+            if (taskData[monthKey]) {
+                const taskIndex = taskData[monthKey].findIndex(t => t.id === task.id);
+                if (taskIndex !== -1) {
+                    taskData[monthKey][taskIndex].worker = worker;
+                    taskData[monthKey][taskIndex].date = dateStr;
+                    taskData[monthKey][taskIndex].isFloating = false;
+                }
+            }
+            
+            generateTable();
+            showNotification(`計画作業を${worker}の${dateStr}に配置しました`, 'success');
+        }
+
+        function removePlanningTask(task) {
+            if (confirm('この計画作業を削除しますか？')) {
+                const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+                if (taskData[monthKey]) {
+                    taskData[monthKey] = taskData[monthKey].filter(t => t.id !== task.id);
+                }
+                generateTable();
+                showNotification('計画作業を削除しました', 'info');
+            }
+        }
         function switchTab(tabName) {
             // すべてのタブボタンとコンテンツから active クラスを削除
             document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
@@ -854,6 +971,9 @@
                         // 空のセルにもイベントを追加
                         setupEmptyCellEvents(dayCell);
                     }
+                    
+                    // すべてのセルをドロップ可能にする
+                    makeCellDroppable(dayCell, worker, dateStr);
                     
                     workerRow.appendChild(dayCell);
                 }
@@ -1006,16 +1126,44 @@
             
             if (tasks.length === 0) return;
             
-            // タスクの種別を判定
-            const hasWorkTasks = tasks.some(task => isWorkTask(task));
-            const hasOnlyNonWorkTasks = tasks.every(task => !isWorkTask(task));
+            // 計画作業があるかチェック
+            const planningTasks = tasks.filter(task => task.isPlanningTask);
+            const otherTasks = tasks.filter(task => !task.isPlanningTask);
             
-            // 最初のタスクの種別に応じて色を設定
-            const task = tasks[0];
-            const typeConfig = taskTypeConfig[task.taskType] || taskTypeConfig.work;
+            // タスクの種別を判定（計画作業以外で）
+            const hasWorkTasks = otherTasks.some(task => isWorkTask(task));
+            const hasOnlyNonWorkTasks = otherTasks.every(task => !isWorkTask(task)) && otherTasks.length > 0;
+            
+            // 最初のタスクの種別に応じて色を設定（計画作業優先）
+            const primaryTask = planningTasks.length > 0 ? planningTasks[0] : tasks[0];
+            const typeConfig = taskTypeConfig[primaryTask.taskType] || taskTypeConfig.work;
             
             cell.style.backgroundColor = typeConfig.color;
             cell.style.color = typeConfig.textColor;
+            
+            // 計画作業がある場合は特別扱い
+            if (planningTasks.length > 0) {
+                cell.classList.add('planning-task');
+                
+                // 計画作業をドラッグ可能にする
+                planningTasks.forEach(planningTask => {
+                    makePlanningTaskDraggable(cell, planningTask);
+                });
+                
+                // 件数表示
+                const countDiv = document.createElement('div');
+                countDiv.className = 'task-count';
+                countDiv.textContent = tasks.length;
+                cell.appendChild(countDiv);
+                
+                // ラベル表示
+                const typeDiv = document.createElement('div');
+                typeDiv.className = 'task-type-label';
+                typeDiv.textContent = '計画作業';
+                cell.appendChild(typeDiv);
+                
+                return;
+            }
             
             // 休暇/MTG/その他のみの場合は文字表示なし
             if (hasOnlyNonWorkTasks) {
@@ -1146,6 +1294,8 @@
                 taskType = 'meeting';
             } else if (lowerValue.includes('研修') || lowerValue.includes('勉強') || lowerValue.includes('学習')) {
                 taskType = 'training';
+            } else if (lowerValue.includes('計画') || lowerValue.includes('予定')) {
+                taskType = 'planning';
             }
             
             const newTask = {
@@ -1163,7 +1313,8 @@
                 assignStatus: taskType === 'vacation' ? '休暇/MTG/その他' : '',
                 createdDate: new Date().toISOString().split('T')[0],
                 isManualEntry: true,
-                isDirectEntry: true
+                isDirectEntry: true,
+                isPlanningTask: taskType === 'planning'
             };
             
             const monthKey = date.substring(0, 7);
