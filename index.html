@@ -585,7 +585,8 @@
             return possibleFileNames;
         }
 
-        async function loadDataFromCSV() {
+        // デバッグ用: フィルタリングを一時的に無効化
+        async function loadDataFromCSVDebug() {
             const possibleFileNames = getCSVFileNames();
             
             showNotification('CSVファイルを検索中...', 'info');
@@ -613,7 +614,18 @@
                         }
                         
                         const tickets = transformCSVToTickets(result.data);
+                        console.log('変換後のチケット数:', tickets.length);
+                        
+                        // 最初の5件を表示
+                        console.log('最初の5件:', tickets.slice(0, 5));
+                        
                         const monthlyData = groupTicketsByMonth(tickets);
+                        console.log('月別データ:', monthlyData);
+                        
+                        // 各月のデータ件数を表示
+                        Object.keys(monthlyData).forEach(month => {
+                            console.log(`${month}: ${monthlyData[month].length}件`);
+                        });
                         
                         taskData = monthlyData;
                         
@@ -634,27 +646,47 @@
             showNotification('CSVファイルが見つかりません。', 'error');
         }
 
+        async function loadDataFromCSV() {
+            return loadDataFromCSVDebug();
+        }
+
         // CSV変換関数（フィルタリング条件を追加）
         function transformCSVToTickets(csvData) {
-            return csvData.filter(row => {
+            console.log('CSV行数:', csvData.length);
+            
+            const filteredData = csvData.filter(row => {
                 // フィルタリング条件
                 const assignStatus = row['TSETアサイン状態'] || '';
                 const tsetStatus = row['TSETステータス'] || '';
                 
-                // TSETアサイン状態のフィルタ
+                console.log('行データ:', {
+                    id: row['Issue ID'],
+                    assignStatus: assignStatus,
+                    tsetStatus: tsetStatus,
+                    worker: row['TSET作業者'],
+                    subject: row['Subject']
+                });
+                
+                // TSETアサイン状態のフィルタ（部分一致で検索）
                 const validAssignStatus = [
-                    'アサイン完了', '対応完了', '中止', '休暇/MTG/その他'
+                    'アサイン完了', '対応完了', '中止', '休暇', 'MTG', 'その他'
                 ].some(status => assignStatus.includes(status));
                 
-                // TSETステータスのフィルタ
+                // TSETステータスのフィルタ（部分一致で検索）
                 const validTsetStatus = [
-                    '03.本アサイン', '22.作業完全終了', '80.キャンセル（依頼者都合）'
+                    '03.本アサイン', '22.作業完全終了', '80.キャンセル', 'キャンセル（依頼者都合）'
                 ].some(status => tsetStatus.includes(status));
                 
-                // どちらか一方に有効な値が入っている場合のみ対象
-                return validAssignStatus || validTsetStatus;
+                const isValid = validAssignStatus || validTsetStatus;
+                console.log('フィルタ結果:', isValid, { validAssignStatus, validTsetStatus });
                 
-            }).map(row => {
+                return isValid;
+                
+            });
+            
+            console.log('フィルタ後の件数:', filteredData.length);
+            
+            return filteredData.map(row => {
                 const assignedWorker = mapWorkerName(row['TSET作業者']);
                 const workDate = getFirstValidWorkDate(row);
                 
@@ -683,13 +715,21 @@
                 return '';
             }
             
+            // TSETプレフィックスを除去
+            let cleanName = csvWorkerName.replace(/^TSET_[A-Z]_/, '');
+            
+            console.log('作業者名マッピング:', csvWorkerName, '->', cleanName);
+            
             const matchedWorker = workers.find(worker => 
-                worker.includes(csvWorkerName) || 
-                csvWorkerName.includes(worker.replace(' ', '')) ||
-                worker.replace(' ', '').includes(csvWorkerName.replace(' ', ''))
+                worker.includes(cleanName) || 
+                cleanName.includes(worker.replace(' ', '')) ||
+                worker.replace(' ', '').includes(cleanName.replace(' ', '')) ||
+                worker === cleanName
             );
             
-            return matchedWorker || csvWorkerName;
+            console.log('マッチ結果:', matchedWorker || cleanName);
+            
+            return matchedWorker || cleanName;
         }
 
         function getFirstValidWorkDate(row) {
@@ -758,6 +798,10 @@
 
         // 初期化
         document.addEventListener('DOMContentLoaded', function() {
+            // 初期表示を2月に設定（データが存在する月）
+            currentMonth = 1; // 2月（0ベース）
+            currentYear = 2025;
+            
             updateMonthDisplay();
             generateTable();
             
