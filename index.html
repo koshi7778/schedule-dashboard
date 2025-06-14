@@ -194,10 +194,11 @@
             background: #fbb6ce !important;
         }
 
-        /* 今日の日付ハイライト（薄い色、ヘッダーのみ） */
+        /* 今日の日付ハイライト */
         .today {
-            background: #fff3cd !important;
+            background: #ffd700 !important;
             font-weight: bold;
+            box-shadow: inset 0 0 0 2px #ff8c00;
         }
 
         .task-cell {
@@ -241,12 +242,12 @@
             margin-top: 2px;
         }
 
-        /* 日別・週別スケジュール表示 */
-        .time-schedule {
+        /* 日別スケジュール表示 */
+        .daily-schedule {
             padding: 20px;
         }
 
-        .time-header {
+        .daily-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -255,142 +256,96 @@
             border-bottom: 2px solid #e2e8f0;
         }
 
-        .time-navigation {
+        .daily-navigation {
             display: flex;
             align-items: center;
             gap: 15px;
         }
 
-        .time-date {
+        .daily-date {
             font-size: 18px;
             font-weight: bold;
             color: #2c5282;
         }
 
-        .time-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 11px;
-        }
-
-        .time-table th,
-        .time-table td {
-            border: 1px solid #e2e8f0;
-            padding: 8px;
-            text-align: center;
-            vertical-align: middle;
-        }
-
-        .time-table th {
+        .daily-stats {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            padding: 15px;
             background: #f7fafc;
-            font-weight: 600;
-            color: #2d3748;
-            position: sticky;
-            top: 0;
-            z-index: 10;
+            border-radius: 8px;
         }
 
-        .time-slot-header {
-            background: #f7fafc;
-            font-weight: 600;
-            color: #2d3748;
-            text-align: center;
-            min-width: 80px;
-            position: sticky;
-            left: 0;
-            z-index: 5;
-        }
-
-        .worker-header {
-            min-width: 120px;
-            max-width: 120px;
-        }
-
-        .time-slot-cell {
-            cursor: pointer;
-            position: relative;
-            height: 40px;
-            min-width: 120px;
-            max-width: 120px;
+        .daily-stat-box {
+            padding: 10px 15px;
             background: white;
-            font-size: 10px;
+            border-radius: 6px;
+            border-left: 4px solid #3182ce;
+            min-width: 120px;
         }
 
-        .time-slot-cell:hover {
-            background: #bee3f8 !important;
+        .daily-stat-title {
+            font-size: 12px;
+            color: #4a5568;
+            margin-bottom: 5px;
         }
 
-        .task-in-slot {
-            padding: 2px 4px;
+        .daily-stat-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .worker-schedule-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .worker-schedule-item {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .worker-name-header {
+            font-size: 14px;
+            font-weight: bold;
+            color: #2c5282;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .task-list {
+            display: grid;
+            gap: 8px;
+        }
+
+        .task-item {
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-title {
+            font-weight: 500;
+        }
+
+        .task-hours {
+            font-size: 11px;
+            color: #4a5568;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 2px 6px;
             border-radius: 3px;
-            margin: 1px;
-            font-size: 9px;
-            line-height: 1.2;
-            cursor: pointer;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
         }
 
-        .task-in-slot:hover {
-            opacity: 0.8;
-        }
-
-        /* 週間表示用 */
-        .week-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 10px;
-        }
-
-        .week-table th,
-        .week-table td {
-            border: 1px solid #e2e8f0;
-            padding: 4px;
-            text-align: center;
-            vertical-align: top;
-        }
-
-        .week-table th {
-            background: #f7fafc;
-            font-weight: 600;
-            color: #2d3748;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        .week-date-header {
-            min-width: 100px;
-            font-size: 11px;
-        }
-
-        .week-time-header {
-            min-width: 60px;
-            background: #f7fafc;
-            font-weight: 600;
-            color: #2d3748;
-            position: sticky;
-            left: 0;
-            z-index: 5;
-        }
-
-        .week-cell {
-            min-width: 100px;
-            height: 30px;
-            position: relative;
-            background: white;
-        }
-
-        .week-cell.weekend {
-            background: #fed7d7 !important;
-        }
-
-        .week-cell.today {
-            background: #fff3cd !important;
-        }
-
-        /* ツールチップ（クリック可能） */
+        /* ツールチップ */
         .tooltip {
             position: absolute;
             background: #1a202c;
@@ -408,24 +363,17 @@
 
         .tooltip.show {
             opacity: 1;
-            pointer-events: auto;
         }
 
         .tooltip-task {
             margin-bottom: 6px;
-            padding: 6px;
+            padding-bottom: 6px;
             border-bottom: 1px solid #4a5568;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-        }
-
-        .tooltip-task:hover {
-            background-color: #2d3748;
         }
 
         .tooltip-task:last-child {
             margin-bottom: 0;
+            padding-bottom: 0;
             border-bottom: none;
         }
 
@@ -438,10 +386,6 @@
         .tooltip-details {
             font-size: 10px;
             color: #cbd5e0;
-        }
-
-        .tooltip-task.clickable {
-            border-left: 3px solid #68d391;
         }
 
         /* 通知 */
@@ -501,7 +445,12 @@
                 font-size: 10px;
             }
 
-            .time-navigation {
+            .daily-stats {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .daily-navigation {
                 flex-direction: column;
                 gap: 10px;
             }
@@ -526,7 +475,6 @@
         <div class="tab-navigation">
             <button class="tab-button active" onclick="switchTab('monthly')">月別スケジュール</button>
             <button class="tab-button" onclick="switchTab('daily')">日別スケジュール</button>
-            <button class="tab-button" onclick="switchTab('weekly')">週間スケジュール</button>
         </div>
 
         <!-- 月別スケジュールタブ -->
@@ -547,40 +495,33 @@
 
         <!-- 日別スケジュールタブ -->
         <div id="daily-tab" class="tab-content">
-            <div class="time-schedule">
-                <div class="time-header">
-                    <div class="time-date" id="dailyDate">2025年6月14日 (土)</div>
-                    <div class="time-navigation">
+            <div class="daily-schedule">
+                <div class="daily-header">
+                    <div class="daily-date" id="dailyDate">2025年6月14日 (土)</div>
+                    <div class="daily-navigation">
                         <button class="month-btn" onclick="changeDailyDate(-1)">◀ 前日</button>
                         <button class="month-btn" onclick="setDailyToday()">今日</button>
                         <button class="month-btn" onclick="changeDailyDate(1)">翌日 ▶</button>
                     </div>
                 </div>
 
-                <div class="table-container">
-                    <table class="time-table" id="dailyTimeTable">
-                        <!-- 時間軸×作業者のテーブル -->
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- 週間スケジュールタブ -->
-        <div id="weekly-tab" class="tab-content">
-            <div class="time-schedule">
-                <div class="time-header">
-                    <div class="time-date" id="weeklyDate">2025年6月9日〜6月15日</div>
-                    <div class="time-navigation">
-                        <button class="month-btn" onclick="changeWeeklyDate(-7)">◀ 前週</button>
-                        <button class="month-btn" onclick="setWeeklyToday()">今週</button>
-                        <button class="month-btn" onclick="changeWeeklyDate(7)">翌週 ▶</button>
+                <div class="daily-stats">
+                    <div class="daily-stat-box">
+                        <div class="daily-stat-title">本日の予定作業件数</div>
+                        <div class="daily-stat-value" id="dailyTotalTasks">0</div>
+                    </div>
+                    <div class="daily-stat-box">
+                        <div class="daily-stat-title">直近の予定作業件数</div>
+                        <div class="daily-stat-value" id="upcomingTasks">0</div>
+                    </div>
+                    <div class="daily-stat-box">
+                        <div class="daily-stat-title">総作業時間</div>
+                        <div class="daily-stat-value" id="dailyTotalHours">0.0h</div>
                     </div>
                 </div>
 
-                <div class="table-container">
-                    <table class="week-table" id="weeklyTimeTable">
-                        <!-- 週間スケジュール表 -->
-                    </table>
+                <div class="worker-schedule-list" id="dailyWorkerList">
+                    <!-- 作業者別スケジュールが動的に生成される -->
                 </div>
             </div>
         </div>
@@ -594,26 +535,14 @@
         const today = new Date();
         let currentDate = new Date();
         let currentYear = today.getFullYear();
-        let currentMonth = today.getMonth();
+        let currentMonth = today.getMonth(); // 今日の月を初期値に設定
 
         // 日別表示用の日付
         let dailyDate = new Date(today);
-        
-        // 週間表示用の日付
-        let weeklyDate = new Date(today);
 
         // データ
         let taskData = {};
         let editingQuickTask = null;
-
-        // 時間スロット
-        const timeSlots = [
-            { label: '10-12', start: 10, end: 12 },
-            { label: '12-14', start: 12, end: 14 },
-            { label: '14-16', start: 14, end: 16 },
-            { label: '16-18', start: 16, end: 18 },
-            { label: '18-20', start: 18, end: 20 }
-        ];
 
         // 種別別の色とラベル
         const taskTypeConfig = {
@@ -635,16 +564,16 @@
 
         // タブ切り替え
         function switchTab(tabName) {
+            // すべてのタブボタンとコンテンツから active クラスを削除
             document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
 
+            // 選択されたタブを有効にする
             document.querySelector(`[onclick="switchTab('${tabName}')"]`).classList.add('active');
             document.getElementById(`${tabName}-tab`).classList.add('active');
 
             if (tabName === 'daily') {
                 updateDailySchedule();
-            } else if (tabName === 'weekly') {
-                updateWeeklySchedule();
             }
         }
 
@@ -722,7 +651,7 @@
                     dayHeader.classList.add('weekend');
                 }
 
-                // 今日の日付をハイライト（ヘッダーのみ）
+                // 今日の日付をハイライト
                 if (isToday(currentYear, currentMonth, day)) {
                     dayHeader.classList.add('today');
                 }
@@ -754,6 +683,11 @@
                     if (date.getDay() === 0 || date.getDay() === 6) {
                         dayCell.classList.add('weekend');
                     }
+
+                    // 今日の日付をハイライト
+                    if (isToday(currentYear, currentMonth, day)) {
+                        dayCell.classList.add('today');
+                    }
                     
                     // タスクデータがある場合は表示
                     const tasksForCell = getTasksForCell(worker, dateStr);
@@ -783,131 +717,144 @@
             document.getElementById('dailyDate').textContent = 
                 `${dailyDate.getFullYear()}年${dailyDate.getMonth() + 1}月${dailyDate.getDate()}日 (${dayOfWeek})`;
 
-            generateDailyTimeTable();
-        }
+            // その日のタスクを取得
+            const allTasks = getAllTasksForDate(dateStr);
+            
+            // 統計を更新
+            document.getElementById('dailyTotalTasks').textContent = allTasks.length;
+            document.getElementById('dailyTotalHours').textContent = `${allTasks.reduce((sum, task) => sum + (task.estimatedHours || 0), 0).toFixed(1)}h`;
+            
+            // 直近の予定を計算（今後7日間）
+            let upcomingCount = 0;
+            for (let i = 0; i < 7; i++) {
+                const futureDate = new Date(dailyDate);
+                futureDate.setDate(dailyDate.getDate() + i);
+                const futureDateStr = futureDate.toISOString().split('T')[0];
+                upcomingCount += getAllTasksForDate(futureDateStr).length;
+            }
+            document.getElementById('upcomingTasks').textContent = upcomingCount;
 
-        // 日別時間軸テーブル生成
-        function generateDailyTimeTable() {
-            const table = document.getElementById('dailyTimeTable');
-            table.innerHTML = '';
-
-            const dateStr = dailyDate.toISOString().split('T')[0];
-
-            // ヘッダー行
-            const headerRow = document.createElement('tr');
-            const timeHeader = document.createElement('th');
-            timeHeader.textContent = '時間';
-            timeHeader.className = 'time-slot-header';
-            headerRow.appendChild(timeHeader);
+            // 作業者別のスケジュールを表示
+            const workerListContainer = document.getElementById('dailyWorkerList');
+            workerListContainer.innerHTML = '';
 
             workers.forEach(worker => {
-                const workerHeader = document.createElement('th');
-                workerHeader.textContent = worker;
-                workerHeader.className = 'worker-header';
-                headerRow.appendChild(workerHeader);
-            });
-
-            table.appendChild(headerRow);
-
-            // 時間スロット行
-            timeSlots.forEach(slot => {
-                const slotRow = document.createElement('tr');
+                const workerTasks = allTasks.filter(task => task.worker === worker);
                 
-                const slotHeader = document.createElement('td');
-                slotHeader.textContent = slot.label;
-                slotHeader.className = 'time-slot-header';
-                slotRow.appendChild(slotHeader);
-
-                workers.forEach(worker => {
-                    const slotCell = document.createElement('td');
-                    slotCell.className = 'time-slot-cell';
+                if (workerTasks.length > 0) {
+                    const workerItem = document.createElement('div');
+                    workerItem.className = 'worker-schedule-item';
                     
-                    // この時間帯の作業者のタスクを取得
-                    const tasksInSlot = getTasksInTimeSlot(worker, dateStr, slot.start, slot.end);
+                    const workerHeader = document.createElement('div');
+                    workerHeader.className = 'worker-name-header';
+                    workerHeader.textContent = worker;
+                    workerItem.appendChild(workerHeader);
                     
-                    tasksInSlot.forEach(task => {
-                        const taskDiv = document.createElement('div');
-                        taskDiv.className = 'task-in-slot';
+                    const taskList = document.createElement('div');
+                    taskList.className = 'task-list';
+                    
+                    workerTasks.forEach(task => {
+                        const taskItem = document.createElement('div');
+                        taskItem.className = 'task-item';
                         
                         const typeConfig = taskTypeConfig[task.taskType] || taskTypeConfig.work;
-                        taskDiv.style.backgroundColor = typeConfig.color;
-                        taskDiv.style.color = typeConfig.textColor;
+                        taskItem.style.backgroundColor = typeConfig.color;
+                        taskItem.style.color = typeConfig.textColor;
                         
-                        taskDiv.textContent = task.title;
+                        taskItem.innerHTML = `
+                            <div class="task-title">${task.title}</div>
+                            <div class="task-hours">${task.estimatedHours || 0}h</div>
+                        `;
                         
-                        // クリックでRedmineリンクを開く
-                        if (task.redmineUrl) {
-                            taskDiv.style.cursor = 'pointer';
-                            taskDiv.addEventListener('click', () => {
-                                window.open(task.redmineUrl, '_blank');
-                            });
-                        }
-                        
-                        setupTaskTooltip(taskDiv, task);
-                        slotCell.appendChild(taskDiv);
+                        taskList.appendChild(taskItem);
                     });
                     
-                    slotRow.appendChild(slotCell);
-                });
-                
-                table.appendChild(slotRow);
+                    workerItem.appendChild(taskList);
+                    workerListContainer.appendChild(workerItem);
+                }
             });
-        }
 
-        // 週間スケジュール更新
-        function updateWeeklySchedule() {
-            const weekStart = getWeekStart(weeklyDate);
-            const weekEnd = new Date(weekStart);
-            weekEnd.setDate(weekStart.getDate() + 6);
-            
-            document.getElementById('weeklyDate').textContent = 
-                `${weekStart.getFullYear()}年${weekStart.getMonth() + 1}月${weekStart.getDate()}日〜${weekEnd.getMonth() + 1}月${weekEnd.getDate()}日`;
-
-            generateWeeklyTimeTable();
-        }
-
-        // 週間時間軸テーブル生成
-        function generateWeeklyTimeTable() {
-            const table = document.getElementById('weeklyTimeTable');
-            table.innerHTML = '';
-
-            const weekStart = getWeekStart(weeklyDate);
-
-            // ヘッダー行（日付）
-            const headerRow = document.createElement('tr');
-            const timeHeader = document.createElement('th');
-            timeHeader.textContent = '時間';
-            timeHeader.className = 'week-time-header';
-            headerRow.appendChild(timeHeader);
-
-            for (let i = 0; i < 7; i++) {
-                const date = new Date(weekStart);
-                date.setDate(weekStart.getDate() + i);
-                const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()];
-                
-                const dateHeader = document.createElement('th');
-                dateHeader.innerHTML = `${date.getMonth() + 1}/${date.getDate()}<br>${dayOfWeek}`;
-                dateHeader.className = 'week-date-header';
-                
-                if (date.getDay() === 0 || date.getDay() === 6) {
-                    dateHeader.classList.add('weekend');
-                }
-                if (isToday(date.getFullYear(), date.getMonth(), date.getDate())) {
-                    dateHeader.classList.add('today');
-                }
-                
-                headerRow.appendChild(dateHeader);
+            if (workerListContainer.children.length === 0) {
+                workerListContainer.innerHTML = '<div style="text-align: center; padding: 40px; color: #4a5568;">この日に予定されている作業はありません</div>';
             }
+        }
 
-            table.appendChild(headerRow);
+        // 日別表示の日付変更
+        function changeDailyDate(direction) {
+            dailyDate.setDate(dailyDate.getDate() + direction);
+            updateDailySchedule();
+        }
 
-            // 時間スロット行
-            timeSlots.forEach(slot => {
-                const slotRow = document.createElement('tr');
-                
-                const slotHeader = document.createElement('td');
-                slotHeader.textContent = slot.label;
-                slotHeader.className = 'week-time-header';
-                slotRow.appendChild(slotHeader);
+        function setDailyToday() {
+            dailyDate = new Date(today);
+            updateDailySchedule();
+        }
 
-                for (let i = 0; i
+        // 指定日のすべてのタスクを取得
+        function getAllTasksForDate(dateStr) {
+            const monthKey = dateStr.substring(0, 7);
+            if (!taskData[monthKey]) return [];
+            
+            return taskData[monthKey].filter(task => task.date === dateStr);
+        }
+
+        // セル内のタスクを取得
+        function getTasksForCell(worker, date) {
+            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+            if (!taskData[monthKey]) return [];
+            
+            return taskData[monthKey].filter(task => 
+                task.worker === worker && task.date === date
+            );
+        }
+
+        // セル内容をレンダリング（種別対応）
+        function renderCellContent(cell, tasks) {
+            cell.innerHTML = '';
+            cell.classList.add('has-tasks');
+            
+            if (tasks.length === 0) return;
+            
+            // 最初のタスクの種別に応じて色を設定
+            const task = tasks[0];
+            const typeConfig = taskTypeConfig[task.taskType] || taskTypeConfig.work;
+            
+            cell.style.backgroundColor = typeConfig.color;
+            cell.style.color = typeConfig.textColor;
+            
+            // 件数表示
+            const countDiv = document.createElement('div');
+            countDiv.className = 'task-count';
+            countDiv.textContent = tasks.length;
+            cell.appendChild(countDiv);
+            
+            // 種別ラベル表示
+            const typeDiv = document.createElement('div');
+            typeDiv.className = 'task-type-label';
+            
+            if (task.taskType && task.taskType !== 'work') {
+                typeDiv.textContent = typeConfig.label;
+            } else {
+                typeDiv.textContent = '作業';
+            }
+            
+            cell.appendChild(typeDiv);
+        }
+
+        // セルのイベント設定
+        function setupCellEvents(cell, tasks) {
+            // マウスホバーでツールチップ表示
+            cell.addEventListener('mouseenter', (e) => {
+                if (tasks.length > 0) {
+                    showTooltip(e, tasks);
+                }
+            });
+
+            cell.addEventListener('mouseleave', () => {
+                hideTooltip();
+            });
+
+            // 単一クリックで最初のタスクのURLに遷移
+            cell.addEventListener('click', (e) => {
+                setTimeout(() => {
+                    if (e.detail === 1 && tasks.length > 0 && tasks[0].redmineUrl) {
