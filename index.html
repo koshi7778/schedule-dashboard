@@ -171,9 +171,20 @@
             background: #bee3f8 !important;
         }
 
-        .task-cell.has-tasks {
-            background: #e6fffa;
-            border: 2px solid #38b2ac;
+        .task-cell.editing {
+            background: #fff3cd !important;
+            border: 2px solid #ffc107;
+        }
+
+        .direct-input {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: transparent;
+            font-size: 10px;
+            text-align: center;
+            outline: none;
+            padding: 2px;
         }
 
         .task-count {
@@ -615,7 +626,7 @@
             return '';
         }
 
-        // 空のセルにもイベントを追加
+        // 空のセルにもイベントを追加（セル内直接入力対応）
         function setupEmptyCellEvents(cell) {
             // 右クリックまたはダブルクリックで新規作成
             cell.addEventListener('contextmenu', (e) => {
@@ -630,6 +641,119 @@
                 const dateStr = getDateFromCell(cell);
                 openQuickEditModal(worker, dateStr, []);
             });
+
+            // 単一クリックで直接入力モード
+            cell.addEventListener('click', (e) => {
+                if (e.detail === 1) {
+                    setTimeout(() => {
+                        startDirectEdit(cell);
+                    }, 200);
+                }
+            });
+
+            // Enterキーで直接入力モード
+            cell.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    startDirectEdit(cell);
+                }
+            });
+        }
+
+        // セル内直接入力機能
+        function startDirectEdit(cell) {
+            if (cell.querySelector('.direct-input')) return; // 既に編集中の場合は無視
+
+            const worker = cell.closest('tr').querySelector('.worker-name').textContent;
+            const dateStr = getDateFromCell(cell);
+            
+            cell.classList.add('editing');
+            
+            const input = document.createElement('input');
+            input.className = 'direct-input';
+            input.type = 'text';
+            input.placeholder = '休暇、会議など';
+            input.value = '';
+            
+            cell.innerHTML = '';
+            cell.appendChild(input);
+            input.focus();
+            
+            // Enterで保存
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    saveDirectEdit(cell, worker, dateStr, input.value);
+                } else if (e.key === 'Escape') {
+                    cancelDirectEdit(cell);
+                }
+            });
+            
+            // フォーカスが外れたら保存
+            input.addEventListener('blur', () => {
+                if (input.value.trim()) {
+                    saveDirectEdit(cell, worker, dateStr, input.value);
+                } else {
+                    cancelDirectEdit(cell);
+                }
+            });
+        }
+
+        function saveDirectEdit(cell, worker, date, inputValue) {
+            if (!inputValue.trim()) {
+                cancelDirectEdit(cell);
+                return;
+            }
+            
+            // 入力内容から種別を自動判定
+            let taskType = 'other';
+            const lowerValue = inputValue.toLowerCase();
+            
+            if (lowerValue.includes('休暇') || lowerValue.includes('有給') || lowerValue.includes('休み')) {
+                taskType = 'vacation';
+            } else if (lowerValue.includes('会議') || lowerValue.includes('mtg') || lowerValue.includes('ミーティング')) {
+                taskType = 'meeting';
+            } else if (lowerValue.includes('研修') || lowerValue.includes('勉強') || lowerValue.includes('学習')) {
+                taskType = 'training';
+            }
+            
+            const newTask = {
+                id: `DIRECT-${Date.now()}`,
+                title: inputValue.trim(),
+                worker: worker,
+                date: date,
+                estimatedHours: 8,
+                description: '直接入力で追加',
+                taskType: taskType,
+                redmineUrl: '',
+                customerName: '',
+                remoteFlag: '',
+                tsetStatus: '',
+                assignStatus: taskType === 'vacation' ? '休暇/MTG/その他' : '',
+                createdDate: new Date().toISOString().split('T')[0],
+                isManualEntry: true,
+                isDirectEntry: true
+            };
+            
+            const monthKey = date.substring(0, 7);
+            if (!taskData[monthKey]) {
+                taskData[monthKey] = [];
+            }
+            
+            taskData[monthKey].push(newTask);
+            
+            cell.classList.remove('editing');
+            
+            // セルを再描画
+            const tasksForCell = getTasksForCell(worker, date);
+            renderCellContent(cell, tasksForCell);
+            setupCellEvents(cell, tasksForCell);
+            
+            showNotification(`${inputValue}を追加しました`, 'success');
+        }
+
+        function cancelDirectEdit(cell) {
+            cell.classList.remove('editing');
+            cell.innerHTML = '';
+            setupEmptyCellEvents(cell);
         }
 
         // ツールチップ表示
@@ -932,8 +1056,8 @@
 
         // 初期化
         document.addEventListener('DOMContentLoaded', function() {
-            // 初期表示を2月に設定（データが存在する月）
-            currentMonth = 1; // 2月（0ベース）
+            // 初期表示を6月に設定（データ確認のため）
+            currentMonth = 5; // 6月（0ベース）
             currentYear = 2025;
             
             updateMonthDisplay();
@@ -990,7 +1114,7 @@
             const memo = document.getElementById('quickEditMemo').value;
             
             const taskData_new = {
-                id: editingQuickTask ? editingQuickTask.id : `MANUAL-${Date.now()}`,
+                id: editingQuickTask ? editingQuickTask.id : `MODAL-${Date.now()}`,
                 title: title,
                 worker: worker,
                 date: date,
@@ -1021,6 +1145,10 @@
                 // 新規タスクの追加
                 taskData[monthKey].push(taskData_new);
             }
+            
+            // デバッグログ
+            console.log('タスク保存:', taskData_new);
+            console.log('月別データ:', taskData[monthKey]);
             
             generateTable();
             closeQuickEditModal();
