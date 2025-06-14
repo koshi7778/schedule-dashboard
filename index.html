@@ -525,95 +525,19 @@
             transition: opacity 0.2s ease;
         }
 
-        .clickable-tooltip {
-            position: fixed;
-            background: #1a202c;
-            color: white;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 11px;
-            max-width: 350px;
-            z-index: 2000;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-            border: 2px solid #4a5568;
-            pointer-events: auto;
-        }
-
-        .clickable-tooltip-header {
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: #68d391;
-            text-align: center;
-            border-bottom: 1px solid #4a5568;
-            padding-bottom: 6px;
-        }
-
-        .clickable-tooltip-task {
-            margin-bottom: 8px;
-            padding: 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border: 1px solid transparent;
-        }
-
-        .clickable-tooltip-task:hover {
-            background-color: #2d3748;
-            border-color: #4a5568;
-            transform: translateX(2px);
-        }
-
-        .clickable-tooltip-task.has-link {
-            border-left: 3px solid #68d391;
-        }
-
-        .clickable-tooltip-task.no-link {
-            border-left: 3px solid #a0aec0;
-        }
-
-        .clickable-tooltip-actions {
-            border-top: 1px solid #4a5568;
-            margin-top: 8px;
-            padding-top: 8px;
-        }
-
-        .clickable-tooltip-action {
-            padding: 6px 8px;
-            margin: 2px 0;
-            border-radius: 4px;
-            cursor: pointer;
-            text-align: center;
-            transition: background-color 0.2s ease;
-        }
-
-        .clickable-tooltip-action:hover {
-            background-color: #2d3748;
-        }
-
-        .clickable-tooltip-action.add {
-            color: #68d391;
-        }
-
         .tooltip.show {
             opacity: 1;
         }
 
         .tooltip-task {
             margin-bottom: 6px;
-            padding: 6px 8px;
+            padding-bottom: 6px;
             border-bottom: 1px solid #4a5568;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-        }
-
-        .tooltip-task:hover {
-            background-color: #2d3748;
         }
 
         .tooltip-task:last-child {
             margin-bottom: 0;
-            padding-bottom: 6px;
+            padding-bottom: 0;
             border-bottom: none;
         }
 
@@ -808,11 +732,6 @@
         let editingQuickTask = null;
         let planningTaskCounter = 1;
         let draggedTask = null;
-        let DEBUG_MODE = false;
-        
-        // キャッシュ
-        let monthCache = {};
-        let renderCache = new Map();
 
         // 種別別の色とラベル
         const taskTypeConfig = {
@@ -820,7 +739,7 @@
             meeting: { label: '会議', color: '#bee3f8', textColor: '#2a4365' },
             training: { label: '研修', color: '#c6f6d5', textColor: '#22543d' },
             other: { label: 'その他', color: '#e2e8f0', textColor: '#4a5568' },
-            work: { label: '随時作業', color: '#bee3f8', textColor: '#2b6cb0' },
+            work: { label: '随時作業', color: '#fefcbf', textColor: '#744210' },
             planning: { label: '計画作業', color: '#e53e3e', textColor: 'white' },
             preparation: { label: '事前準備', color: '#bee3f8', textColor: '#2b6cb0' }
         };
@@ -844,42 +763,60 @@
             { label: '20-22', start: 20, end: 22 }
         ];
 
-        // セルクリック時のプルダウン表示（軽量版）
+        // セルクリック時のプルダウン表示
         function showCellDropdown(cell, worker, dateStr) {
+            console.log('showCellDropdown 呼び出し:', { worker, dateStr });
+            
+            // 既存のドロップダウンを削除
             hideCellDropdown();
             
             const dropdown = document.createElement('div');
             dropdown.className = 'cell-dropdown';
             dropdown.id = 'cell-dropdown';
             
-            dropdown.innerHTML = `
-                <div class="dropdown-option planning" onclick="selectOption('planning', '計画作業', '${worker}', '${dateStr}')">
-                    <div class="dropdown-option-icon" style="background: #e53e3e"></div>
-                    <span>計画作業</span>
-                </div>
-                <div class="dropdown-option vacation" onclick="selectOption('vacation', '休暇', '${worker}', '${dateStr}')">
-                    <div class="dropdown-option-icon" style="background: #702459"></div>
-                    <span>休暇</span>
-                </div>
-                <div class="dropdown-option preparation" onclick="selectOption('preparation', '事前準備', '${worker}', '${dateStr}')">
-                    <div class="dropdown-option-icon" style="background: #2b6cb0"></div>
-                    <span>事前準備</span>
-                </div>
-                <div class="dropdown-option cancel" onclick="hideCellDropdown()">
-                    <span>キャンセル</span>
-                </div>
-            `;
+            // オプションの定義
+            const options = [
+                { type: 'planning', label: '計画作業', icon: '#e53e3e' },
+                { type: 'vacation', label: '休暇', icon: '#702459' },
+                { type: 'preparation', label: '事前準備', icon: '#2b6cb0' },
+                { type: 'cancel', label: 'キャンセル', icon: null }
+            ];
             
+            options.forEach(option => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = `dropdown-option ${option.type}`;
+                
+                if (option.icon) {
+                    optionDiv.innerHTML = `
+                        <div class="dropdown-option-icon" style="background: ${option.icon}"></div>
+                        <span>${option.label}</span>
+                    `;
+                } else {
+                    optionDiv.innerHTML = `<span>${option.label}</span>`;
+                }
+                
+                optionDiv.addEventListener('click', (e) => {
+                    console.log('オプション選択:', option.type, option.label);
+                    e.stopPropagation();
+                    if (option.type !== 'cancel') {
+                        addTaskToCell(worker, dateStr, option.type, option.label);
+                    }
+                    hideCellDropdown();
+                });
+                
+                dropdown.appendChild(optionDiv);
+            });
+            
+            // ドロップダウンの位置調整
             const rect = cell.getBoundingClientRect();
             dropdown.style.position = 'fixed';
             dropdown.style.left = `${rect.left}px`;
             dropdown.style.top = `${rect.bottom + 5}px`;
-            dropdown.style.zIndex = '1000';
             
+            // 画面外に出る場合の調整
             document.body.appendChild(dropdown);
-            
-            // 画面外調整
             const dropdownRect = dropdown.getBoundingClientRect();
+            
             if (dropdownRect.right > window.innerWidth) {
                 dropdown.style.left = `${rect.right - dropdownRect.width}px`;
             }
@@ -887,12 +824,10 @@
                 dropdown.style.top = `${rect.top - dropdownRect.height - 5}px`;
             }
             
-            setTimeout(() => document.addEventListener('click', hideCellDropdown), 100);
-        }
-
-        function selectOption(type, label, worker, dateStr) {
-            addTaskToCell(worker, dateStr, type, label);
-            hideCellDropdown();
+            // クリック外しで閉じる
+            setTimeout(() => {
+                document.addEventListener('click', hideCellDropdown);
+            }, 100);
         }
 
         function hideCellDropdown() {
@@ -904,10 +839,12 @@
         }
 
         function addTaskToCell(worker, dateStr, taskType, taskLabel) {
-            console.log('タスク追加開始:', { worker, dateStr, taskType, taskLabel });
+            console.log('=== addTaskToCell 開始 ===');
+            console.log('引数:', { worker, dateStr, taskType, taskLabel });
             
+            const taskId = `${taskType.toUpperCase()}-${Date.now()}`;
             const newTask = {
-                id: `${taskType.toUpperCase()}-${Date.now()}`,
+                id: taskId,
                 title: taskLabel,
                 worker: worker,
                 date: dateStr,
@@ -927,37 +864,28 @@
             
             console.log('作成されたタスク:', newTask);
             
+            // 現在表示中の月のキーを使用
             const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
-            console.log('月キー:', monthKey);
+            console.log('使用する月キー:', monthKey);
+            console.log('currentYear:', currentYear, 'currentMonth:', currentMonth);
             
+            // taskDataの初期化
             if (!taskData[monthKey]) {
+                console.log('新しい月データを作成:', monthKey);
                 taskData[monthKey] = [];
             }
             
+            // タスクを追加
             taskData[monthKey].push(newTask);
-            console.log('追加後のtaskData:', taskData[monthKey]);
+            console.log('タスク追加後のデータ:', taskData[monthKey]);
+            console.log('全taskData:', Object.keys(taskData));
             
-            // キャッシュをクリア
-            renderCache.clear();
-            console.log('キャッシュクリア完了');
-            
-            // 該当セルを直接更新
-            const targetCell = document.querySelector(`td[data-worker="${worker}"][data-date="${dateStr}"]`);
-            if (targetCell) {
-                console.log('対象セル発見:', targetCell);
-                const tasks = getTasksForCell(worker, dateStr);
-                console.log('セルのタスク:', tasks);
-                renderCellContent(targetCell, tasks);
-                setupCellEvents(targetCell, tasks);
-                makeCellDroppable(targetCell, worker, dateStr);
-            } else {
-                console.log('対象セルが見つかりません');
-                // フォールバック: テーブル全体を再生成
-                generateTable();
-            }
+            // 強制的にテーブルを再生成
+            console.log('テーブル再生成開始...');
+            generateTable();
             
             showNotification(`${worker}の${dateStr}に${taskLabel}を追加しました`, 'success');
-            console.log('タスク追加完了');
+            console.log('=== addTaskToCell 完了 ===');
         }
 
         // ドラッグ&ドロップ機能（改良版）
@@ -1248,7 +1176,7 @@
             }, 3000);
         }
 
-        // 月変更（キャッシュクリア付き）
+        // 月変更
         function changeMonth(direction) {
             currentMonth += direction;
             if (currentMonth > 11) {
@@ -1259,7 +1187,6 @@
                 currentYear--;
             }
             
-            renderCache.clear(); // キャッシュクリア
             updateMonthDisplay();
             generateTable();
         }
@@ -1283,77 +1210,103 @@
             return dayOfWeek !== 0 && dayOfWeek !== 6; // 0=日曜, 6=土曜
         }
 
-        // テーブル生成（超高速版）
+        // テーブル生成
         function generateTable() {
+            console.log('=== テーブル生成開始 ===');
+            console.log('現在の年月:', currentYear, currentMonth + 1);
+            console.log('全taskData:', taskData);
+            
             const table = document.getElementById('scheduleTable');
+            table.innerHTML = '';
+
             const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-            
-            // フラグメントを使用してDOM操作を最小化
-            const fragment = document.createDocumentFragment();
-            
-            // ヘッダー行
+            console.log('月の日数:', daysInMonth);
+
+            // ヘッダー行生成
             const headerRow = document.createElement('tr');
-            headerRow.innerHTML = '<th class="worker-name">作業者</th>';
             
-            const today_year = today.getFullYear();
-            const today_month = today.getMonth();
-            const today_date = today.getDate();
-            
+            // 作業者列ヘッダー
+            const workerHeader = document.createElement('th');
+            workerHeader.textContent = '作業者';
+            workerHeader.className = 'worker-name';
+            headerRow.appendChild(workerHeader);
+
+            // 日付列ヘッダー
             for (let day = 1; day <= daysInMonth; day++) {
+                const dayHeader = document.createElement('th');
                 const date = new Date(currentYear, currentMonth, day);
                 const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()];
-                const isWeekend = date.getDay() === 0 || date.getDay() === 6;
-                const isTodayCell = currentYear === today_year && currentMonth === today_month && day === today_date && !isWeekend;
                 
-                const classes = ['date-header'];
-                if (isWeekend) classes.push('weekend');
-                if (isTodayCell) classes.push('today');
+                dayHeader.innerHTML = `${day}<br>${dayOfWeek}`;
+                dayHeader.className = 'date-header';
                 
-                headerRow.innerHTML += `<th class="${classes.join(' ')}">${day}<br>${dayOfWeek}</th>`;
-            }
-            fragment.appendChild(headerRow);
-            
-            // 作業者行を一括生成
-            const workersHTML = workers.map(worker => {
-                let rowHTML = `<tr><td class="worker-name">${worker}</td>`;
-                
-                for (let day = 1; day <= daysInMonth; day++) {
-                    const date = new Date(currentYear, currentMonth, day);
-                    const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                    const isWeekend = date.getDay() === 0 || date.getDay() === 6;
-                    const isTodayCell = currentYear === today.getFullYear() && currentMonth === today.getMonth() && day === today.getDate() && !isWeekend;
-                    
-                    const classes = ['task-cell'];
-                    if (isWeekend) classes.push('weekend');
-                    if (isTodayCell) classes.push('today');
-                    
-                    rowHTML += `<td class="${classes.join(' ')}" data-worker="${worker}" data-date="${dateStr}"></td>`;
+                // 土日祝日の色分け
+                if (date.getDay() === 0 || date.getDay() === 6) {
+                    dayHeader.classList.add('weekend');
                 }
-                return rowHTML + '</tr>';
-            }).join('');
+
+                // 今日の日付をハイライト（平日のみ）
+                if (isToday(currentYear, currentMonth, day) && isWeekday(currentYear, currentMonth, day)) {
+                    dayHeader.classList.add('today');
+                }
+                
+                headerRow.appendChild(dayHeader);
+            }
             
-            table.innerHTML = headerRow.outerHTML + workersHTML;
-            
-            // セルにタスクを設定（requestAnimationFrame使用）
-            requestAnimationFrame(() => {
-                const cells = table.querySelectorAll('td[data-worker]');
-                cells.forEach(cell => {
-                    const worker = cell.dataset.worker;
-                    const dateStr = cell.dataset.date;
-                    const tasks = getTasksForCell(worker, dateStr);
+            table.appendChild(headerRow);
+
+            // 作業者行生成
+            workers.forEach(worker => {
+                const workerRow = document.createElement('tr');
+                
+                // 作業者名セル
+                const workerCell = document.createElement('td');
+                workerCell.textContent = worker;
+                workerCell.className = 'worker-name';
+                workerRow.appendChild(workerCell);
+
+                // 各日のセル
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dayCell = document.createElement('td');
+                    dayCell.className = 'task-cell';
                     
-                    if (tasks.length > 0) {
-                        renderCellContent(cell, tasks);
-                        setupCellEvents(cell, tasks);
-                    } else {
-                        setupEmptyCellEvents(cell);
+                    const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    
+                    // 土日の背景色
+                    const date = new Date(currentYear, currentMonth, day);
+                    if (date.getDay() === 0 || date.getDay() === 6) {
+                        dayCell.classList.add('weekend');
+                    }
+
+                    // 今日の日付をハイライト（平日のみ）
+                    if (isToday(currentYear, currentMonth, day) && isWeekday(currentYear, currentMonth, day)) {
+                        dayCell.classList.add('today');
                     }
                     
-                    makeCellDroppable(cell, worker, dateStr);
-                });
+                    // タスクデータがある場合は表示
+                    const tasksForCell = getTasksForCell(worker, dateStr);
+                    
+                    if (tasksForCell.length > 0) {
+                        console.log(`✅ タスクあり - ${worker} ${dateStr}: ${tasksForCell.length}件`);
+                        renderCellContent(dayCell, tasksForCell);
+                        setupCellEvents(dayCell, tasksForCell);
+                    } else {
+                        console.log(`❌ タスクなし - ${worker} ${dateStr}`);
+                        // 空のセルにもイベントを追加
+                        setupEmptyCellEvents(dayCell);
+                    }
+                    
+                    // すべてのセルをドロップ可能にする
+                    makeCellDroppable(dayCell, worker, dateStr);
+                    
+                    workerRow.appendChild(dayCell);
+                }
                 
-                updateStats();
+                table.appendChild(workerRow);
             });
+
+            updateStats();
+            console.log('=== テーブル生成完了 ===');
         }
 
         // 日別スケジュール更新
@@ -1481,107 +1434,118 @@
             return taskData[monthKey].filter(task => task.date === dateStr);
         }
 
-        // セル内のタスクを取得（デバッグ強化版）
+        // セル内のタスクを取得（簡略化・デバッグ強化版）
         function getTasksForCell(worker, date) {
-            console.log('getTasksForCell呼び出し:', { worker, date });
-            
-            const cacheKey = `${worker}|${date}`;
-            if (renderCache.has(cacheKey)) {
-                const cached = renderCache.get(cacheKey);
-                console.log('キャッシュから取得:', cached);
-                return cached;
-            }
+            console.log('=== getTasksForCell 呼び出し ===');
+            console.log('検索条件:', { worker, date });
             
             const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
             console.log('検索対象月キー:', monthKey);
             console.log('利用可能な月キー:', Object.keys(taskData));
             
             if (!taskData[monthKey]) {
-                console.log('該当月のデータなし');
-                renderCache.set(cacheKey, []);
+                console.log('該当月のデータが存在しません');
                 return [];
             }
             
             console.log('該当月の全タスク:', taskData[monthKey]);
             
-            const result = taskData[monthKey].filter(task => {
+            const matchingTasks = taskData[monthKey].filter(task => {
                 const workerMatch = task.worker === worker;
                 const dateMatch = task.date === date;
-                console.log(`タスク${task.id}: worker=${workerMatch}(${task.worker}), date=${dateMatch}(${task.date})`);
+                console.log(`タスク ${task.id}: worker=${workerMatch} (${task.worker}), date=${dateMatch} (${task.date})`);
                 return workerMatch && dateMatch;
             });
             
-            console.log('マッチしたタスク:', result);
-            renderCache.set(cacheKey, result);
-            return result;
+            console.log('マッチしたタスク:', matchingTasks);
+            console.log('=== getTasksForCell 完了 ===');
+            
+            return matchingTasks;
         }
 
         // セル内容をレンダリング（デバッグ強化版）
         function renderCellContent(cell, tasks) {
-            console.log('renderCellContent呼び出し:', { cell, tasks: tasks.length });
+            console.log('=== renderCellContent 開始 ===');
+            console.log('対象セル:', cell);
+            console.log('タスク数:', tasks.length);
+            console.log('タスク詳細:', tasks);
             
+            // セルをクリア
             cell.innerHTML = '';
-            cell.className = 'task-cell';
+            cell.classList.remove('has-tasks');
             
-            // 既存のクラスを保持
-            const existingClasses = Array.from(cell.classList);
-            existingClasses.forEach(cls => {
-                if (cls !== 'task-cell') {
-                    cell.classList.add(cls);
-                }
-            });
-            
-            if (!tasks.length) {
+            if (tasks.length === 0) {
                 console.log('タスクなし、レンダリング終了');
                 return;
             }
             
-            console.log('タスク詳細:', tasks);
             cell.classList.add('has-tasks');
             
-            // 最優先タスクを1回のループで決定
+            // 計画作業、事前準備、その他の種別をチェック
+            const planningTasks = tasks.filter(task => task.isPlanningTask);
+            const preparationTasks = tasks.filter(task => task.isPreparationTask);
+            const otherTasks = tasks.filter(task => !task.isPlanningTask && !task.isPreparationTask);
+            
+            console.log('分類結果:', { 
+                planning: planningTasks.length, 
+                preparation: preparationTasks.length, 
+                other: otherTasks.length 
+            });
+            
+            // タスクの種別を判定（計画作業以外で）
+            const hasWorkTasks = otherTasks.some(task => isWorkTask(task));
+            const hasOnlyNonWorkTasks = otherTasks.every(task => !isWorkTask(task)) && otherTasks.length > 0;
+            
+            // 優先順位: 計画作業 > 事前準備 > その他
             let primaryTask = tasks[0];
-            let label = '';
-            let showText = false;
+            let displayLabel = '';
             
-            for (let i = 0; i < tasks.length; i++) {
-                const task = tasks[i];
-                console.log(`タスク${i}:`, task.taskType, task.isPlanningTask, task.isPreparationTask);
-                
-                if (task.taskType === 'vacation') {
-                    primaryTask = task; label = '休暇'; showText = false; break;
-                } else if (task.taskType === 'meeting') {
-                    primaryTask = task; label = '会議'; showText = false; break;
-                } else if (task.taskType === 'planning' || task.isPlanningTask) {
-                    primaryTask = task; label = '計画作業'; showText = true; break;
-                } else if (task.taskType === 'preparation' || task.isPreparationTask) {
-                    primaryTask = task; label = '事前準備'; showText = true; break;
-                } else if (isWorkTask(task)) {
-                    primaryTask = task; label = '随時作業'; showText = true; break;
-                }
-            }
-            
-            if (!label) { label = 'その他'; showText = false; }
-            
-            console.log('選択されたタスク:', { primaryTask: primaryTask.taskType, label, showText });
-            
-            const config = taskTypeConfig[primaryTask.taskType] || taskTypeConfig.other;
-            cell.style.backgroundColor = config.color;
-            cell.style.color = config.textColor;
-            
-            console.log('適用された色:', config);
-            
-            if (primaryTask.isManualEntry) {
+            if (planningTasks.length > 0) {
+                primaryTask = planningTasks[0];
+                displayLabel = '計画作業';
+                console.log('計画作業として表示');
                 makeCellDraggable(cell, primaryTask);
+            } else if (preparationTasks.length > 0) {
+                primaryTask = preparationTasks[0];
+                displayLabel = '事前準備';
+                console.log('事前準備として表示');
+                makeCellDraggable(cell, primaryTask);
+            } else if (hasWorkTasks) {
+                displayLabel = '随時作業';
+                console.log('随時作業として表示');
+            } else if (hasOnlyNonWorkTasks) {
+                // 休暇/MTG/その他のみの場合は文字表示なし
+                console.log('休暇等として表示（文字なし）');
+                const typeConfig = taskTypeConfig[primaryTask.taskType] || taskTypeConfig.other;
+                cell.style.backgroundColor = typeConfig.color;
+                cell.style.color = typeConfig.textColor;
+                makeCellDraggable(cell, primaryTask);
+                console.log('=== renderCellContent 完了（色のみ） ===');
+                return;
             }
             
-            if (showText) {
-                const html = `<div class="task-count">${tasks.length}</div><div class="task-type-label">${label}</div>`;
-                cell.innerHTML = html;
-                console.log('HTML設定:', html);
-            }
+            const typeConfig = taskTypeConfig[primaryTask.taskType] || taskTypeConfig.work;
+            console.log('使用する色設定:', typeConfig);
             
-            console.log('レンダリング完了');
+            // セルの背景色と文字色を設定
+            cell.style.backgroundColor = typeConfig.color;
+            cell.style.color = typeConfig.textColor;
+            
+            // 件数表示
+            const countDiv = document.createElement('div');
+            countDiv.className = 'task-count';
+            countDiv.textContent = tasks.length;
+            cell.appendChild(countDiv);
+            console.log('件数表示を追加:', tasks.length);
+            
+            // ラベル表示
+            const typeDiv = document.createElement('div');
+            typeDiv.className = 'task-type-label';
+            typeDiv.textContent = displayLabel || typeConfig.label;
+            cell.appendChild(typeDiv);
+            console.log('ラベル表示を追加:', displayLabel || typeConfig.label);
+            
+            console.log('=== renderCellContent 完了 ===');
         }
 
         // 作業タスクかどうかを判定
@@ -1599,46 +1563,31 @@
             );
         }
 
-        // セルのイベント設定（最適化版）
+        // セルのイベント設定
         function setupCellEvents(cell, tasks) {
             // マウスホバーでツールチップ表示
             cell.addEventListener('mouseenter', (e) => {
-                if (tasks.length > 0 && !document.getElementById('clickable-tooltip')) {
+                if (tasks.length > 0) {
                     showTooltip(e, tasks);
                 }
             });
 
             cell.addEventListener('mouseleave', () => {
-                if (!document.getElementById('clickable-tooltip')) {
-                    hideTooltip();
-                }
+                hideTooltip();
             });
 
-            // 単一クリックの処理
+            // 単一クリックで最初のタスクのURLに遷移、またはプルダウン表示
             cell.addEventListener('click', (e) => {
                 e.stopPropagation();
                 
-                if (tasks.length > 1) {
-                    // 複数タスク - クリック可能ツールチップ表示
-                    hideTooltip();
-                    showClickableTooltip(e, tasks, cell);
-                } else if (tasks.length === 1) {
-                    // 単一タスク処理
-                    if (tasks[0].redmineUrl && tasks[0].redmineUrl.trim() !== '') {
-                        window.open(tasks[0].redmineUrl, '_blank');
-                        showNotification(`${tasks[0].title} を開きました`, 'success');
-                    } else {
-                        // プルダウン表示
-                        const worker = cell.closest('tr')?.querySelector('.worker-name')?.textContent;
-                        const dateStr = getDateFromCell(cell);
-                        if (worker && dateStr) {
-                            showCellDropdown(cell, worker, dateStr);
-                        }
-                    }
+                // Redmineリンクがある場合は遷移
+                if (tasks.length > 0 && tasks[0].redmineUrl) {
+                    window.open(tasks[0].redmineUrl, '_blank');
                 } else {
-                    // タスクなし - プルダウン表示
+                    // プルダウンを表示
                     const worker = cell.closest('tr')?.querySelector('.worker-name')?.textContent;
                     const dateStr = getDateFromCell(cell);
+                    
                     if (worker && dateStr) {
                         showCellDropdown(cell, worker, dateStr);
                     }
@@ -1817,7 +1766,7 @@
             tasks.forEach((task, index) => {
                 const hours = task.estimatedHours || 0;
                 tooltipContent += `
-                    <div class="tooltip-task" data-task-id="${task.id}">
+                    <div class="tooltip-task">
                         <div class="tooltip-title">${task.title}</div>
                         <div class="tooltip-details">
                             ID: ${task.id} | 作業時間: ${hours}h<br>
@@ -1843,112 +1792,6 @@
             if (tooltipRect.bottom > window.innerHeight) {
                 tooltip.style.top = `${rect.bottom - tooltipRect.height}px`;
             }
-        }
-
-        // クリック可能なツールチップを表示（最適化版）
-        function showClickableTooltip(event, tasks, cell) {
-            // 既存のツールチップを全て隠す
-            hideTooltip();
-            hideClickableTooltip();
-            hideCellDropdown();
-            
-            const clickableTooltip = document.createElement('div');
-            clickableTooltip.className = 'clickable-tooltip';
-            clickableTooltip.id = 'clickable-tooltip';
-            
-            // ヘッダー
-            const header = document.createElement('div');
-            header.className = 'clickable-tooltip-header';
-            header.textContent = `チケットを選択 (${tasks.length}件)`;
-            clickableTooltip.appendChild(header);
-            
-            // 各タスクの表示
-            tasks.forEach((task) => {
-                const taskDiv = document.createElement('div');
-                const hasLink = task.redmineUrl && task.redmineUrl.trim() !== '';
-                taskDiv.className = `clickable-tooltip-task ${hasLink ? 'has-link' : 'no-link'}`;
-                
-                const hours = task.estimatedHours || 0;
-                const linkIcon = hasLink ? ' 🔗' : ' ⚠️';
-                
-                taskDiv.innerHTML = `
-                    <div style="font-weight: bold; color: ${hasLink ? '#68d391' : '#fbb6ce'};">
-                        ${task.title}${linkIcon}
-                    </div>
-                    <div style="font-size: 10px; color: #cbd5e0; margin-top: 2px;">
-                        ID: ${task.id} | 時間: ${hours}h
-                    </div>
-                `;
-                
-                // タスククリックイベント
-                taskDiv.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    
-                    if (hasLink) {
-                        window.open(task.redmineUrl, '_blank');
-                        showNotification(`${task.title} を開きました`, 'success');
-                    } else {
-                        showNotification('このタスクにはRedmineリンクがありません', 'info');
-                    }
-                    hideClickableTooltip();
-                });
-                
-                clickableTooltip.appendChild(taskDiv);
-            });
-            
-            // アクション部分
-            const actionsDiv = document.createElement('div');
-            actionsDiv.className = 'clickable-tooltip-actions';
-            
-            // タスク追加アクション
-            const addAction = document.createElement('div');
-            addAction.className = 'clickable-tooltip-action add';
-            addAction.textContent = '➕ 新しいタスクを追加';
-            addAction.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const worker = cell.closest('tr')?.querySelector('.worker-name')?.textContent;
-                const dateStr = getDateFromCell(cell);
-                if (worker && dateStr) {
-                    hideClickableTooltip();
-                    showCellDropdown(cell, worker, dateStr);
-                }
-            });
-            actionsDiv.appendChild(addAction);
-            
-            // 閉じるアクション
-            const closeAction = document.createElement('div');
-            closeAction.className = 'clickable-tooltip-action close';
-            closeAction.textContent = '❌ 閉じる';
-            closeAction.addEventListener('click', (e) => {
-                e.stopPropagation();
-                hideClickableTooltip();
-            });
-            actionsDiv.appendChild(closeAction);
-            
-            clickableTooltip.appendChild(actionsDiv);
-            
-            // 位置調整
-            const rect = cell.getBoundingClientRect();
-            clickableTooltip.style.left = `${rect.right + 10}px`;
-            clickableTooltip.style.top = `${rect.top}px`;
-            
-            document.body.appendChild(clickableTooltip);
-            
-            // 画面外調整
-            setTimeout(() => {
-                const tooltipRect = clickableTooltip.getBoundingClientRect();
-                if (tooltipRect.right > window.innerWidth) {
-                    clickableTooltip.style.left = `${rect.left - tooltipRect.width - 10}px`;
-                }
-                if (tooltipRect.bottom > window.innerHeight) {
-                    clickableTooltip.style.top = `${window.innerHeight - tooltipRect.height - 10}px`;
-                }
-            }, 10);
-            
-            // 外側クリックで閉じる
-            setTimeout(() => {
-                document.addEventListener('click', handleClickableTooltipOutsideClick);
-            }, 200);
         }
 
         // ツールチップ非表示
@@ -2184,42 +2027,14 @@
         }
 
         function determineTaskType(assignStatus, subject) {
-            // まずタイトル(Subject)をチェック
+            if (assignStatus && assignStatus.includes('休暇')) return 'vacation';
+            if (assignStatus && assignStatus.includes('MTG')) return 'meeting';
+            if (assignStatus && assignStatus.includes('その他')) return 'other';
+            
             if (subject) {
                 const lowerSubject = subject.toLowerCase();
-                if (lowerSubject.includes('休暇') || 
-                    lowerSubject.includes('休み') || 
-                    lowerSubject.includes('有給') || 
-                    lowerSubject.includes('年休') ||
-                    lowerSubject.includes('特休') ||
-                    lowerSubject.includes('代休')) {
-                    return 'vacation';
-                }
-                if (lowerSubject.includes('会議') || 
-                    lowerSubject.includes('mtg') || 
-                    lowerSubject.includes('ミーティング') ||
-                    lowerSubject.includes('打合') ||
-                    lowerSubject.includes('打ち合わせ')) {
-                    return 'meeting';
-                }
-                if (lowerSubject.includes('研修') || 
-                    lowerSubject.includes('勉強') || 
-                    lowerSubject.includes('学習') ||
-                    lowerSubject.includes('セミナー') ||
-                    lowerSubject.includes('講習')) {
-                    return 'training';
-                }
-                if (lowerSubject.includes('準備') || 
-                    lowerSubject.includes('事前')) {
-                    return 'preparation';
-                }
-            }
-            
-            // 次にアサイン状態をチェック
-            if (assignStatus) {
-                if (assignStatus.includes('休暇')) return 'vacation';
-                if (assignStatus.includes('MTG')) return 'meeting';
-                if (assignStatus.includes('その他')) return 'other';
+                if (lowerSubject.includes('研修') || lowerSubject.includes('勉強')) return 'training';
+                if (lowerSubject.includes('会議') || lowerSubject.includes('mtg')) return 'meeting';
             }
             
             return 'work';
