@@ -808,7 +808,11 @@
         let editingQuickTask = null;
         let planningTaskCounter = 1;
         let draggedTask = null;
-        let DEBUG_MODE = false; // デバッグモードの切り替え
+        let DEBUG_MODE = false;
+        
+        // キャッシュ
+        let monthCache = {};
+        let renderCache = new Map();
 
         // 種別別の色とラベル
         const taskTypeConfig = {
@@ -840,60 +844,42 @@
             { label: '20-22', start: 20, end: 22 }
         ];
 
-        // セルクリック時のプルダウン表示
+        // セルクリック時のプルダウン表示（軽量版）
         function showCellDropdown(cell, worker, dateStr) {
-            if (DEBUG_MODE) console.log('showCellDropdown 呼び出し:', { worker, dateStr });
-            
-            // 既存のドロップダウンを削除
             hideCellDropdown();
             
             const dropdown = document.createElement('div');
             dropdown.className = 'cell-dropdown';
             dropdown.id = 'cell-dropdown';
             
-            // オプションの定義
-            const options = [
-                { type: 'planning', label: '計画作業', icon: '#e53e3e' },
-                { type: 'vacation', label: '休暇', icon: '#702459' },
-                { type: 'preparation', label: '事前準備', icon: '#2b6cb0' },
-                { type: 'cancel', label: 'キャンセル', icon: null }
-            ];
+            dropdown.innerHTML = `
+                <div class="dropdown-option planning" onclick="selectOption('planning', '計画作業', '${worker}', '${dateStr}')">
+                    <div class="dropdown-option-icon" style="background: #e53e3e"></div>
+                    <span>計画作業</span>
+                </div>
+                <div class="dropdown-option vacation" onclick="selectOption('vacation', '休暇', '${worker}', '${dateStr}')">
+                    <div class="dropdown-option-icon" style="background: #702459"></div>
+                    <span>休暇</span>
+                </div>
+                <div class="dropdown-option preparation" onclick="selectOption('preparation', '事前準備', '${worker}', '${dateStr}')">
+                    <div class="dropdown-option-icon" style="background: #2b6cb0"></div>
+                    <span>事前準備</span>
+                </div>
+                <div class="dropdown-option cancel" onclick="hideCellDropdown()">
+                    <span>キャンセル</span>
+                </div>
+            `;
             
-            options.forEach(option => {
-                const optionDiv = document.createElement('div');
-                optionDiv.className = `dropdown-option ${option.type}`;
-                
-                if (option.icon) {
-                    optionDiv.innerHTML = `
-                        <div class="dropdown-option-icon" style="background: ${option.icon}"></div>
-                        <span>${option.label}</span>
-                    `;
-                } else {
-                    optionDiv.innerHTML = `<span>${option.label}</span>`;
-                }
-                
-                optionDiv.addEventListener('click', (e) => {
-                    if (DEBUG_MODE) console.log('オプション選択:', option.type, option.label);
-                    e.stopPropagation();
-                    if (option.type !== 'cancel') {
-                        addTaskToCell(worker, dateStr, option.type, option.label);
-                    }
-                    hideCellDropdown();
-                });
-                
-                dropdown.appendChild(optionDiv);
-            });
-            
-            // ドロップダウンの位置調整
             const rect = cell.getBoundingClientRect();
             dropdown.style.position = 'fixed';
             dropdown.style.left = `${rect.left}px`;
             dropdown.style.top = `${rect.bottom + 5}px`;
+            dropdown.style.zIndex = '1000';
             
-            // 画面外に出る場合の調整
             document.body.appendChild(dropdown);
-            const dropdownRect = dropdown.getBoundingClientRect();
             
+            // 画面外調整
+            const dropdownRect = dropdown.getBoundingClientRect();
             if (dropdownRect.right > window.innerWidth) {
                 dropdown.style.left = `${rect.right - dropdownRect.width}px`;
             }
@@ -901,10 +887,12 @@
                 dropdown.style.top = `${rect.top - dropdownRect.height - 5}px`;
             }
             
-            // クリック外しで閉じる
-            setTimeout(() => {
-                document.addEventListener('click', hideCellDropdown);
-            }, 100);
+            setTimeout(() => document.addEventListener('click', hideCellDropdown), 100);
+        }
+
+        function selectOption(type, label, worker, dateStr) {
+            addTaskToCell(worker, dateStr, type, label);
+            hideCellDropdown();
         }
 
         function hideCellDropdown() {
@@ -916,11 +904,10 @@
         }
 
         function addTaskToCell(worker, dateStr, taskType, taskLabel) {
-            if (DEBUG_MODE) console.log('=== addTaskToCell 開始 ===');
+            console.log('タスク追加開始:', { worker, dateStr, taskType, taskLabel });
             
-            const taskId = `${taskType.toUpperCase()}-${Date.now()}`;
             const newTask = {
-                id: taskId,
+                id: `${taskType.toUpperCase()}-${Date.now()}`,
                 title: taskLabel,
                 worker: worker,
                 date: dateStr,
@@ -938,27 +925,39 @@
                 isPreparationTask: taskType === 'preparation'
             };
             
-            if (DEBUG_MODE) console.log('作成されたタスク:', newTask);
+            console.log('作成されたタスク:', newTask);
             
-            // 現在表示中の月のキーを使用
             const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+            console.log('月キー:', monthKey);
             
-            // taskDataの初期化
             if (!taskData[monthKey]) {
                 taskData[monthKey] = [];
             }
             
-            // タスクを追加
             taskData[monthKey].push(newTask);
+            console.log('追加後のtaskData:', taskData[monthKey]);
             
-            if (DEBUG_MODE) console.log('追加後のtaskData:', taskData[monthKey]);
+            // キャッシュをクリア
+            renderCache.clear();
+            console.log('キャッシュクリア完了');
             
-            // テーブルを再生成
-            generateTable();
+            // 該当セルを直接更新
+            const targetCell = document.querySelector(`td[data-worker="${worker}"][data-date="${dateStr}"]`);
+            if (targetCell) {
+                console.log('対象セル発見:', targetCell);
+                const tasks = getTasksForCell(worker, dateStr);
+                console.log('セルのタスク:', tasks);
+                renderCellContent(targetCell, tasks);
+                setupCellEvents(targetCell, tasks);
+                makeCellDroppable(targetCell, worker, dateStr);
+            } else {
+                console.log('対象セルが見つかりません');
+                // フォールバック: テーブル全体を再生成
+                generateTable();
+            }
             
             showNotification(`${worker}の${dateStr}に${taskLabel}を追加しました`, 'success');
-            
-            if (DEBUG_MODE) console.log('=== addTaskToCell 完了 ===');
+            console.log('タスク追加完了');
         }
 
         // ドラッグ&ドロップ機能（改良版）
@@ -1249,7 +1248,7 @@
             }, 3000);
         }
 
-        // 月変更
+        // 月変更（キャッシュクリア付き）
         function changeMonth(direction) {
             currentMonth += direction;
             if (currentMonth > 11) {
@@ -1260,6 +1259,7 @@
                 currentYear--;
             }
             
+            renderCache.clear(); // キャッシュクリア
             updateMonthDisplay();
             generateTable();
         }
@@ -1283,95 +1283,77 @@
             return dayOfWeek !== 0 && dayOfWeek !== 6; // 0=日曜, 6=土曜
         }
 
-        // テーブル生成（最適化版）
+        // テーブル生成（超高速版）
         function generateTable() {
             const table = document.getElementById('scheduleTable');
-            table.innerHTML = '';
-
             const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-
-            // ヘッダー行生成
-            const headerRow = document.createElement('tr');
             
-            // 作業者列ヘッダー
-            const workerHeader = document.createElement('th');
-            workerHeader.textContent = '作業者';
-            workerHeader.className = 'worker-name';
-            headerRow.appendChild(workerHeader);
-
-            // 日付列ヘッダー
+            // フラグメントを使用してDOM操作を最小化
+            const fragment = document.createDocumentFragment();
+            
+            // ヘッダー行
+            const headerRow = document.createElement('tr');
+            headerRow.innerHTML = '<th class="worker-name">作業者</th>';
+            
+            const today_year = today.getFullYear();
+            const today_month = today.getMonth();
+            const today_date = today.getDate();
+            
             for (let day = 1; day <= daysInMonth; day++) {
-                const dayHeader = document.createElement('th');
                 const date = new Date(currentYear, currentMonth, day);
                 const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()];
+                const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+                const isTodayCell = currentYear === today_year && currentMonth === today_month && day === today_date && !isWeekend;
                 
-                dayHeader.innerHTML = `${day}<br>${dayOfWeek}`;
-                dayHeader.className = 'date-header';
+                const classes = ['date-header'];
+                if (isWeekend) classes.push('weekend');
+                if (isTodayCell) classes.push('today');
                 
-                // 土日祝日の色分け
-                if (date.getDay() === 0 || date.getDay() === 6) {
-                    dayHeader.classList.add('weekend');
-                }
-
-                // 今日の日付をハイライト（平日のみ）
-                if (isToday(currentYear, currentMonth, day) && isWeekday(currentYear, currentMonth, day)) {
-                    dayHeader.classList.add('today');
-                }
-                
-                headerRow.appendChild(dayHeader);
+                headerRow.innerHTML += `<th class="${classes.join(' ')}">${day}<br>${dayOfWeek}</th>`;
             }
+            fragment.appendChild(headerRow);
             
-            table.appendChild(headerRow);
-
-            // 作業者行生成
-            workers.forEach(worker => {
-                const workerRow = document.createElement('tr');
+            // 作業者行を一括生成
+            const workersHTML = workers.map(worker => {
+                let rowHTML = `<tr><td class="worker-name">${worker}</td>`;
                 
-                // 作業者名セル
-                const workerCell = document.createElement('td');
-                workerCell.textContent = worker;
-                workerCell.className = 'worker-name';
-                workerRow.appendChild(workerCell);
-
-                // 各日のセル
                 for (let day = 1; day <= daysInMonth; day++) {
-                    const dayCell = document.createElement('td');
-                    dayCell.className = 'task-cell';
-                    
-                    const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                    
-                    // 土日の背景色
                     const date = new Date(currentYear, currentMonth, day);
-                    if (date.getDay() === 0 || date.getDay() === 6) {
-                        dayCell.classList.add('weekend');
-                    }
-
-                    // 今日の日付をハイライト（平日のみ）
-                    if (isToday(currentYear, currentMonth, day) && isWeekday(currentYear, currentMonth, day)) {
-                        dayCell.classList.add('today');
-                    }
+                    const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+                    const isTodayCell = currentYear === today.getFullYear() && currentMonth === today.getMonth() && day === today.getDate() && !isWeekend;
                     
-                    // タスクデータがある場合は表示
-                    const tasksForCell = getTasksForCell(worker, dateStr);
+                    const classes = ['task-cell'];
+                    if (isWeekend) classes.push('weekend');
+                    if (isTodayCell) classes.push('today');
                     
-                    if (tasksForCell.length > 0) {
-                        renderCellContent(dayCell, tasksForCell);
-                        setupCellEvents(dayCell, tasksForCell);
-                    } else {
-                        // 空のセルにもイベントを追加
-                        setupEmptyCellEvents(dayCell);
-                    }
-                    
-                    // すべてのセルをドロップ可能にする
-                    makeCellDroppable(dayCell, worker, dateStr);
-                    
-                    workerRow.appendChild(dayCell);
+                    rowHTML += `<td class="${classes.join(' ')}" data-worker="${worker}" data-date="${dateStr}"></td>`;
                 }
+                return rowHTML + '</tr>';
+            }).join('');
+            
+            table.innerHTML = headerRow.outerHTML + workersHTML;
+            
+            // セルにタスクを設定（requestAnimationFrame使用）
+            requestAnimationFrame(() => {
+                const cells = table.querySelectorAll('td[data-worker]');
+                cells.forEach(cell => {
+                    const worker = cell.dataset.worker;
+                    const dateStr = cell.dataset.date;
+                    const tasks = getTasksForCell(worker, dateStr);
+                    
+                    if (tasks.length > 0) {
+                        renderCellContent(cell, tasks);
+                        setupCellEvents(cell, tasks);
+                    } else {
+                        setupEmptyCellEvents(cell);
+                    }
+                    
+                    makeCellDroppable(cell, worker, dateStr);
+                });
                 
-                table.appendChild(workerRow);
+                updateStats();
             });
-
-            updateStats();
         }
 
         // 日別スケジュール更新
@@ -1499,94 +1481,69 @@
             return taskData[monthKey].filter(task => task.date === dateStr);
         }
 
-        // セル内のタスクを取得（最適化版）
+        // セル内のタスクを取得（キャッシュ付き超高速版）
         function getTasksForCell(worker, date) {
+            const cacheKey = `${worker}|${date}`;
+            if (renderCache.has(cacheKey)) {
+                return renderCache.get(cacheKey);
+            }
+            
             const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
             
             if (!taskData[monthKey]) {
+                renderCache.set(cacheKey, []);
                 return [];
             }
             
-            return taskData[monthKey].filter(task => 
+            const result = taskData[monthKey].filter(task => 
                 task.worker === worker && task.date === date
             );
+            
+            renderCache.set(cacheKey, result);
+            return result;
         }
 
-        // セル内容をレンダリング（最適化版）
+        // セル内容をレンダリング（超高速版）
         function renderCellContent(cell, tasks) {
-            // セルをクリア
             cell.innerHTML = '';
-            cell.classList.remove('has-tasks');
+            cell.className = 'task-cell';
             
-            if (tasks.length === 0) return;
+            if (!tasks.length) return;
             
             cell.classList.add('has-tasks');
             
-            // タスクの種別分類（最適化）
+            // 最優先タスクを1回のループで決定
             let primaryTask = tasks[0];
-            let displayLabel = '';
-            let shouldShowText = true;
+            let label = '';
+            let showText = false;
             
-            // 優先順位チェック（効率化）
-            for (const task of tasks) {
+            for (let i = 0; i < tasks.length; i++) {
+                const task = tasks[i];
                 if (task.taskType === 'vacation') {
-                    primaryTask = task;
-                    displayLabel = '休暇';
-                    shouldShowText = false;
-                    break;
+                    primaryTask = task; label = '休暇'; break;
                 } else if (task.taskType === 'meeting') {
-                    primaryTask = task;
-                    displayLabel = '会議';
-                    shouldShowText = false;
-                    break;
+                    primaryTask = task; label = '会議'; break;
                 } else if (task.taskType === 'planning' || task.isPlanningTask) {
-                    primaryTask = task;
-                    displayLabel = '計画作業';
-                    shouldShowText = true; // 計画作業は文字表示
-                    break;
+                    primaryTask = task; label = '計画作業'; showText = true; break;
                 } else if (task.taskType === 'preparation' || task.isPreparationTask) {
-                    primaryTask = task;
-                    displayLabel = '事前準備';
-                    shouldShowText = true; // 事前準備は文字表示
-                    break;
+                    primaryTask = task; label = '事前準備'; showText = true; break;
                 } else if (isWorkTask(task)) {
-                    primaryTask = task;
-                    displayLabel = '随時作業';
-                    shouldShowText = true; // 随時作業は文字表示
-                    break;
+                    primaryTask = task; label = '随時作業'; showText = true; break;
                 }
             }
             
-            // その他の判定
-            if (!displayLabel) {
-                displayLabel = 'その他';
-                shouldShowText = false;
-            }
+            if (!label) { label = 'その他'; }
             
-            const typeConfig = taskTypeConfig[primaryTask.taskType] || taskTypeConfig.other;
+            const config = taskTypeConfig[primaryTask.taskType] || taskTypeConfig.other;
+            cell.style.backgroundColor = config.color;
+            cell.style.color = config.textColor;
             
-            // セルの背景色と文字色を設定
-            cell.style.backgroundColor = typeConfig.color;
-            cell.style.color = typeConfig.textColor;
-            
-            // ドラッグ可能にする（手動入力のタスクのみ）
             if (primaryTask.isManualEntry) {
                 makeCellDraggable(cell, primaryTask);
             }
             
-            // 文字表示が必要な場合のみ表示
-            if (shouldShowText) {
-                // 件数表示
-                const countDiv = document.createElement('div');
-                countDiv.className = 'task-count';
-                countDiv.textContent = tasks.length;
-                cell.appendChild(countDiv);
-                
-                // ラベル表示
-                const typeDiv = document.createElement('div');
-                typeDiv.className = 'task-type-label';
-                typeDiv.textContent = displayLabel;
-                cell.appendChild(typeDiv);
+            if (showText) {
+                cell.innerHTML = `<div class="task-count">${tasks.length}</div><div class="task-type-label">${label}</div>`;
             }
         }
 
