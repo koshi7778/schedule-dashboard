@@ -1481,35 +1481,62 @@
             return taskData[monthKey].filter(task => task.date === dateStr);
         }
 
-        // セル内のタスクを取得（キャッシュ付き超高速版）
+        // セル内のタスクを取得（デバッグ強化版）
         function getTasksForCell(worker, date) {
+            console.log('getTasksForCell呼び出し:', { worker, date });
+            
             const cacheKey = `${worker}|${date}`;
             if (renderCache.has(cacheKey)) {
-                return renderCache.get(cacheKey);
+                const cached = renderCache.get(cacheKey);
+                console.log('キャッシュから取得:', cached);
+                return cached;
             }
             
             const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+            console.log('検索対象月キー:', monthKey);
+            console.log('利用可能な月キー:', Object.keys(taskData));
             
             if (!taskData[monthKey]) {
+                console.log('該当月のデータなし');
                 renderCache.set(cacheKey, []);
                 return [];
             }
             
-            const result = taskData[monthKey].filter(task => 
-                task.worker === worker && task.date === date
-            );
+            console.log('該当月の全タスク:', taskData[monthKey]);
             
+            const result = taskData[monthKey].filter(task => {
+                const workerMatch = task.worker === worker;
+                const dateMatch = task.date === date;
+                console.log(`タスク${task.id}: worker=${workerMatch}(${task.worker}), date=${dateMatch}(${task.date})`);
+                return workerMatch && dateMatch;
+            });
+            
+            console.log('マッチしたタスク:', result);
             renderCache.set(cacheKey, result);
             return result;
         }
 
-        // セル内容をレンダリング（超高速版）
+        // セル内容をレンダリング（デバッグ強化版）
         function renderCellContent(cell, tasks) {
+            console.log('renderCellContent呼び出し:', { cell, tasks: tasks.length });
+            
             cell.innerHTML = '';
             cell.className = 'task-cell';
             
-            if (!tasks.length) return;
+            // 既存のクラスを保持
+            const existingClasses = Array.from(cell.classList);
+            existingClasses.forEach(cls => {
+                if (cls !== 'task-cell') {
+                    cell.classList.add(cls);
+                }
+            });
             
+            if (!tasks.length) {
+                console.log('タスクなし、レンダリング終了');
+                return;
+            }
+            
+            console.log('タスク詳細:', tasks);
             cell.classList.add('has-tasks');
             
             // 最優先タスクを1回のループで決定
@@ -1519,10 +1546,12 @@
             
             for (let i = 0; i < tasks.length; i++) {
                 const task = tasks[i];
+                console.log(`タスク${i}:`, task.taskType, task.isPlanningTask, task.isPreparationTask);
+                
                 if (task.taskType === 'vacation') {
-                    primaryTask = task; label = '休暇'; break;
+                    primaryTask = task; label = '休暇'; showText = false; break;
                 } else if (task.taskType === 'meeting') {
-                    primaryTask = task; label = '会議'; break;
+                    primaryTask = task; label = '会議'; showText = false; break;
                 } else if (task.taskType === 'planning' || task.isPlanningTask) {
                     primaryTask = task; label = '計画作業'; showText = true; break;
                 } else if (task.taskType === 'preparation' || task.isPreparationTask) {
@@ -1532,19 +1561,27 @@
                 }
             }
             
-            if (!label) { label = 'その他'; }
+            if (!label) { label = 'その他'; showText = false; }
+            
+            console.log('選択されたタスク:', { primaryTask: primaryTask.taskType, label, showText });
             
             const config = taskTypeConfig[primaryTask.taskType] || taskTypeConfig.other;
             cell.style.backgroundColor = config.color;
             cell.style.color = config.textColor;
+            
+            console.log('適用された色:', config);
             
             if (primaryTask.isManualEntry) {
                 makeCellDraggable(cell, primaryTask);
             }
             
             if (showText) {
-                cell.innerHTML = `<div class="task-count">${tasks.length}</div><div class="task-type-label">${label}</div>`;
+                const html = `<div class="task-count">${tasks.length}</div><div class="task-type-label">${label}</div>`;
+                cell.innerHTML = html;
+                console.log('HTML設定:', html);
             }
+            
+            console.log('レンダリング完了');
         }
 
         // 作業タスクかどうかを判定
@@ -1918,9 +1955,6 @@
         function hideTooltip() {
             const tooltip = document.getElementById('tooltip');
             tooltip.classList.remove('show');
-            
-            // クリック可能ツールチップも隠す
-            hideClickableTooltip();
         }
 
         // 統計更新
