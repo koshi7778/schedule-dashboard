@@ -410,6 +410,14 @@
             background: #c82333;
         }
 
+        .control-btn.csv-load {
+            background: #17a2b8;
+        }
+
+        .control-btn.csv-load:hover {
+            background: #138496;
+        }
+
         .notification {
             position: fixed;
             top: 20px;
@@ -529,6 +537,7 @@
                 <div class="assignment-controls">
                     <button class="control-btn save" onclick="saveAssignments()">💾 保存</button>
                     <button class="control-btn reset" onclick="resetAssignments()">🔄 リセット</button>
+                    <button class="control-btn csv-load" onclick="loadDataFromCSV()">📄 CSV読込</button>
                 </div>
                 <div class="unassigned-tasks" id="unassignedTasks">
                     <!-- 未アサインタスクがここに表示される -->
@@ -610,6 +619,25 @@
             '中村 龍之介', '小泉 祐稀', '小菅 祐馬', '矢野 俊介', '末廣 太一',
             '木暮 誉貴'
         ];
+
+        // 通知表示関数
+        function showNotification(message, type = 'info') {
+            // 既存の通知を削除
+            const existingNotification = document.querySelector('.notification');
+            if (existingNotification) {
+                existingNotification.remove();
+            }
+
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            // 3秒後に自動削除
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
 
         // CSV読み込み関連の関数
         function getCSVFileNames() {
@@ -874,4 +902,312 @@
                         task.worker === worker && task.date === currentDateStr
                     ) || [];
 
-                    tas
+                    tasksForDay.forEach(task => {
+                        const taskElement = createTaskElement(task);
+                        dayCell.appendChild(taskElement);
+                    });
+
+                    calendar.appendChild(dayCell);
+                }
+            });
+
+            generateUnassignedTasks();
+            updateStats();
+        }
+
+        function createTaskElement(task) {
+            const taskElement = document.createElement('div');
+            taskElement.className = `task-item task-${task.status}`;
+            taskElement.textContent = task.type === 'planned' ? `計画: ${task.title}` : task.title;
+            taskElement.dataset.taskId = task.id;
+            
+            if (task.status === 'unassigned') {
+                taskElement.draggable = true;
+                setupDragEvents(taskElement, task);
+            } else {
+                taskElement.onclick = () => showTaskDetail(task);
+            }
+            
+            return taskElement;
+        }
+
+        function generateUnassignedTasks() {
+            const container = document.getElementById('unassignedTasks');
+            container.innerHTML = '';
+
+            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+            const unassignedTasks = mockTasks[monthKey]?.filter(task => task.status === 'unassigned') || [];
+
+            unassignedTasks.forEach(task => {
+                const taskElement = createTaskElement(task);
+                taskElement.classList.add('in-panel');
+                container.appendChild(taskElement);
+            });
+        }
+
+        function setupDragEvents(element, task) {
+            element.addEventListener('dragstart', (e) => {
+                draggedTask = task;
+                element.classList.add('dragging');
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/html', element.outerHTML);
+            });
+
+            element.addEventListener('dragend', (e) => {
+                element.classList.remove('dragging');
+                draggedTask = null;
+            });
+        }
+
+        function setupDropZone(dayCell) {
+            dayCell.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+                
+                if (draggedTask && canDropTask(dayCell, draggedTask)) {
+                    dayCell.classList.add('drag-over');
+                } else {
+                    dayCell.classList.add('invalid-drop');
+                }
+            });
+
+            dayCell.addEventListener('dragleave', (e) => {
+                dayCell.classList.remove('drag-over', 'invalid-drop');
+            });
+
+            dayCell.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dayCell.classList.remove('drag-over', 'invalid-drop');
+                
+                if (draggedTask && canDropTask(dayCell, draggedTask)) {
+                    dropTask(dayCell, draggedTask);
+                } else {
+                    showNotification('この場所にはタスクを配置できません', 'error');
+                }
+            });
+        }
+
+        function canDropTask(dayCell, task) {
+            const worker = dayCell.dataset.worker;
+            const date = dayCell.dataset.date;
+            
+            if (task.type === 'planned') {
+                const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+                const existingPlannedTasks = mockTasks[monthKey]?.filter(t => 
+                    t.worker === worker && 
+                    t.date === date && 
+                    t.type === 'planned' && 
+                    t.id !== task.id
+                ) || [];
+                
+                if (existingPlannedTasks.length > 0) {
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+
+        function dropTask(dayCell, task) {
+            const worker = dayCell.dataset.worker;
+            const date = dayCell.dataset.date;
+            
+            const change = {
+                taskId: task.id,
+                oldWorker: task.worker,
+                oldDate: task.date,
+                newWorker: worker,
+                newDate: date
+            };
+            
+            pendingChanges.push(change);
+            
+            if (task.worker && task.date) {
+                removeTaskFromCalendar(task.id);
+            } else {
+                removeTaskFromUnassigned(task.id);
+            }
+            
+            task.worker = worker;
+            task.date = date;
+            task.status = 'assigned';
+            
+            const taskElement = createTaskElement(task);
+            dayCell.appendChild(taskElement);
+            
+            updateStats();
+            showNotification(`${task.title} を ${worker} の ${date} にアサインしました`, 'success');
+        }
+
+        function removeTaskFromCalendar(taskId) {
+            const taskElements = document.querySelectorAll(`[data-task-id="${taskId}"]`);
+            taskElements.forEach(el => el.remove());
+        }
+
+        function removeTaskFromUnassigned(taskId) {
+            const unassignedContainer = document.getElementById('unassignedTasks');
+            const taskElement = unassignedContainer.querySelector(`[data-task-id="${taskId}"]`);
+            if (taskElement) {
+                taskElement.remove();
+            }
+        }
+
+        function saveAssignments() {
+            if (pendingChanges.length === 0) {
+                showNotification('保存する変更がありません', 'error');
+                return;
+            }
+            
+            console.log('Saving assignments:', pendingChanges);
+            
+            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+            pendingChanges.forEach(change => {
+                const task = mockTasks[monthKey]?.find(t => t.id === change.taskId);
+                if (task) {
+                    task.worker = change.newWorker;
+                    task.date = change.newDate;
+                    task.status = 'assigned';
+                }
+            });
+            
+            pendingChanges = [];
+            showNotification(`変更を保存しました`, 'success');
+        }
+
+        function resetAssignments() {
+            if (pendingChanges.length === 0) {
+                showNotification('リセットする変更がありません', 'error');
+                return;
+            }
+            
+            pendingChanges.forEach(change => {
+                const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+                const task = mockTasks[monthKey]?.find(t => t.id === change.taskId);
+                if (task) {
+                    task.worker = change.oldWorker;
+                    task.date = change.oldDate;
+                    task.status = change.oldWorker ? 'assigned' : 'unassigned';
+                }
+            });
+            
+            pendingChanges = [];
+            generateCalendar();
+            showNotification('変更をリセットしました', 'success');
+        }
+
+        function updateStats() {
+            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+            const tasks = mockTasks[monthKey] || [];
+            
+            const totalTasks = tasks.length;
+            const assignedTasks = tasks.filter(t => t.status === 'assigned').length;
+            const completedTasks = tasks.filter(t => t.status === 'completed').length;
+            const unassignedTasks = tasks.filter(t => t.status === 'unassigned').length;
+
+            document.getElementById('totalTasks').textContent = totalTasks;
+            document.getElementById('assignedTasks').textContent = assignedTasks;
+            document.getElementById('completedTasks').textContent = completedTasks;
+            document.getElementById('unassignedTasks').textContent = unassignedTasks;
+        }
+
+        function showTaskDetail(task) {
+            const modal = document.getElementById('taskModal');
+            const detail = document.getElementById('taskDetail');
+            
+            const statusText = {
+                'assigned': '本アサイン',
+                'unassigned': '未アサイン',
+                'completed': '作業完了'
+            };
+
+            const typeText = {
+                'ad-hoc': '随時作業',
+                'planned': '計画作業'
+            };
+
+            detail.innerHTML = `
+                <h3>${task.title}</h3>
+                <div class="task-info">
+                    <div class="info-item">
+                        <div class="info-label">チケットID</div>
+                        <div class="info-value">${task.id}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">担当者</div>
+                        <div class="info-value">${task.worker || '未アサイン'}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">作業日</div>
+                        <div class="info-value">${task.date || '未設定'}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">ステータス</div>
+                        <div class="info-value">${statusText[task.status]}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">作業種別</div>
+                        <div class="info-value">${typeText[task.type]}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">予定時間</div>
+                        <div class="info-value">${task.estimatedHours}時間</div>
+                    </div>
+                </div>
+                <div class="info-item" style="grid-column: 1 / -1; margin-top: 15px;">
+                    <div class="info-label">詳細</div>
+                    <div class="info-value">${task.description}</div>
+                </div>
+                ${task.redmineUrl ? `<a href="${task.redmineUrl}" target="_blank" class="redmine-link">Redmineで詳細を確認 →</a>` : ''}
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('taskModal').style.display = 'none';
+        }
+
+        function changeMonth(direction) {
+            currentMonth += direction;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            } else if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            
+            updateMonthDisplay();
+            generateCalendar();
+        }
+
+        function updateMonthDisplay() {
+            const months = [
+                '1月', '2月', '3月', '4月', '5月', '6月',
+                '7月', '8月', '9月', '10月', '11月', '12月'
+            ];
+            document.getElementById('currentMonth').textContent = 
+                `${currentYear}年${months[currentMonth]}`;
+        }
+
+        // モーダルの外側をクリックした時に閉じる
+        window.onclick = function(event) {
+            const modal = document.getElementById('taskModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // 初期化とCSVデータ自動読み込み
+        document.addEventListener('DOMContentLoaded', function() {
+            updateMonthDisplay();
+            generateCalendar();
+            
+            // ページ読み込み後1秒でCSVデータを自動読み込み
+            setTimeout(() => {
+                loadDataFromCSV();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
