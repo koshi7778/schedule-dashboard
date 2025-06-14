@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>作業スケジュール管理ダッシュボード</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .month-selector {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .month-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .month-btn:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .legend {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .unassigned-panel {
+            width: 300px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .unassigned-panel h3 {
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        .unassigned-tasks {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .calendar-container {
+            flex: 1;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: 150px repeat(31, 1fr);
+            gap: 1px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .worker-header, .date-header {
+            background: #343a40;
+            color: white;
+            padding: 12px 8px;
+            font-weight: 600;
+            text-align: center;
+            font-size: 0.9em;
+        }
+
+        .worker-name {
+            background: #495057;
+            color: white;
+            padding: 12px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            min-height: 60px;
+        }
+
+        .day-cell {
+            background: white;
+            min-height: 60px;
+            padding: 4px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .day-cell.drag-over {
+            background: #e3f2fd;
+            border: 2px dashed #2196f3;
+            transform: scale(1.02);
+        }
+
+        .day-cell.invalid-drop {
+            background: #ffebee;
+            border: 2px dashed #f44336;
+        }
+
+        .task-item {
+            padding: 6px 8px;
+            border-radius: 6px;
+            font-size: 0.75em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            user-select: none;
+            position: relative;
+        }
+
+        .task-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .task-item.dragging {
+            opacity: 0.7;
+            transform: rotate(5deg);
+            z-index: 1000;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .task-assigned {
+            background: #d4edda;
+            border-left-color: #28a745;
+            color: #155724;
+        }
+
+        .task-unassigned {
+            background: #fff3cd;
+            border-left-color: #ffc107;
+            color: #856404;
+            cursor: grab;
+        }
+
+        .task-unassigned:active {
+            cursor: grabbing;
+        }
+
+        .task-unassigned.in-panel {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            margin-bottom: 8px;
+            padding: 12px;
+            font-size: 0.9em;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
+        }
+
+        .task-completed {
+            background: #d1ecf1;
+            border-left-color: #17a2b8;
+            color: #0c5460;
+        }
+
+        .task-planned {
+            background: #f8d7da;
+            border-left-color: #dc3545;
+            color: #721c24;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 600px;
+            position: relative;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #aaa;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .task-detail {
+            margin-top: 20px;
+        }
+
+        .task-detail h3 {
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .task-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            color: #333;
+        }
+
+        .redmine-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .redmine-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+            background: #f8f9fa;
+            margin: 0 20px 20px 20px;
+            border-radius: 10px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            margin-top: 5px;
+        }
+
+        .drag-hint {
+            background: #e3f2fd;
+            border: 2px dashed #2196f3;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            color: #1976d2;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .assignment-controls {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            justify-content: center;
+        }
+
+        .control-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: #5a6268;
+            transform: translateY(-1px);
+        }
+
+        .control-btn.save {
+            background: #28a745;
+        }
+
+        .control-btn.save:hover {
+            background: #218838;
+        }
+
+        .control-btn.reset {
+            background: #dc3545;
+        }
+
+        .control-btn.reset:hover {
+            background: #c82333;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 2000;
+            animation: slideInRight 0.3s ease;
+        }
+
+        .notification.success {
+            background: #28a745;
+        }
+
+        .notification.error {
+            background: #dc3545;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .unassigned-panel {
+                width: 100%;
+                order: -1;
+            }
+            
+            .unassigned-tasks {
+                flex-direction: row;
+                overflow-x: auto;
+                max-height: none;
+            }
+            
+            .calendar-grid {
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>作業スケジュール管理ダッシュボード</h1>
+            <p>ドラッグ&ドロップでスケジュールを直感的に管理</p>
+        </div>
+
+        <div class="controls">
+            <div class="month-selector">
+                <button class="month-btn" onclick="changeMonth(-1)">◀ 前月</button>
+                <h2 id="currentMonth">2025年6月</h2>
+                <button class="month-btn" onclick="changeMonth(1)">次月 ▶</button>
+            </div>
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #d4edda; border-left: 3px solid #28a745;"></div>
+                    <span>本アサイン</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #fff3cd; border-left: 3px solid #ffc107;"></div>
+                    <span>未アサイン</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #d1ecf1; border-left: 3px solid #17a2b8;"></div>
+                    <span>作業完了</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #f8d7da; border-left: 3px solid #dc3545;"></div>
+                    <span>計画作業</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number" id="totalTasks">0</div>
+                <div class="stat-label">総タスク数</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="assignedTasks">0</div>
+                <div class="stat-label">アサイン済み</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="completedTasks">0</div>
+                <div class="stat-label">完了済み</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="unassignedTasks">0</div>
+                <div class="stat-label">未アサイン</div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="unassigned-panel">
+                <h3>📋 未アサインタスク</h3>
+                <div class="drag-hint">
+                    未アサインのタスクをドラッグして<br>
+                    カレンダーにドロップしてください
+                </div>
+                <div class="assignment-controls">
+                    <button class="control-btn save" onclick="saveAssignments()">💾 保存</button>
+                    <button class="control-btn reset" onclick="resetAssignments()">🔄 リセット</button>
+                </div>
+                <div class="unassigned-tasks" id="unassignedTasks">
+                    <!-- 未アサインタスクがここに表示される -->
+                </div>
+            </div>
+
+            <div class="calendar-container">
+                <div class="calendar-grid" id="calendar">
+                    <!-- カレンダーはJavaScriptで動的生成 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- モーダルウィンドウ -->
+    <div id="taskModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div class="task-detail" id="taskDetail">
+                <!-- タスク詳細がここに表示される -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 現在の月
+        let currentDate = new Date();
+        let currentYear = currentDate.getFullYear();
+        let currentMonth = currentDate.getMonth();
+
+        // ドラッグ中のタスク
+        let draggedTask = null;
+        let pendingChanges = [];
+
+        // モックデータ - 実際にはRedmine APIから取得
+        const mockTasks = {
+            '2025-06': [
+                {
+                    id: 'RDM-001',
+                    title: 'システム機能改修',
+                    worker: '田中太郎',
+                    date: '2025-06-03',
+                    status: 'assigned',
+                    type: 'ad-hoc',
+                    estimatedHours: 3,
+                    description: 'ユーザー管理画面の機能改修作業',
+                    redmineUrl: 'https://redmine.example.com/issues/001'
+                },
+                {
+                    id: 'RDM-002',
+                    title: 'データベース設計',
+                    worker: '田中太郎',
+                    date: '2025-06-05',
+                    status: 'assigned',
+                    type: 'planned',
+                    estimatedHours: 8,
+                    description: '新機能用のデータベース設計作業',
+                    redmineUrl: 'https://redmine.example.com/issues/002'
+                },
+                {
+                    id: 'RDM-003',
+                    title: 'API開発',
+                    worker: '佐藤花子',
+                    date: '2025-06-03',
+                    status: 'completed',
+                    type: 'ad-hoc',
+                    estimatedHours: 2,
+                    description: 'REST API エンドポイントの開発',
+                    redmineUrl: 'https://redmine.example.com/issues/003'
+                },
+                {
+                    id: 'RDM-004',
+                    title: 'テスト実施',
+                    worker: '鈴木一郎',
+                    date: '2025-06-07',
+                    status: 'assigned',
+                    type: 'planned',
+                    estimatedHours: 8,
+                    description: 'システム全体のテスト実施',
+                    redmineUrl: 'https://redmine.example.com/issues/004'
+                },
+                {
+                    id: 'RDM-005',
+                    title: 'バグ修正',
+                    worker: '',
+                    date: '',
+                    status: 'unassigned',
+                    type: 'ad-hoc',
+                    estimatedHours: 2,
+                    description: 'ログイン機能のバグ修正',
+                    redmineUrl: 'https://redmine.example.com/issues/005'
+                },
+                {
+                    id: 'RDM-006',
+                    title: 'UI改善',
+                    worker: '',
+                    date: '',
+                    status: 'unassigned',
+                    type: 'ad-hoc',
+                    estimatedHours: 4,
+                    description: 'ユーザーインターフェースの改善作業',
+                    redmineUrl: 'https://redmine.example.com/issues/006'
+                },
+                {
+                    id: 'RDM-007',
+                    title: '新機能開発',
+                    worker: '',
+                    date: '',
+                    status: 'unassigned',
+                    type: 'planned',
+                    estimatedHours: 8,
+                    description: '新しい機能の開発作業',
+                    redmineUrl: 'https://redmine.example.com/issues/007'
+                },
+                {
+                    id: 'RDM-008',
+                    title: 'ドキュメント作成',
+                    worker: '',
+                    date: '',
+                    status: 'unassigned',
+                    type: 'ad-hoc',
+                    estimatedHours: 3,
+                    description: 'システムドキュメントの作成',
+                    redmineUrl: 'https://redmine.example.com/issues/008'
+                }
+            ]
+        };
+
+        // 作業者リスト - ここを実際の作業者名に変更してください
+        const workers = [
+            '田中太郎', '佐藤花子', '鈴木一郎', '高橋次郎', '山田三郎',
+            '中村四郎', '小林五郎', '加藤六郎', '伊藤七郎', '渡辺八郎',
+            '斎藤九郎', '松本十郎', '井上十一', '木村十二', '林十三',
+            '清水十四', '山口十五', '池田十六', '橋本十七', '森十八'
+        ];
+
+        function generateCalendar() {
+            const calendar = document.getElementById('calendar');
+            calendar.innerHTML = '';
+
+            // 月の日数を取得
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+            // ヘッダー行を作成
+            const headerRow = document.createElement('div');
+            headerRow.className = 'worker-header';
+            headerRow.textContent = '作業者';
+            calendar.appendChild(headerRow);
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateHeader = document.createElement('div');
+                dateHeader.className = 'date-header';
+                dateHeader.textContent = day;
+                calendar.appendChild(dateHeader);
+            }
+
+            // 各作業者の行を作成
+            workers.forEach(worker => {
+                // 作業者名
+                const workerCell = document.createElement('div');
+                workerCell.className = 'worker-name';
+                workerCell.textContent = worker;
+                calendar.appendChild(workerCell);
+
+                // 各日のセルを作成
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dayCell = document.createElement('div');
+                    dayCell.className = 'day-cell';
+                    dayCell.dataset.worker = worker;
+                    dayCell.dataset.date = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    
+                    // ドロップイベントリスナーを追加
+                    setupDropZone(dayCell);
+                    
+                    // その日のタスクを取得
+                    const currentDateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+                    const tasksForDay = mockTasks[monthKey]?.filter(task => 
+                        task.worker === worker && task.date === currentDateStr
+                    ) || [];
+
+                    // タスクを表示
+                    tasksForDay.forEach(task => {
+                        const taskElement = createTaskElement(task);
+                        dayCell.appendChild(taskElement);
+                    });
+
+                    calendar.appendChild(dayCell);
+                }
+            });
+
+            generateUnassignedTasks();
+            updateStats();
+        }
+
+        function createTaskElement(task) {
+            const taskElement = document.createElement('div');
+            taskElement.className = `task-item task-${task.status}`;
+            taskElement.textContent = task.type === 'planned' ? `計画: ${task.title}` : task.title;
+            taskElement.dataset.taskId = task.id;
+            
+            // 未アサインタスクの場合はドラッグ可能にする
+            if (task.status === 'unassigned') {
+                taskElement.draggable = true;
+                setupDragEvents(taskElement, task);
+            } else {
+                taskElement.onclick = () => showTaskDetail(task);
+            }
+            
+            return taskElement;
+        }
+
+        function generateUnassignedTasks() {
+            const container = document.getElementById('unassignedTasks');
+            container.innerHTML = '';
+
+            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+            const unassignedTasks = mockTasks[monthKey]?.filter(task => task.status === 'unassigned') || [];
+
+            unassignedTasks.forEach(task => {
+                const taskElement = createTaskElement(task);
+                taskElement.classList.add('in-panel');
+                container.appendChild(taskElement);
+            });
+        }
+
+        function setupDragEvents(element, task) {
+            element.addEventListener('dragstart', (e) => {
+                draggedTask = task;
+                element.classList.add('dragging');
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/html', element.outerHTML);
+            });
+
+            element.addEventListener('dragend', (e) => {
+                element.classList.remove('dragging');
+                draggedTask = null;
+            });
+        }
+
+        function setupDropZone(dayCell) {
+            dayCell.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+                
+                if (draggedTask && canDropTask(dayCell, draggedTask)) {
+                    dayCell.classList.add('drag-over');
+                } else {
+                    dayCell.classList.add('invalid-drop');
+                }
+            });
+
+            dayCell.addEventListener('dragleave', (e) => {
+                dayCell.classList.remove('drag-over', 'invalid-drop');
+            });
+
+            dayCell.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dayCell.classList.remove('drag-over', 'invalid-drop');
+                
+                if (draggedTask && canDropTask(dayCell, draggedTask)) {
+                    dropTask(dayCell, draggedTask);
+                } else {
+                    showNotification('この場所にはタスクを配置できません', 'error');
+                }
+            });
+        }
+
+        function canDropTask(dayCell, task) {
+            const worker = dayCell.dataset.worker;
+            const date = dayCell.dataset.date;
+            
+            // 計画作業の場合、同じ日に他の計画作業があるかチェック
+            if (task.type === 'planned') {
+                const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+                const existingPlannedTasks = mockTasks[monthKey]?.filter(t => 
+                    t.worker === worker && 
+                    t.date === date && 
+                    t.type === 'planned' && 
+                    t.id !== task.id
+                ) || [];
+                
+                if (existingPlannedTasks.length > 0) {
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+
+        function dropTask(dayCell, task) {
+            const worker = dayCell.dataset.worker;
+            const date = dayCell.dataset.date;
+            
+            // タスクの情報を更新
+            const change = {
+                taskId: task.id,
+                oldWorker: task.worker,
+                oldDate: task.date,
+                newWorker: worker,
+                newDate: date
+            };
+            
+            pendingChanges.push(change);
+            
+            // 元の場所からタスクを削除
+            if (task.worker && task.date) {
+                removeTaskFromCalendar(task.id);
+            } else {
+                removeTaskFromUnassigned(task.id);
+            }
+            
+            // 新しい場所にタスクを追加
+            task.worker = worker;
+            task.date = date;
+            task.status = 'assigned';
+            
+            const taskElement = createTaskElement(task);
+            dayCell.appendChild(taskElement);
+            
+            updateStats();
+            showNotification(`${task.title} を ${worker} の ${date} にアサインしました`, 'success');
+        }
+
+        function removeTaskFromCalendar(taskId) {
+            const taskElements = document.querySelectorAll(`[data-task-id="${taskId}"]`);
+            taskElements.forEach(el => el.remove());
+        }
+
+        function removeTaskFromUnassigned(taskId) {
+            const unassignedContainer = document.getElementById('unassignedTasks');
+            const taskElement = unassignedContainer.querySelector(`[data-task-id="${taskId}"]`);
+            if (taskElement) {
+                taskElement.remove();
+            }
+        }
+
+        function saveAssignments() {
+            if (pendingChanges.length === 0) {
+                showNotification('保存する変更がありません', 'error');
+                return;
+            }
+            
+            // 実際のAPIコール（現在はモック）
+            console.log('Saving assignments:', pendingChanges);
+            
+            // 変更をmockTasksに反映
+            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+            pendingChanges.forEach(change => {
+                const task = mockTasks[monthKey]?.
