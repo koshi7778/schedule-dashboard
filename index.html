@@ -765,6 +765,8 @@
 
         // セルクリック時のプルダウン表示
         function showCellDropdown(cell, worker, dateStr) {
+            console.log('showCellDropdown 呼び出し:', { worker, dateStr });
+            
             // 既存のドロップダウンを削除
             hideCellDropdown();
             
@@ -794,6 +796,7 @@
                 }
                 
                 optionDiv.addEventListener('click', (e) => {
+                    console.log('オプション選択:', option.type, option.label);
                     e.stopPropagation();
                     if (option.type !== 'cancel') {
                         addTaskToCell(worker, dateStr, option.type, option.label);
@@ -836,6 +839,9 @@
         }
 
         function addTaskToCell(worker, dateStr, taskType, taskLabel) {
+            console.log('=== addTaskToCell 開始 ===');
+            console.log('引数:', { worker, dateStr, taskType, taskLabel });
+            
             const taskId = `${taskType.toUpperCase()}-${Date.now()}`;
             const newTask = {
                 id: taskId,
@@ -856,23 +862,65 @@
                 isPreparationTask: taskType === 'preparation'
             };
             
-            const monthKey = dateStr.substring(0, 7);
+            console.log('作成されたタスク:', newTask);
+            
+            // 現在表示中の月のキーを使用
+            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+            console.log('使用する月キー:', monthKey);
+            console.log('currentYear:', currentYear, 'currentMonth:', currentMonth);
+            
+            // taskDataの初期化
             if (!taskData[monthKey]) {
+                console.log('新しい月データを作成:', monthKey);
                 taskData[monthKey] = [];
             }
-            taskData[monthKey].push(newTask);
             
-            // テーブルを再生成
+            // タスクを追加
+            taskData[monthKey].push(newTask);
+            console.log('タスク追加後のデータ:', taskData[monthKey]);
+            console.log('全taskData:', Object.keys(taskData));
+            
+            // 強制的にテーブルを再生成
+            console.log('テーブル再生成開始...');
             generateTable();
             
             showNotification(`${worker}の${dateStr}に${taskLabel}を追加しました`, 'success');
+            console.log('=== addTaskToCell 完了 ===');
         }
 
-        // ドラッグ&ドロップ機能
+        // ドラッグ&ドロップ機能（改良版）
+        function makeCellDraggable(cell, task) {
+            cell.draggable = true;
+            cell.style.cursor = 'move';
+            
+            cell.addEventListener('dragstart', (e) => {
+                draggedTask = task;
+                cell.classList.add('dragging');
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/plain', task.id);
+                console.log('ドラッグ開始:', task);
+            });
+
+            cell.addEventListener('dragend', (e) => {
+                cell.classList.remove('dragging');
+                draggedTask = null;
+                console.log('ドラッグ終了');
+            });
+
+            // 右クリックで削除オプション
+            cell.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                if (task.isManualEntry) {
+                    showTaskContextMenu(e, task);
+                }
+            });
+        }
+
         function makeCellDroppable(cell, worker, dateStr) {
             cell.addEventListener('dragover', (e) => {
                 e.preventDefault();
                 cell.classList.add('drag-over');
+                e.dataTransfer.dropEffect = 'move';
             });
 
             cell.addEventListener('dragleave', (e) => {
@@ -883,66 +931,99 @@
                 e.preventDefault();
                 cell.classList.remove('drag-over');
                 
-                if (draggedTask && draggedTask.isPlanningTask) {
-                    // 計画作業をこのセルに移動
-                    movePlanningTaskToCell(draggedTask, worker, dateStr);
+                console.log('ドロップイベント発生:', { worker, dateStr, draggedTask });
+                
+                if (draggedTask && draggedTask.isManualEntry) {
+                    moveTaskToCell(draggedTask, worker, dateStr);
                 }
             });
         }
 
-        function makePlanningTaskDraggable(taskElement, task) {
-            taskElement.draggable = true;
-            taskElement.classList.add('planning-task');
+        function moveTaskToCell(task, newWorker, newDate) {
+            console.log('タスク移動:', { task: task.id, from: `${task.worker}-${task.date}`, to: `${newWorker}-${newDate}` });
             
-            // 計画作業バッジを追加
-            const badge = document.createElement('div');
-            badge.className = 'planning-badge';
-            badge.textContent = 'P';
-            taskElement.appendChild(badge);
+            const oldMonthKey = task.date.substring(0, 7);
+            const newMonthKey = newDate.substring(0, 7);
             
-            taskElement.addEventListener('dragstart', (e) => {
-                draggedTask = task;
-                taskElement.classList.add('dragging');
-                e.dataTransfer.effectAllowed = 'move';
-            });
-
-            taskElement.addEventListener('dragend', (e) => {
-                taskElement.classList.remove('dragging');
-                draggedTask = null;
-            });
-
-            // ダブルクリックで削除
-            taskElement.addEventListener('dblclick', (e) => {
-                e.stopPropagation();
-                removePlanningTask(task);
-            });
-        }
-
-        function movePlanningTaskToCell(task, worker, dateStr) {
-            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
-            
-            // 既存の位置から削除（もし配置済みの場合）
-            if (taskData[monthKey]) {
-                const taskIndex = taskData[monthKey].findIndex(t => t.id === task.id);
+            // 既存の位置から削除
+            if (taskData[oldMonthKey]) {
+                const taskIndex = taskData[oldMonthKey].findIndex(t => t.id === task.id);
                 if (taskIndex !== -1) {
-                    taskData[monthKey][taskIndex].worker = worker;
-                    taskData[monthKey][taskIndex].date = dateStr;
-                    taskData[monthKey][taskIndex].isFloating = false;
+                    taskData[oldMonthKey].splice(taskIndex, 1);
                 }
             }
             
+            // 新しい位置に追加
+            if (!taskData[newMonthKey]) {
+                taskData[newMonthKey] = [];
+            }
+            
+            // タスクの情報を更新
+            task.worker = newWorker;
+            task.date = newDate;
+            
+            taskData[newMonthKey].push(task);
+            
             generateTable();
-            showNotification(`計画作業を${worker}の${dateStr}に配置しました`, 'success');
+            showNotification(`${task.title}を${newWorker}の${newDate}に移動しました`, 'success');
         }
 
-        function removePlanningTask(task) {
-            if (confirm('この計画作業を削除しますか？')) {
-                const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+        function showTaskContextMenu(event, task) {
+            hideCellDropdown(); // 既存のメニューを閉じる
+            
+            const contextMenu = document.createElement('div');
+            contextMenu.className = 'cell-dropdown';
+            contextMenu.id = 'task-context-menu';
+            
+            const deleteOption = document.createElement('div');
+            deleteOption.className = 'dropdown-option';
+            deleteOption.innerHTML = '<span style="color: #e53e3e;">🗑️ 削除</span>';
+            deleteOption.addEventListener('click', (e) => {
+                e.stopPropagation();
+                deleteTask(task);
+                hideTaskContextMenu();
+            });
+            
+            const cancelOption = document.createElement('div');
+            cancelOption.className = 'dropdown-option cancel';
+            cancelOption.innerHTML = '<span>キャンセル</span>';
+            cancelOption.addEventListener('click', (e) => {
+                e.stopPropagation();
+                hideTaskContextMenu();
+            });
+            
+            contextMenu.appendChild(deleteOption);
+            contextMenu.appendChild(cancelOption);
+            
+            // 位置調整
+            contextMenu.style.position = 'fixed';
+            contextMenu.style.left = `${event.clientX}px`;
+            contextMenu.style.top = `${event.clientY}px`;
+            
+            document.body.appendChild(contextMenu);
+            
+            // クリック外しで閉じる
+            setTimeout(() => {
+                document.addEventListener('click', hideTaskContextMenu);
+            }, 100);
+        }
+
+        function hideTaskContextMenu() {
+            const existingMenu = document.getElementById('task-context-menu');
+            if (existingMenu) {
+                existingMenu.remove();
+                document.removeEventListener('click', hideTaskContextMenu);
+            }
+        }
+
+        function deleteTask(task) {
+            if (confirm(`${task.title}を削除しますか？`)) {
+                const monthKey = task.date.substring(0, 7);
                 if (taskData[monthKey]) {
                     taskData[monthKey] = taskData[monthKey].filter(t => t.id !== task.id);
                 }
                 generateTable();
-                showNotification('計画作業を削除しました', 'info');
+                showNotification(`${task.title}を削除しました`, 'info');
             }
         }
 
@@ -1131,10 +1212,15 @@
 
         // テーブル生成
         function generateTable() {
+            console.log('=== テーブル生成開始 ===');
+            console.log('現在の年月:', currentYear, currentMonth + 1);
+            console.log('全taskData:', taskData);
+            
             const table = document.getElementById('scheduleTable');
             table.innerHTML = '';
 
             const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            console.log('月の日数:', daysInMonth);
 
             // ヘッダー行生成
             const headerRow = document.createElement('tr');
@@ -1201,9 +1287,11 @@
                     const tasksForCell = getTasksForCell(worker, dateStr);
                     
                     if (tasksForCell.length > 0) {
+                        console.log(`✅ タスクあり - ${worker} ${dateStr}: ${tasksForCell.length}件`);
                         renderCellContent(dayCell, tasksForCell);
                         setupCellEvents(dayCell, tasksForCell);
                     } else {
+                        console.log(`❌ タスクなし - ${worker} ${dateStr}`);
                         // 空のセルにもイベントを追加
                         setupEmptyCellEvents(dayCell);
                     }
@@ -1218,6 +1306,7 @@
             });
 
             updateStats();
+            console.log('=== テーブル生成完了 ===');
         }
 
         // 日別スケジュール更新
@@ -1345,27 +1434,63 @@
             return taskData[monthKey].filter(task => task.date === dateStr);
         }
 
-        // セル内のタスクを取得
+        // セル内のタスクを取得（簡略化・デバッグ強化版）
         function getTasksForCell(worker, date) {
-            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
-            if (!taskData[monthKey]) return [];
+            console.log('=== getTasksForCell 呼び出し ===');
+            console.log('検索条件:', { worker, date });
             
-            return taskData[monthKey].filter(task => 
-                task.worker === worker && task.date === date
-            );
+            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+            console.log('検索対象月キー:', monthKey);
+            console.log('利用可能な月キー:', Object.keys(taskData));
+            
+            if (!taskData[monthKey]) {
+                console.log('該当月のデータが存在しません');
+                return [];
+            }
+            
+            console.log('該当月の全タスク:', taskData[monthKey]);
+            
+            const matchingTasks = taskData[monthKey].filter(task => {
+                const workerMatch = task.worker === worker;
+                const dateMatch = task.date === date;
+                console.log(`タスク ${task.id}: worker=${workerMatch} (${task.worker}), date=${dateMatch} (${task.date})`);
+                return workerMatch && dateMatch;
+            });
+            
+            console.log('マッチしたタスク:', matchingTasks);
+            console.log('=== getTasksForCell 完了 ===');
+            
+            return matchingTasks;
         }
 
-        // セル内容をレンダリング（改善版）
+        // セル内容をレンダリング（デバッグ強化版）
         function renderCellContent(cell, tasks) {
-            cell.innerHTML = '';
-            cell.classList.add('has-tasks');
+            console.log('=== renderCellContent 開始 ===');
+            console.log('対象セル:', cell);
+            console.log('タスク数:', tasks.length);
+            console.log('タスク詳細:', tasks);
             
-            if (tasks.length === 0) return;
+            // セルをクリア
+            cell.innerHTML = '';
+            cell.classList.remove('has-tasks');
+            
+            if (tasks.length === 0) {
+                console.log('タスクなし、レンダリング終了');
+                return;
+            }
+            
+            cell.classList.add('has-tasks');
             
             // 計画作業、事前準備、その他の種別をチェック
             const planningTasks = tasks.filter(task => task.isPlanningTask);
             const preparationTasks = tasks.filter(task => task.isPreparationTask);
             const otherTasks = tasks.filter(task => !task.isPlanningTask && !task.isPreparationTask);
+            
+            console.log('分類結果:', { 
+                planning: planningTasks.length, 
+                preparation: preparationTasks.length, 
+                other: otherTasks.length 
+            });
             
             // タスクの種別を判定（計画作業以外で）
             const hasWorkTasks = otherTasks.some(task => isWorkTask(task));
@@ -1378,20 +1503,31 @@
             if (planningTasks.length > 0) {
                 primaryTask = planningTasks[0];
                 displayLabel = '計画作業';
+                console.log('計画作業として表示');
+                makeCellDraggable(cell, primaryTask);
             } else if (preparationTasks.length > 0) {
                 primaryTask = preparationTasks[0];
                 displayLabel = '事前準備';
+                console.log('事前準備として表示');
+                makeCellDraggable(cell, primaryTask);
             } else if (hasWorkTasks) {
                 displayLabel = '随時作業';
+                console.log('随時作業として表示');
             } else if (hasOnlyNonWorkTasks) {
                 // 休暇/MTG/その他のみの場合は文字表示なし
+                console.log('休暇等として表示（文字なし）');
                 const typeConfig = taskTypeConfig[primaryTask.taskType] || taskTypeConfig.other;
                 cell.style.backgroundColor = typeConfig.color;
                 cell.style.color = typeConfig.textColor;
+                makeCellDraggable(cell, primaryTask);
+                console.log('=== renderCellContent 完了（色のみ） ===');
                 return;
             }
             
             const typeConfig = taskTypeConfig[primaryTask.taskType] || taskTypeConfig.work;
+            console.log('使用する色設定:', typeConfig);
+            
+            // セルの背景色と文字色を設定
             cell.style.backgroundColor = typeConfig.color;
             cell.style.color = typeConfig.textColor;
             
@@ -1400,12 +1536,16 @@
             countDiv.className = 'task-count';
             countDiv.textContent = tasks.length;
             cell.appendChild(countDiv);
+            console.log('件数表示を追加:', tasks.length);
             
             // ラベル表示
             const typeDiv = document.createElement('div');
             typeDiv.className = 'task-type-label';
             typeDiv.textContent = displayLabel || typeConfig.label;
             cell.appendChild(typeDiv);
+            console.log('ラベル表示を追加:', displayLabel || typeConfig.label);
+            
+            console.log('=== renderCellContent 完了 ===');
         }
 
         // 作業タスクかどうかを判定
