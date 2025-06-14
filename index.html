@@ -744,13 +744,15 @@
             preparation: { label: '事前準備', color: '#bee3f8', textColor: '#2b6cb0' }
         };
 
-        // 作業者リスト
+        // 作業者リスト（拠点別）
         const workers = [
-            '宮崎 仁', '村田 祐馬', '紫藤 正之', '塚本 祐太', '山口 広生',
-            '竹田 愛美', '松岡 隼', '有働 麻耶', '末藤 千奈', '園田 敏雄',
-            '井島 響香', '入江 有香', '李 相旼', '但馬 惟之', '佐治 友里子',
-            '中村 龍之介', '小泉 祐稀', '小菅 祐馬', '矢野 俊介', '末廣 太一',
-            '木暮 誉貴'
+            // 熊本拠点
+            '紫藤 正之', '村田 祐馬', '入江 有香', '末藤 千奈', '松岡 隼',
+            '園田 敏雄', '塚本 祐太', '宮崎 仁', '山口 広生', '竹田 愛美',
+            '有働 麻耶', '井島 響香',
+            // 東京拠点  
+            '但馬 惟之', '矢野 俊介', '佐治 友里子', '李 相旼', '小泉 祐稀',
+            '小菅 祐馬', '末廣 太一', '木暮 誉貴'
         ];
 
         // 時間軸の定義
@@ -1114,8 +1116,48 @@
             
             table.appendChild(headerRow);
 
-            // 作業者行生成
-            workers.forEach(worker => {
+            // 作業者行生成（拠点別ヘッダー付き）
+            let currentLocation = '';
+            workers.forEach((worker, index) => {
+                // 拠点ヘッダーの判定と追加
+                if (index === 0) {
+                    // 熊本拠点ヘッダー
+                    const kumamotoHeaderRow = document.createElement('tr');
+                    const kumamotoHeaderCell = document.createElement('td');
+                    kumamotoHeaderCell.textContent = '熊本拠点';
+                    kumamotoHeaderCell.className = 'worker-name';
+                    kumamotoHeaderCell.style.backgroundColor = '#e6fffa';
+                    kumamotoHeaderCell.style.fontWeight = 'bold';
+                    kumamotoHeaderCell.style.color = '#2c7a7b';
+                    kumamotoHeaderRow.appendChild(kumamotoHeaderCell);
+                    
+                    // 空のセルで埋める
+                    for (let day = 1; day <= daysInMonth; day++) {
+                        const emptyCell = document.createElement('td');
+                        emptyCell.style.backgroundColor = '#e6fffa';
+                        kumamotoHeaderRow.appendChild(emptyCell);
+                    }
+                    table.appendChild(kumamotoHeaderRow);
+                } else if (index === 12) {
+                    // 東京拠点ヘッダー
+                    const tokyoHeaderRow = document.createElement('tr');
+                    const tokyoHeaderCell = document.createElement('td');
+                    tokyoHeaderCell.textContent = '東京拠点';
+                    tokyoHeaderCell.className = 'worker-name';
+                    tokyoHeaderCell.style.backgroundColor = '#fef5e7';
+                    tokyoHeaderCell.style.fontWeight = 'bold';
+                    tokyoHeaderCell.style.color = '#c05621';
+                    tokyoHeaderRow.appendChild(tokyoHeaderCell);
+                    
+                    // 空のセルで埋める
+                    for (let day = 1; day <= daysInMonth; day++) {
+                        const emptyCell = document.createElement('td');
+                        emptyCell.style.backgroundColor = '#fef5e7';
+                        tokyoHeaderRow.appendChild(emptyCell);
+                    }
+                    table.appendChild(tokyoHeaderRow);
+                }
+                
                 const workerRow = document.createElement('tr');
                 
                 // 作業者名セル
@@ -1750,64 +1792,6 @@
             });
             
             return monthlyData;
-        }
-
-        // 空のセルに随時作業を追加する機能
-        function fillEmptyCellsWithWork() {
-            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
-            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-            let addedCount = 0;
-            
-            if (!taskData[monthKey]) {
-                taskData[monthKey] = [];
-            }
-            
-            workers.forEach(worker => {
-                for (let day = 1; day <= daysInMonth; day++) {
-                    const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                    
-                    // 平日のみ対象とする
-                    const date = new Date(currentYear, currentMonth, day);
-                    const isWeekend = date.getDay() === 0 || date.getDay() === 6;
-                    
-                    if (!isWeekend) {
-                        // 既存のタスクをチェック（手動入力されたもののみ）
-                        const existingManualTasks = taskData[monthKey].filter(task => 
-                            task.worker === worker && 
-                            task.date === dateStr && 
-                            task.isManualEntry
-                        );
-                        
-                        // 手動入力されたタスクがない場合のみ随時作業を追加
-                        if (existingManualTasks.length === 0) {
-                            const workTask = {
-                                id: `WORK-${Date.now()}-${addedCount}`,
-                                title: '随時作業',
-                                worker: worker,
-                                date: dateStr,
-                                estimatedHours: 8,
-                                description: '随時作業（一括追加）',
-                                taskType: 'work',
-                                redmineUrl: '',
-                                customerName: '',
-                                remoteFlag: '',
-                                tsetStatus: '',
-                                assignStatus: '随時作業',
-                                createdDate: new Date().toISOString().split('T')[0],
-                                isManualEntry: true,
-                                isPlanningTask: false,
-                                isPreparationTask: false
-                            };
-                            
-                            taskData[monthKey].push(workTask);
-                            addedCount++;
-                        }
-                    }
-                }
-            });
-            
-            generateTable();
-            showNotification(`${addedCount}件の随時作業を追加しました`, 'success');
         }
 
         // 初期化
