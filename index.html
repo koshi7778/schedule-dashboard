@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>作業スケジュール管理ダッシュボード</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -429,6 +430,10 @@
             background: #dc3545;
         }
 
+        .notification.info {
+            background: #007bff;
+        }
+
         @keyframes slideInRight {
             from {
                 transform: translateX(100%);
@@ -564,7 +569,7 @@
                 {
                     id: 'RDM-001',
                     title: 'システム機能改修',
-                    worker: '田中太郎',
+                    worker: '宮崎 仁',
                     date: '2025-06-03',
                     status: 'assigned',
                     type: 'ad-hoc',
@@ -575,7 +580,7 @@
                 {
                     id: 'RDM-002',
                     title: 'データベース設計',
-                    worker: '田中太郎',
+                    worker: '村田 祐馬',
                     date: '2025-06-05',
                     status: 'assigned',
                     type: 'planned',
@@ -586,7 +591,7 @@
                 {
                     id: 'RDM-003',
                     title: 'API開発',
-                    worker: '佐藤花子',
+                    worker: '紫藤 正之',
                     date: '2025-06-03',
                     status: 'completed',
                     type: 'ad-hoc',
@@ -597,7 +602,7 @@
                 {
                     id: 'RDM-004',
                     title: 'テスト実施',
-                    worker: '鈴木一郎',
+                    worker: '塚本 祐太',
                     date: '2025-06-07',
                     status: 'assigned',
                     type: 'planned',
@@ -652,13 +657,13 @@
             ]
         };
 
-        // 作業者リスト - ここを実際の作業者名に変更してください
+        // 作業者リスト - 実際の作業者名
         const workers = [
             '宮崎 仁', '村田 祐馬', '紫藤 正之', '塚本 祐太', '山口 広生',
-    '竹田 愛美', '松岡 隼', '有働 麻耶', '末藤 千奈', '園田 敏雄',
-    '井島 響香', '入江 有香', '李 相旼', '但馬 惟之', '佐治 友里子',
-    '中村 龍之介', '小泉 祐稀', '小菅 祐馬', '矢野 俊介', '末廣 太一',
-    '木暮 誉貴'
+            '竹田 愛美', '松岡 隼', '有働 麻耶', '末藤 千奈', '園田 敏雄',
+            '井島 響香', '入江 有香', '李 相旼', '但馬 惟之', '佐治 友里子',
+            '中村 龍之介', '小泉 祐稀', '小菅 祐馬', '矢野 俊介', '末廣 太一',
+            '木暮 誉貴'
         ];
 
         function generateCalendar() {
@@ -874,4 +879,7 @@
             // 変更をmockTasksに反映
             const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
             pendingChanges.forEach(change => {
-                const task = mockTasks[monthKey]?.
+                const task = mockTasks[monthKey]?.find(t => t.id === change.taskId);
+                if (task) {
+                    task.worker = change.newWorker;
+                    task.date = change.newDate
