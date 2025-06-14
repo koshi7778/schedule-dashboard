@@ -641,6 +641,7 @@
                     <button class="month-btn" onclick="changeMonth(1)">▶</button>
                 </div>
                 <button class="csv-btn" onclick="loadDataFromCSV()">CSV読込</button>
+                <button class="csv-btn" onclick="fillEmptyCellsWithWork()" style="background: #805ad5;">空欄に随時作業</button>
             </div>
         </div>
 
@@ -1316,8 +1317,16 @@
                 return;
             }
             
-            // 最初のタスクの種別で色とラベルを決定
-            const primaryTask = tasks[0];
+            // 手動入力されたタスクのみ表示する
+            const manualTasks = tasks.filter(task => task.isManualEntry);
+            
+            if (manualTasks.length === 0) {
+                // 手動入力されたタスクがない場合は何も表示しない
+                return;
+            }
+            
+            // 最初の手動タスクの種別で色とラベルを決定
+            const primaryTask = manualTasks[0];
             const typeConfig = taskTypeConfig[primaryTask.taskType] || taskTypeConfig.other;
             
             // セルの背景色と文字色を設定
@@ -1332,11 +1341,11 @@
             labelDiv.style.fontSize = '9px';
             cell.appendChild(labelDiv);
             
-            // 複数のタスクがある場合は件数も表示
-            if (tasks.length > 1) {
+            // 複数の手動タスクがある場合は件数も表示
+            if (manualTasks.length > 1) {
                 const countDiv = document.createElement('div');
                 countDiv.className = 'task-count';
-                countDiv.textContent = tasks.length;
+                countDiv.textContent = manualTasks.length;
                 countDiv.style.fontSize = '10px';
                 cell.appendChild(countDiv);
             }
@@ -1355,22 +1364,25 @@
                 hideTooltip();
             });
 
-            // 単一クリックで最初のタスクのURLに遷移、またはプルダウン表示
+            // ダブルクリックでプルダウン表示
+            cell.addEventListener('dblclick', (e) => {
+                e.stopPropagation();
+                showCellDropdown(cell, worker, dateStr);
+            });
+
+            // シングルクリックでRedmineリンクに遷移
             cell.addEventListener('click', (e) => {
                 e.stopPropagation();
                 
                 // Redmineリンクがある場合は遷移
                 if (tasks.length > 0 && tasks[0].redmineUrl) {
                     window.open(tasks[0].redmineUrl, '_blank');
-                } else {
-                    // プルダウンを表示
-                    showCellDropdown(cell, worker, dateStr);
                 }
             });
 
             // 手動で追加されたタスクの場合はドラッグ可能にする
             if (tasks.some(task => task.isManualEntry)) {
-                makeCellDraggable(cell, tasks[0]);
+                makeCellDraggable(cell, tasks.find(task => task.isManualEntry));
             }
         }
 
@@ -1524,7 +1536,7 @@
                 const tsetStatus = row['TSETステータス'] || '';
                 
                 const validAssignStatus = [
-                    'アサイン完了', '対応完了', '中止', '休暇', 'MTG', 'その他'
+                    'アサイン完了', '対応完了', '中止'
                 ].some(status => assignStatus.includes(status));
                 
                 const validTsetStatus = [
@@ -1641,16 +1653,7 @@
         }
 
         function determineTaskType(assignStatus, subject) {
-            if (assignStatus && assignStatus.includes('休暇')) return 'vacation';
-            if (assignStatus && assignStatus.includes('MTG')) return 'meeting';
-            if (assignStatus && assignStatus.includes('その他')) return 'other';
-            
-            if (subject) {
-                const lowerSubject = subject.toLowerCase();
-                if (lowerSubject.includes('研修') || lowerSubject.includes('勉強')) return 'training';
-                if (lowerSubject.includes('会議') || lowerSubject.includes('mtg')) return 'meeting';
-            }
-            
+            // CSVから読み込まれるタスクは全て work タイプとする
             return 'work';
         }
 
