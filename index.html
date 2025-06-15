@@ -122,10 +122,6 @@
             background: #e53e3e;
         }
 
-        .dropdown-option.work .dropdown-option-icon {
-            background: #744210;
-        }
-
         .dropdown-option.vacation .dropdown-option-icon {
             background: #702459;
         }
@@ -137,6 +133,21 @@
         .dropdown-option.cancel {
             color: #a0aec0;
             border-top: 1px solid #e2e8f0;
+        }
+
+        .add-planning-btn {
+            background: #805ad5;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+
+        .add-planning-btn:hover {
+            background: #6b46c1;
         }
 
         /* タブナビゲーション */
@@ -207,11 +218,11 @@
         .schedule-table th,
         .schedule-table td {
             border: 1px solid #e2e8f0;
-            padding: 0;
+            padding: 4px 6px;
             text-align: center;
             vertical-align: middle;
-            min-width: 45px;
-            max-width: 45px;
+            min-width: 35px;
+            max-width: 35px;
             overflow: hidden;
         }
 
@@ -261,35 +272,10 @@
         .task-cell {
             cursor: pointer;
             position: relative;
-            height: 40px;
+            height: 30px;
             font-size: 10px;
             line-height: 1.2;
             background: white;
-            display: flex;
-            flex-direction: column;
-            padding: 2px;
-        }
-
-        .cell-upper {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 9px;
-            font-weight: bold;
-            border-bottom: 1px solid #e2e8f0;
-            min-height: 18px;
-        }
-
-        .cell-lower {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            font-weight: bold;
-            color: #2d3748;
-            min-height: 18px;
         }
 
         .task-cell:hover {
@@ -337,6 +323,29 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
+        }
+
+        .direct-input {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: transparent;
+            font-size: 10px;
+            text-align: center;
+            outline: none;
+            padding: 2px;
+        }
+
+        .task-count {
+            font-weight: bold;
+            color: #2d3748;
+            font-size: 11px;
+        }
+
+        .task-type-label {
+            font-size: 9px;
+            color: #4a5568;
+            margin-top: 2px;
         }
 
         /* 日別スケジュール表示 */
@@ -632,9 +641,6 @@
                     <button class="month-btn" onclick="changeMonth(1)">▶</button>
                 </div>
                 <button class="csv-btn" onclick="loadDataFromCSV()">CSV読込</button>
-                <button class="csv-btn" onclick="saveToLocalStorage()" style="background: #38a169;">手動タスク保存</button>
-                <button class="csv-btn" onclick="loadFromLocalStorage()" style="background: #3182ce;">手動タスク読込</button>
-                <button class="csv-btn" onclick="clearLocalStorage()" style="background: #e53e3e;">手動タスク削除</button>
             </div>
         </div>
 
@@ -759,90 +765,7 @@
             { label: '20-22', start: 20, end: 22 }
         ];
 
-        // LocalStorage関連の機能
-        function saveToLocalStorage() {
-            try {
-                // 手動入力されたタスクのみを抽出
-                const manualTasksOnly = {};
-                
-                Object.keys(taskData).forEach(monthKey => {
-                    const manualTasks = taskData[monthKey].filter(task => task.isManualEntry);
-                    if (manualTasks.length > 0) {
-                        manualTasksOnly[monthKey] = manualTasks;
-                    }
-                });
-                
-                // LocalStorageに保存
-                localStorage.setItem('scheduleManualTasks', JSON.stringify(manualTasksOnly));
-                localStorage.setItem('scheduleManualTasksDate', new Date().toISOString());
-                
-                const taskCount = Object.values(manualTasksOnly).reduce((sum, tasks) => sum + tasks.length, 0);
-                showNotification(`${taskCount}件の手動タスクを保存しました`, 'success');
-            } catch (error) {
-                showNotification('保存に失敗しました', 'error');
-            }
-        }
-
-        function loadFromLocalStorage() {
-            try {
-                const savedTasks = localStorage.getItem('scheduleManualTasks');
-                const savedDate = localStorage.getItem('scheduleManualTasksDate');
-                
-                if (!savedTasks) {
-                    showNotification('保存されている手動タスクがありません', 'info');
-                    return;
-                }
-                
-                const manualTasks = JSON.parse(savedTasks);
-                let loadedCount = 0;
-                
-                // 既存のデータに手動タスクを追加（重複チェック付き）
-                Object.keys(manualTasks).forEach(monthKey => {
-                    if (!taskData[monthKey]) {
-                        taskData[monthKey] = [];
-                    }
-                    
-                    manualTasks[monthKey].forEach(newTask => {
-                        // 重複チェック（同じIDのタスクがあるかチェック）
-                        const exists = taskData[monthKey].some(existingTask => existingTask.id === newTask.id);
-                        if (!exists) {
-                            taskData[monthKey].push(newTask);
-                            loadedCount++;
-                        }
-                    });
-                });
-                
-                generateTable();
-                updateDailySchedule();
-                
-                const saveDate = savedDate ? new Date(savedDate).toLocaleString('ja-JP') : '不明';
-                showNotification(`${loadedCount}件の手動タスクを読み込みました（保存日時: ${saveDate}）`, 'success');
-            } catch (error) {
-                showNotification('読み込みに失敗しました', 'error');
-            }
-        }
-
-        function clearLocalStorage() {
-            if (confirm('保存されている手動タスクを全て削除しますか？\n（この操作は取り消せません）')) {
-                try {
-                    localStorage.removeItem('scheduleManualTasks');
-                    localStorage.removeItem('scheduleManualTasksDate');
-                    showNotification('保存されている手動タスクを削除しました', 'info');
-                } catch (error) {
-                    showNotification('削除に失敗しました', 'error');
-                }
-            }
-        }
-
-        // ページ読み込み時に自動でLocalStorageから読み込み
-        function autoLoadFromLocalStorage() {
-            const savedTasks = localStorage.getItem('scheduleManualTasks');
-            if (savedTasks) {
-                loadFromLocalStorage();
-            }
-        }
-
-        // セルクリック時のプルダウン表示
+        // セルクリック時のプルダウン表示（修正版）
         function showCellDropdown(cell, worker, dateStr) {
             // 既存のドロップダウンを削除
             hideCellDropdown();
@@ -915,7 +838,7 @@
             }
         }
 
-        // タスク追加機能
+        // タスク追加機能（修正版）
         function addTaskToCell(worker, dateStr, taskType, taskLabel) {
             const taskId = `${taskType.toUpperCase()}-${Date.now()}`;
             const newTask = {
@@ -955,7 +878,7 @@
             showNotification(`${worker}の${dateStr}に${taskLabel}を追加しました`, 'success');
         }
 
-        // ドラッグ&ドロップ機能
+        // ドラッグ&ドロップ機能（改良版）
         function makeCellDraggable(cell, task) {
             cell.draggable = true;
             cell.style.cursor = 'move';
@@ -1153,7 +1076,7 @@
             return dayOfWeek !== 0 && dayOfWeek !== 6; // 0=日曜, 6=土曜
         }
 
-        // テーブル生成
+        // テーブル生成（修正版）
         function generateTable() {
             const table = document.getElementById('scheduleTable');
             table.innerHTML = '';
@@ -1409,7 +1332,7 @@
             return taskData[monthKey].filter(task => task.date === dateStr);
         }
 
-        // セル内のタスクを取得
+        // セル内のタスクを取得（修正版）
         function getTasksForCell(worker, date) {
             const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
             
@@ -1426,61 +1349,71 @@
             return matchingTasks;
         }
 
-        // セル内容をレンダリング（2分割表示版）
+        // セル内容をレンダリング（修正版）
         function renderCellContent(cell, tasks) {
             // セルをクリア
             cell.innerHTML = '';
             cell.style.backgroundColor = '';
             cell.style.color = '';
             
+            if (tasks.length === 0) {
+                return;
+            }
+            
             // チケット系タスク（CSV読み込み）と手動タスクを分離
             const ticketTasks = tasks.filter(task => !task.isManualEntry);
             const manualTasks = tasks.filter(task => task.isManualEntry);
             
-            // 上段（手動タスク表示エリア）
-            const upperDiv = document.createElement('div');
-            upperDiv.className = 'cell-upper';
-            
-            // 下段（チケット件数表示エリア）
-            const lowerDiv = document.createElement('div');
-            lowerDiv.className = 'cell-lower';
-            
-            // 手動タスクがある場合は上段に表示
+            // 手動タスクがある場合は手動タスクを優先表示
             if (manualTasks.length > 0) {
+                // 最初の手動タスクの種別で色とラベルを決定
                 const primaryTask = manualTasks[0];
                 const typeConfig = taskTypeConfig[primaryTask.taskType] || taskTypeConfig.other;
                 
-                // 上段の背景色と文字色を設定
-                upperDiv.style.backgroundColor = typeConfig.color;
-                upperDiv.style.color = typeConfig.textColor;
-                upperDiv.textContent = typeConfig.label;
+                // セルの背景色と文字色を設定
+                cell.style.backgroundColor = typeConfig.color;
+                cell.style.color = typeConfig.textColor;
+                
+                // ラベルを表示
+                const labelDiv = document.createElement('div');
+                labelDiv.className = 'task-type-label';
+                labelDiv.textContent = typeConfig.label;
+                labelDiv.style.fontWeight = 'bold';
+                labelDiv.style.fontSize = '9px';
+                cell.appendChild(labelDiv);
+                
+                // チケット件数がある場合は小さく表示
+                if (ticketTasks.length > 0) {
+                    const ticketCountDiv = document.createElement('div');
+                    ticketCountDiv.className = 'ticket-count';
+                    ticketCountDiv.textContent = `(${ticketTasks.length})`;
+                    ticketCountDiv.style.fontSize = '8px';
+                    ticketCountDiv.style.opacity = '0.7';
+                    cell.appendChild(ticketCountDiv);
+                }
                 
                 // 複数の手動タスクがある場合は件数も表示
                 if (manualTasks.length > 1) {
-                    upperDiv.textContent += ` (${manualTasks.length})`;
+                    const manualCountDiv = document.createElement('div');
+                    manualCountDiv.className = 'task-count';
+                    manualCountDiv.textContent = `+${manualTasks.length - 1}`;
+                    manualCountDiv.style.fontSize = '8px';
+                    cell.appendChild(manualCountDiv);
                 }
-            } else {
-                // 手動タスクがない場合は薄いグレー
-                upperDiv.style.backgroundColor = '#f7fafc';
-                upperDiv.style.color = '#a0aec0';
-                upperDiv.textContent = '';
+            } else if (ticketTasks.length > 0) {
+                // 手動タスクがない場合のみチケット件数を表示
+                const countDiv = document.createElement('div');
+                countDiv.className = 'task-count';
+                countDiv.textContent = ticketTasks.length;
+                countDiv.style.fontSize = '11px';
+                countDiv.style.fontWeight = 'bold';
+                countDiv.style.color = '#2d3748';
+                countDiv.title = 'ダブルクリックで手動タスクを追加 | チケット詳細はツールチップで確認';
+                cell.appendChild(countDiv);
             }
-            
-            // チケット件数を下段に表示
-            if (ticketTasks.length > 0) {
-                lowerDiv.textContent = ticketTasks.length;
-                lowerDiv.style.backgroundColor = '#edf2f7';
-            } else {
-                lowerDiv.textContent = '';
-                lowerDiv.style.backgroundColor = 'white';
-            }
-            
-            // セルに上段・下段を追加
-            cell.appendChild(upperDiv);
-            cell.appendChild(lowerDiv);
         }
 
-        // セルのイベント設定
+        // セルのイベント設定（修正版）
         function setupCellEvents(cell, tasks, worker, dateStr) {
             // マウスホバーでツールチップ表示
             cell.addEventListener('mouseenter', (e) => {
@@ -1514,7 +1447,7 @@
             }
         }
 
-        // 空のセルのイベント設定
+        // 空のセルのイベント設定（修正版）
         function setupEmptyCellEvents(cell, worker, dateStr) {
             // ダブルクリックでプルダウン表示
             cell.addEventListener('dblclick', (e) => {
@@ -1872,9 +1805,6 @@
             updateMonthDisplay();
             generateTable();
             updateDailySchedule();
-            
-            // LocalStorageから手動タスクを自動読み込み
-            autoLoadFromLocalStorage();
             
             // 1秒後にCSV自動読み込み
             setTimeout(() => {
