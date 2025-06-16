@@ -878,16 +878,16 @@
             });
         }
 
-        // 日付選択プルダウンの初期化
+        // 日付選択プルダウンの初期化（改良版）
         function initializeDateSelector() {
             const dateSelect = document.getElementById('dateSelect');
             dateSelect.innerHTML = ''; // 全てのオプションをクリア
             
-            // 今日を中心に前後7日間の日付を生成
-            const today = new Date();
+            // dailyDate を中心に前後7日間の日付を生成
+            const centerDate = new Date(dailyDate);
             for (let i = -7; i <= 7; i++) {
-                const date = new Date(today);
-                date.setDate(today.getDate() + i);
+                const date = new Date(centerDate);
+                date.setDate(centerDate.getDate() + i);
                 
                 const option = document.createElement('option');
                 const dateStr = date.toISOString().split('T')[0];
@@ -896,8 +896,8 @@
                 option.value = dateStr;
                 option.textContent = displayStr;
                 
-                // 今日の日付を選択状態にする
-                if (i === 0) {
+                // 現在のdailyDateと同じ日付を選択状態にする
+                if (dateStr === dailyDate.toISOString().split('T')[0]) {
                     option.selected = true;
                 }
                 
@@ -905,22 +905,27 @@
             }
         }
 
-        // 日付を表示用にフォーマット
+        // 日付を表示用にフォーマット（改良版）
         function formatDateForDisplay(date) {
             const year = date.getFullYear();
             const month = date.getMonth() + 1;
             const day = date.getDate();
             const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()];
             
-            // 今日、昨日、明日の場合は特別な表記
+            // 現在のdailyDateと比較して特別な表記
             const today = new Date();
-            const diffDays = Math.floor((date - today) / (1000 * 60 * 60 * 24));
+            const currentDate = new Date(dailyDate);
             
-            if (diffDays === 0) {
+            // 今日との差を計算
+            const todayDiff = Math.floor((date - today) / (1000 * 60 * 60 * 24));
+            // 現在表示中の日付との差を計算
+            const currentDiff = Math.floor((date - currentDate) / (1000 * 60 * 60 * 24));
+            
+            if (todayDiff === 0) {
                 return `今日 ${month}/${day} (${dayOfWeek})`;
-            } else if (diffDays === -1) {
+            } else if (todayDiff === -1) {
                 return `昨日 ${month}/${day} (${dayOfWeek})`;
-            } else if (diffDays === 1) {
+            } else if (todayDiff === 1) {
                 return `明日 ${month}/${day} (${dayOfWeek})`;
             } else {
                 return `${month}/${day} (${dayOfWeek})`;
@@ -1387,8 +1392,12 @@
             const dateStr = dailyDate.toISOString().split('T')[0];
             const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][dailyDate.getDay()];
             
+            // 上部の日付表示を更新
             document.getElementById('dailyDate').textContent = 
                 `${dailyDate.getFullYear()}年${dailyDate.getMonth() + 1}月${dailyDate.getDate()}日 (${dayOfWeek})`;
+
+            // 日付選択プルダウンを現在の日付に同期
+            syncDateSelector();
 
             // 選択された作業者を取得
             const selectedWorker = document.getElementById('workerSelect').value;
@@ -1421,6 +1430,34 @@
 
             // 時間軸スケジュールを更新
             updateTimelineSchedule(filteredTasks);
+        }
+
+        // 日付選択プルダウンを現在の日付に同期
+        function syncDateSelector() {
+            const dateSelect = document.getElementById('dateSelect');
+            const currentDateStr = dailyDate.toISOString().split('T')[0];
+            
+            // プルダウンで該当する日付を探して選択
+            let optionFound = false;
+            for (let option of dateSelect.options) {
+                if (option.value === currentDateStr) {
+                    option.selected = true;
+                    optionFound = true;
+                    break;
+                }
+            }
+            
+            // プルダウンに該当する日付がない場合は、プルダウンを再生成
+            if (!optionFound) {
+                initializeDateSelector();
+                // 再生成後に正しい日付を選択
+                for (let option of dateSelect.options) {
+                    if (option.value === currentDateStr) {
+                        option.selected = true;
+                        break;
+                    }
+                }
+            }
         }
 
         // 時間軸スケジュールの更新（改良版）
@@ -1475,16 +1512,19 @@
                     const timeCell = document.createElement('div');
                     timeCell.className = 'worker-timeline-cell';
                     
-                    // この時間帯のタスクを探す（修正版）
                     const tasksInTimeSlot = workerTasks.filter(task => {
                         const taskTime = getTaskTimeSlot(task);
                         if (!taskTime) return false;
                         
-                        // タスクの時間帯と表示時間帯の重複をチェック
                         const taskStart = taskTime.start;
                         const taskEnd = taskTime.end;
                         const slotStart = timeSlot.start;
                         const slotEnd = timeSlot.end;
+                        
+                        // デバッグ用：時間帯の情報をコンソールに出力
+                        if (task.originalTimeString) {
+                            console.log(`Task: ${task.title}, Original: ${task.originalTimeString}, Parsed: ${taskStart}-${taskEnd}, Slot: ${slotStart}-${slotEnd}, Match: ${taskStart < slotEnd && taskEnd > slotStart}`);
+                        }
                         
                         // 重複判定：タスクの時間帯が表示時間帯と重複している場合
                         return (taskStart < slotEnd && taskEnd > slotStart);
@@ -1493,8 +1533,11 @@
                     tasksInTimeSlot.forEach(task => {
                         const taskItem = document.createElement('div');
                         taskItem.className = `task-timeline-item ${task.taskType}`;
+                        
+                        // タスク情報の表示（時間情報も含める）
+                        const timeInfo = task.originalTimeString ? ` (${task.originalTimeString})` : '';
                         taskItem.innerHTML = `
-                            <div>${task.title}</div>
+                            <div>${task.title}${timeInfo}</div>
                             <div class="task-timeline-hours">${task.estimatedHours}h</div>
                         `;
                         
@@ -1536,53 +1579,16 @@
             }
         }
 
-        // 日別表示の日付変更
+        // 日別表示の日付変更（修正版）
         function changeDailyDate(direction) {
             dailyDate.setDate(dailyDate.getDate() + direction);
-            
-            // 日付選択プルダウンも更新
-            const dateSelect = document.getElementById('dateSelect');
-            const newDateStr = dailyDate.toISOString().split('T')[0];
-            
-            // プルダウンに該当する日付があるかチェック
-            let optionFound = false;
-            for (let option of dateSelect.options) {
-                if (option.value === newDateStr) {
-                    option.selected = true;
-                    optionFound = true;
-                    break;
-                }
-            }
-            
-            // プルダウンに該当する日付がない場合は、プルダウンを再生成
-            if (!optionFound) {
-                initializeDateSelector();
-                // 再生成後に正しい日付を選択
-                for (let option of dateSelect.options) {
-                    if (option.value === newDateStr) {
-                        option.selected = true;
-                        break;
-                    }
-                }
-            }
-            
+            // 日付が変更されたら、スケジュール全体を更新（プルダウンも含む）
             updateDailySchedule();
         }
 
         function setDailyToday() {
             dailyDate = new Date(today);
-            
-            // 日付選択プルダウンを今日に設定
-            const dateSelect = document.getElementById('dateSelect');
-            const todayStr = today.toISOString().split('T')[0];
-            
-            for (let option of dateSelect.options) {
-                if (option.value === todayStr) {
-                    option.selected = true;
-                    break;
-                }
-            }
-            
+            // 今日に戻ったら、スケジュール全体を更新（プルダウンも含む）
             updateDailySchedule();
         }
 
