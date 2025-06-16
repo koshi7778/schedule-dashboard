@@ -450,13 +450,14 @@
         }
 
         .timeline-content {
-            display: grid;
-            grid-template-columns: 80px 1fr;
+            display: flex;
         }
 
         .time-slots {
             background: #f7fafc;
             border-right: 1px solid #e2e8f0;
+            width: 80px;
+            flex-shrink: 0;
         }
 
         .time-slot {
@@ -466,25 +467,23 @@
             font-weight: 500;
             text-align: center;
             color: #4a5568;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .workers-timeline {
+            flex: 1;
             overflow-x: auto;
-        }
-
-        .worker-timeline-container {
-            display: flex;
-            flex-direction: column;
         }
 
         .worker-section {
             border-bottom: 2px solid #e2e8f0;
-            margin-bottom: 10px;
         }
 
         .worker-section:last-child {
             border-bottom: none;
-            margin-bottom: 0;
         }
 
         .worker-name-header {
@@ -495,20 +494,35 @@
             font-size: 14px;
             color: #2c5282;
             border-left: 4px solid #3182ce;
+            height: 50px;
+            display: flex;
+            align-items: center;
         }
 
         .worker-timeline-row {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            min-height: 60px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .worker-time-row {
+            display: flex;
+            height: 80px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .worker-time-row:last-child {
+            border-bottom: none;
         }
 
         .worker-timeline-cell {
             padding: 8px;
             border-right: 1px solid #e2e8f0;
-            border-bottom: 1px solid #e2e8f0;
             position: relative;
-            min-height: 60px;
+            min-width: 200px;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
 
         .worker-timeline-cell:last-child {
@@ -1371,12 +1385,16 @@
                 workerNameHeader.textContent = worker;
                 workerSection.appendChild(workerNameHeader);
                 
-                // 時間軸行
-                const timelineRow = document.createElement('div');
-                timelineRow.className = 'worker-timeline-row';
+                // 時間軸行のコンテナ
+                const timelineRowContainer = document.createElement('div');
+                timelineRowContainer.className = 'worker-timeline-row';
                 
-                // 各時間帯のセル
+                // 各時間帯の行を作成
                 timeSlots.forEach(timeSlot => {
+                    const timeRow = document.createElement('div');
+                    timeRow.className = 'worker-time-row';
+                    
+                    // タスクセル
                     const timeCell = document.createElement('div');
                     timeCell.className = 'worker-timeline-cell';
                     
@@ -1405,10 +1423,11 @@
                         timeCell.appendChild(taskItem);
                     });
                     
-                    timelineRow.appendChild(timeCell);
+                    timeRow.appendChild(timeCell);
+                    timelineRowContainer.appendChild(timeRow);
                 });
                 
-                workerSection.appendChild(timelineRow);
+                workerSection.appendChild(timelineRowContainer);
                 workersTimeline.appendChild(workerSection);
             });
         }
