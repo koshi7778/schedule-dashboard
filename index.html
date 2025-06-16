@@ -374,20 +374,28 @@
             color: #2c5282;
         }
 
-        /* 作業者選択機能 */
+        /* 作業者・日付選択機能 */
         .worker-selector {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 20px;
             margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .selector-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .worker-selector label {
             font-weight: bold;
             color: #2c5282;
+            white-space: nowrap;
         }
 
-        .worker-select {
+        .worker-select, .date-select {
             background: white;
             border: 2px solid #e2e8f0;
             border-radius: 6px;
@@ -397,9 +405,10 @@
             cursor: pointer;
             outline: none;
             transition: border-color 0.2s ease;
+            min-width: 120px;
         }
 
-        .worker-select:focus {
+        .worker-select:focus, .date-select:focus {
             border-color: #3182ce;
             box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
         }
@@ -747,13 +756,21 @@
                     </div>
                 </div>
 
-                <!-- 作業者選択 -->
+                <!-- 作業者・日付選択 -->
                 <div class="worker-selector">
-                    <label for="workerSelect">表示する作業者:</label>
-                    <select id="workerSelect" class="worker-select" onchange="updateDailySchedule()">
-                        <option value="all">全員</option>
-                        <!-- 作業者オプションは JavaScript で動的に追加される -->
-                    </select>
+                    <div class="selector-group">
+                        <label for="workerSelect">表示する作業者:</label>
+                        <select id="workerSelect" class="worker-select" onchange="updateDailySchedule()">
+                            <option value="all">全員</option>
+                            <!-- 作業者オプションは JavaScript で動的に追加される -->
+                        </select>
+                    </div>
+                    <div class="selector-group">
+                        <label for="dateSelect">作業日:</label>
+                        <select id="dateSelect" class="date-select" onchange="onDateSelectChange()">
+                            <!-- 日付オプションは JavaScript で動的に追加される -->
+                        </select>
+                    </div>
                 </div>
 
                 <div class="daily-stats">
@@ -859,6 +876,64 @@
                 option.textContent = worker;
                 workerSelect.appendChild(option);
             });
+        }
+
+        // 日付選択プルダウンの初期化
+        function initializeDateSelector() {
+            const dateSelect = document.getElementById('dateSelect');
+            dateSelect.innerHTML = ''; // 全てのオプションをクリア
+            
+            // 今日を中心に前後7日間の日付を生成
+            const today = new Date();
+            for (let i = -7; i <= 7; i++) {
+                const date = new Date(today);
+                date.setDate(today.getDate() + i);
+                
+                const option = document.createElement('option');
+                const dateStr = date.toISOString().split('T')[0];
+                const displayStr = formatDateForDisplay(date);
+                
+                option.value = dateStr;
+                option.textContent = displayStr;
+                
+                // 今日の日付を選択状態にする
+                if (i === 0) {
+                    option.selected = true;
+                }
+                
+                dateSelect.appendChild(option);
+            }
+        }
+
+        // 日付を表示用にフォーマット
+        function formatDateForDisplay(date) {
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()];
+            
+            // 今日、昨日、明日の場合は特別な表記
+            const today = new Date();
+            const diffDays = Math.floor((date - today) / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 0) {
+                return `今日 ${month}/${day} (${dayOfWeek})`;
+            } else if (diffDays === -1) {
+                return `昨日 ${month}/${day} (${dayOfWeek})`;
+            } else if (diffDays === 1) {
+                return `明日 ${month}/${day} (${dayOfWeek})`;
+            } else {
+                return `${month}/${day} (${dayOfWeek})`;
+            }
+        }
+
+        // 日付選択変更時の処理
+        function onDateSelectChange() {
+            const selectedDate = document.getElementById('dateSelect').value;
+            if (selectedDate) {
+                dailyDate = new Date(selectedDate);
+                updateDailySchedule();
+            }
         }
 
         // セルクリック時のプルダウン表示（修正版）
@@ -1119,6 +1194,8 @@
             if (tabName === 'daily') {
                 // 作業者選択プルダウンを初期化
                 initializeWorkerSelector();
+                // 日付選択プルダウンを初期化
+                initializeDateSelector();
                 updateDailySchedule();
             }
         }
@@ -1398,10 +1475,19 @@
                     const timeCell = document.createElement('div');
                     timeCell.className = 'worker-timeline-cell';
                     
-                    // この時間帯のタスクを探す
+                    // この時間帯のタスクを探す（修正版）
                     const tasksInTimeSlot = workerTasks.filter(task => {
                         const taskTime = getTaskTimeSlot(task);
-                        return taskTime && taskTime.start >= timeSlot.start && taskTime.end <= timeSlot.end;
+                        if (!taskTime) return false;
+                        
+                        // タスクの時間帯と表示時間帯の重複をチェック
+                        const taskStart = taskTime.start;
+                        const taskEnd = taskTime.end;
+                        const slotStart = timeSlot.start;
+                        const slotEnd = timeSlot.end;
+                        
+                        // 重複判定：タスクの時間帯が表示時間帯と重複している場合
+                        return (taskStart < slotEnd && taskEnd > slotStart);
                     });
                     
                     tasksInTimeSlot.forEach(task => {
@@ -1453,11 +1539,50 @@
         // 日別表示の日付変更
         function changeDailyDate(direction) {
             dailyDate.setDate(dailyDate.getDate() + direction);
+            
+            // 日付選択プルダウンも更新
+            const dateSelect = document.getElementById('dateSelect');
+            const newDateStr = dailyDate.toISOString().split('T')[0];
+            
+            // プルダウンに該当する日付があるかチェック
+            let optionFound = false;
+            for (let option of dateSelect.options) {
+                if (option.value === newDateStr) {
+                    option.selected = true;
+                    optionFound = true;
+                    break;
+                }
+            }
+            
+            // プルダウンに該当する日付がない場合は、プルダウンを再生成
+            if (!optionFound) {
+                initializeDateSelector();
+                // 再生成後に正しい日付を選択
+                for (let option of dateSelect.options) {
+                    if (option.value === newDateStr) {
+                        option.selected = true;
+                        break;
+                    }
+                }
+            }
+            
             updateDailySchedule();
         }
 
         function setDailyToday() {
             dailyDate = new Date(today);
+            
+            // 日付選択プルダウンを今日に設定
+            const dateSelect = document.getElementById('dateSelect');
+            const todayStr = today.toISOString().split('T')[0];
+            
+            for (let option of dateSelect.options) {
+                if (option.value === todayStr) {
+                    option.selected = true;
+                    break;
+                }
+            }
+            
             updateDailySchedule();
         }
 
@@ -1727,7 +1852,7 @@
             showNotification('CSVファイルが見つかりません。', 'error');
         }
 
-        // CSV変換関数
+        // CSV変換関数（修正版）
         function transformCSVToTickets(csvData) {
             const filteredData = csvData.filter(row => {
                 const assignStatus = row['TSETアサイン状態'] || '';
@@ -1756,7 +1881,8 @@
                     const timeField = `作業日${['①', '②', '③', '④', '⑤'][i-1]}_時間`;
                     
                     const workDate = formatDate(row[dateField]);
-                    const workHours = parseFloat(row[timeField]) || 0;
+                    const workTimeStr = row[timeField] || '';
+                    const workHours = parseFloat(workTimeStr.replace(/[^\d.]/g, '')) || 0;
                     
                     if (workDate && workHours > 0) {
                         const ticket = {
@@ -1776,7 +1902,8 @@
                             startDate: row['作業開始可能日'] || '',
                             dueDate: row['作業完了期限日'] || '',
                             taskType: determineTaskType(row['TSETアサイン状態'], row['Subject']),
-                            workTimeSlot: parseWorkTimeSlot(row[`作業日${['①', '②', '③', '④', '⑤'][i-1]}_時間`])
+                            workTimeSlot: parseWorkTimeSlot(workTimeStr), // 時間文字列をそのまま渡す
+                            originalTimeString: workTimeStr // デバッグ用に元の文字列も保持
                         };
                         
                         allTickets.push(ticket);
@@ -1944,6 +2071,8 @@
             
             // 作業者選択プルダウンを初期化（日別スケジュール用）
             initializeWorkerSelector();
+            // 日付選択プルダウンを初期化
+            initializeDateSelector();
             updateDailySchedule();
             
             // 1秒後にCSV自動読み込み
