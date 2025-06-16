@@ -374,6 +374,36 @@
             color: #2c5282;
         }
 
+        /* 作業者選択機能 */
+        .worker-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .worker-selector label {
+            font-weight: bold;
+            color: #2c5282;
+        }
+
+        .worker-select {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 14px;
+            color: #2d3748;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .worker-select:focus {
+            border-color: #3182ce;
+            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+        }
+
         .daily-stats {
             display: flex;
             gap: 20px;
@@ -442,31 +472,47 @@
             overflow-x: auto;
         }
 
+        .worker-timeline-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .worker-section {
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 10px;
+        }
+
+        .worker-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .worker-name-header {
+            background: #f7fafc;
+            font-weight: bold;
+            padding: 12px 15px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 14px;
+            color: #2c5282;
+            border-left: 4px solid #3182ce;
+        }
+
         .worker-timeline-row {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            grid-template-columns: repeat(6, 1fr);
             min-height: 60px;
-            border-bottom: 1px solid #e2e8f0;
         }
 
         .worker-timeline-cell {
             padding: 8px;
             border-right: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
             position: relative;
             min-height: 60px;
         }
 
-        .worker-name-timeline {
-            position: sticky;
-            left: 0;
-            background: #f7fafc;
-            font-weight: bold;
-            padding: 15px 10px;
-            border-right: 2px solid #e2e8f0;
-            border-bottom: 1px solid #e2e8f0;
-            font-size: 12px;
-            color: #2d3748;
-            z-index: 5;
+        .worker-timeline-cell:last-child {
+            border-right: none;
         }
 
         .task-timeline-item {
@@ -507,6 +553,15 @@
             font-size: 9px;
             opacity: 0.8;
             margin-top: 2px;
+        }
+
+        /* 空の状態の表示 */
+        .empty-timeline {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            color: #4a5568;
+            font-style: italic;
         }
 
         /* ツールチップ */
@@ -670,12 +725,20 @@
         <div id="daily-tab" class="tab-content">
             <div class="daily-schedule">
                 <div class="daily-header">
-                    <div class="daily-date" id="dailyDate">2025年6月14日 (土)</div>
+                    <div class="daily-date" id="dailyDate">2025年6月17日 (火)</div>
                     <div class="daily-navigation">
                         <button class="month-btn" onclick="changeDailyDate(-1)">◀ 前日</button>
                         <button class="month-btn" onclick="setDailyToday()">今日</button>
                         <button class="month-btn" onclick="changeDailyDate(1)">翌日 ▶</button>
                     </div>
+                </div>
+
+                <!-- 作業者選択 -->
+                <div class="worker-selector">
+                    <label for="workerSelect">表示する作業者:</label>
+                    <select id="workerSelect" class="worker-select" onchange="updateDailySchedule()">
+                        <option value="all">全員</option>
+                    </select>
                 </div>
 
                 <div class="daily-stats">
@@ -764,6 +827,24 @@
             { label: '18-20', start: 18, end: 20 },
             { label: '20-22', start: 20, end: 22 }
         ];
+
+        // 作業者選択プルダウンの初期化
+        function initializeWorkerSelector() {
+            const workerSelect = document.getElementById('workerSelect');
+            
+            // 既存のオプションを削除（「全員」以外）
+            while (workerSelect.children.length > 1) {
+                workerSelect.removeChild(workerSelect.lastChild);
+            }
+            
+            // 作業者のオプションを追加
+            workers.forEach(worker => {
+                const option = document.createElement('option');
+                option.value = worker;
+                option.textContent = worker;
+                workerSelect.appendChild(option);
+            });
+        }
 
         // セルクリック時のプルダウン表示（修正版）
         function showCellDropdown(cell, worker, dateStr) {
@@ -1021,6 +1102,7 @@
             document.getElementById(`${tabName}-tab`).classList.add('active');
 
             if (tabName === 'daily') {
+                initializeWorkerSelector();
                 updateDailySchedule();
             }
         }
@@ -1207,7 +1289,7 @@
             updateStats();
         }
 
-        // 日別スケジュール更新
+        // 日別スケジュール更新（改良版）
         function updateDailySchedule() {
             const dateStr = dailyDate.toISOString().split('T')[0];
             const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][dailyDate.getDay()];
@@ -1215,12 +1297,20 @@
             document.getElementById('dailyDate').textContent = 
                 `${dailyDate.getFullYear()}年${dailyDate.getMonth() + 1}月${dailyDate.getDate()}日 (${dayOfWeek})`;
 
+            // 選択された作業者を取得
+            const selectedWorker = document.getElementById('workerSelect').value;
+            
             // その日のタスクを取得
             const allTasks = getAllTasksForDate(dateStr);
             
+            // 作業者でフィルタリング
+            const filteredTasks = selectedWorker === 'all' 
+                ? allTasks 
+                : allTasks.filter(task => task.worker === selectedWorker);
+            
             // 統計を更新
-            document.getElementById('dailyTotalTasks').textContent = allTasks.length;
-            document.getElementById('dailyTotalHours').textContent = `${allTasks.reduce((sum, task) => sum + (task.estimatedHours || 0), 0).toFixed(1)}h`;
+            document.getElementById('dailyTotalTasks').textContent = filteredTasks.length;
+            document.getElementById('dailyTotalHours').textContent = `${filteredTasks.reduce((sum, task) => sum + (task.estimatedHours || 0), 0).toFixed(1)}h`;
             
             // 直近の予定を計算（今後7日間）
             let upcomingCount = 0;
@@ -1228,38 +1318,61 @@
                 const futureDate = new Date(dailyDate);
                 futureDate.setDate(dailyDate.getDate() + i);
                 const futureDateStr = futureDate.toISOString().split('T')[0];
-                upcomingCount += getAllTasksForDate(futureDateStr).length;
+                const futureTasks = getAllTasksForDate(futureDateStr);
+                const filteredFutureTasks = selectedWorker === 'all' 
+                    ? futureTasks 
+                    : futureTasks.filter(task => task.worker === selectedWorker);
+                upcomingCount += filteredFutureTasks.length;
             }
             document.getElementById('upcomingTasks').textContent = upcomingCount;
 
             // 時間軸スケジュールを更新
-            updateTimelineSchedule(allTasks);
+            updateTimelineSchedule(filteredTasks);
         }
 
-        // 時間軸スケジュールの更新
+        // 時間軸スケジュールの更新（改良版）
         function updateTimelineSchedule(allTasks) {
             const workersTimeline = document.getElementById('workersTimeline');
             workersTimeline.innerHTML = '';
 
-            // その日にタスクがある作業者のみ表示
-            const workersWithTasks = workers.filter(worker => 
-                allTasks.some(task => task.worker === worker)
-            );
+            // 選択された作業者を取得
+            const selectedWorker = document.getElementById('workerSelect').value;
+            
+            // 作業者でフィルタリング
+            let workersWithTasks;
+            if (selectedWorker === 'all') {
+                // 全員表示の場合は、その日にタスクがある作業者のみ表示
+                workersWithTasks = workers.filter(worker => 
+                    allTasks.some(task => task.worker === worker)
+                );
+            } else {
+                // 特定の作業者が選択されている場合
+                workersWithTasks = allTasks.length > 0 ? [selectedWorker] : [];
+            }
 
             if (workersWithTasks.length === 0) {
-                workersTimeline.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #4a5568;">この日に予定されている作業はありません</div>';
+                workersTimeline.innerHTML = '<div class="empty-timeline">この日に予定されている作業はありません</div>';
                 return;
             }
 
+            // 作業者ごとにセクションを作成
             workersWithTasks.forEach(worker => {
                 const workerTasks = allTasks.filter(task => task.worker === worker);
                 
-                // 作業者名
-                const workerNameDiv = document.createElement('div');
-                workerNameDiv.className = 'worker-name-timeline';
-                workerNameDiv.textContent = worker;
-                workersTimeline.appendChild(workerNameDiv);
-
+                // 作業者セクション
+                const workerSection = document.createElement('div');
+                workerSection.className = 'worker-section';
+                
+                // 作業者名ヘッダー
+                const workerNameHeader = document.createElement('div');
+                workerNameHeader.className = 'worker-name-header';
+                workerNameHeader.textContent = worker;
+                workerSection.appendChild(workerNameHeader);
+                
+                // 時間軸行
+                const timelineRow = document.createElement('div');
+                timelineRow.className = 'worker-timeline-row';
+                
                 // 各時間帯のセル
                 timeSlots.forEach(timeSlot => {
                     const timeCell = document.createElement('div');
@@ -1290,8 +1403,11 @@
                         timeCell.appendChild(taskItem);
                     });
                     
-                    workersTimeline.appendChild(timeCell);
+                    timelineRow.appendChild(timeCell);
                 });
+                
+                workerSection.appendChild(timelineRow);
+                workersTimeline.appendChild(workerSection);
             });
         }
 
@@ -1804,6 +1920,7 @@
             // 今日の月を初期表示に設定
             updateMonthDisplay();
             generateTable();
+            initializeWorkerSelector();
             updateDailySchedule();
             
             // 1秒後にCSV自動読み込み
