@@ -932,11 +932,13 @@
             }
         }
 
-        // 日付選択変更時の処理
+        // 日付選択変更時の処理（修正版）
         function onDateSelectChange() {
             const selectedDate = document.getElementById('dateSelect').value;
             if (selectedDate) {
+                // dailyDateを選択された日付に更新
                 dailyDate = new Date(selectedDate);
+                // スケジュール表示を更新（左上の日付表示も含む）
                 updateDailySchedule();
             }
         }
@@ -1387,17 +1389,21 @@
             updateStats();
         }
 
-        // 日別スケジュール更新（改良版）
+        // 日別スケジュール更新（修正版）
         function updateDailySchedule() {
             const dateStr = dailyDate.toISOString().split('T')[0];
             const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][dailyDate.getDay()];
             
-            // 上部の日付表示を更新
+            // 左上の日付表示を更新（選択された作業日に合わせる）
             document.getElementById('dailyDate').textContent = 
                 `${dailyDate.getFullYear()}年${dailyDate.getMonth() + 1}月${dailyDate.getDate()}日 (${dayOfWeek})`;
 
-            // 日付選択プルダウンを現在の日付に同期
-            syncDateSelector();
+            // 日付選択プルダウンを現在の日付に同期（無限ループを防ぐため条件付き）
+            const dateSelect = document.getElementById('dateSelect');
+            const currentSelection = dateSelect.value;
+            if (currentSelection !== dateStr) {
+                syncDateSelector();
+            }
 
             // 選択された作業者を取得
             const selectedWorker = document.getElementById('workerSelect').value;
@@ -1815,15 +1821,20 @@
         async function loadDataFromCSV() {
             const possibleFileNames = getCSVFileNames();
             
+            console.log('CSV読み込み開始 - 検索順序:', possibleFileNames);
             showNotification('CSVファイルを検索中...', 'info');
             
             for (const fileName of possibleFileNames) {
                 try {
+                    console.log(`ファイル検索中: ${fileName}`);
                     const csvUrl = `https://raw.githubusercontent.com/koshi7778/schedule-dashboard/main/${fileName}`;
                     
                     const response = await fetch(csvUrl);
+                    console.log(`${fileName} のレスポンス:`, response.status, response.ok);
+                    
                     if (response.ok) {
                         const csvText = await response.text();
+                        console.log(`${fileName} を読み込み成功 - データサイズ:`, csvText.length);
                         
                         const result = Papa.parse(csvText, {
                             header: true,
@@ -1832,10 +1843,12 @@
                         });
                         
                         if (result.errors.length > 0) {
-                            // エラーがあっても処理を続行
+                            console.log(`${fileName} のパースエラー:`, result.errors);
                         }
                         
                         const tickets = transformCSVToTickets(result.data);
+                        console.log(`${fileName} から変換されたチケット数:`, tickets.length);
+                        
                         const monthlyData = groupTicketsByMonth(tickets);
                         
                         taskData = monthlyData;
@@ -1844,17 +1857,19 @@
                         updateDailySchedule();
                         
                         showNotification(`${fileName} から ${tickets.length}件のチケットを読み込みました`, 'success');
+                        console.log(`最終的に使用されたファイル: ${fileName}`);
                         return;
                         
                     } else {
-                        // ファイルが見つからない場合はログを出力しない
+                        console.log(`${fileName} が見つかりません (${response.status})`);
                     }
                     
                 } catch (error) {
-                    // エラーの場合もログを出力しない
+                    console.log(`${fileName} の読み込みエラー:`, error);
                 }
             }
             
+            console.log('利用可能なCSVファイルが見つかりませんでした');
             showNotification('CSVファイルが見つかりません。', 'error');
         }
 
