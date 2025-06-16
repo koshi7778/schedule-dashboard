@@ -738,6 +738,7 @@
                     <label for="workerSelect">表示する作業者:</label>
                     <select id="workerSelect" class="worker-select" onchange="updateDailySchedule()">
                         <option value="all">全員</option>
+                        <!-- 作業者オプションは JavaScript で動的に追加される -->
                     </select>
                 </div>
 
@@ -1102,6 +1103,7 @@
             document.getElementById(`${tabName}-tab`).classList.add('active');
 
             if (tabName === 'daily') {
+                // 作業者選択プルダウンを初期化
                 initializeWorkerSelector();
                 updateDailySchedule();
             }
@@ -1920,6 +1922,8 @@
             // 今日の月を初期表示に設定
             updateMonthDisplay();
             generateTable();
+            
+            // 作業者選択プルダウンを初期化（日別スケジュール用）
             initializeWorkerSelector();
             updateDailySchedule();
             
