@@ -13,94 +13,73 @@
         }
 
         body {
-            font-family: 'Inter', 'Segoe UI', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            font-family: 'Segoe UI', 'Meiryo', sans-serif;
+            background: #f5f5f5;
             padding: 20px;
             font-size: 12px;
-            margin: 0;
         }
 
         .container {
             max-width: 100%;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .header {
-            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            background: #2c5282;
             color: white;
-            padding: 20px 30px;
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .header h1 {
-            font-size: 24px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-size: 18px;
+            font-weight: normal;
         }
 
         .controls {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             align-items: center;
         }
 
         .month-selector {
             display: flex;
             align-items: center;
-            gap: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 8px 16px;
-            border-radius: 12px;
-            backdrop-filter: blur(10px);
+            gap: 10px;
         }
 
         .month-btn {
             background: rgba(255, 255, 255, 0.2);
             color: white;
             border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 8px 12px;
-            border-radius: 8px;
+            padding: 5px 10px;
+            border-radius: 4px;
             cursor: pointer;
             font-size: 12px;
-            transition: all 0.3s ease;
-            font-weight: 500;
         }
 
         .month-btn:hover {
             background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         .csv-btn {
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            background: #38a169;
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
+            padding: 6px 12px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(72, 187, 120, 0.4);
+            font-size: 12px;
         }
 
         .csv-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(72, 187, 120, 0.6);
+            background: #2f855a;
         }
 
         .cell-dropdown {
@@ -173,153 +152,134 @@
 
         /* タブナビゲーション */
         .tab-navigation {
-            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            background: #e2e8f0;
             display: flex;
-            border-bottom: 1px solid rgba(203, 213, 224, 0.5);
-            padding: 0 20px;
+            border-bottom: 1px solid #cbd5e0;
         }
 
         .tab-button {
             background: transparent;
             border: none;
-            padding: 16px 32px;
+            padding: 12px 24px;
             cursor: pointer;
             font-size: 14px;
-            font-weight: 600;
             color: #4a5568;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            border-bottom: 2px solid transparent;
         }
 
         .tab-button.active {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-            color: #667eea;
-            border-bottom-color: #667eea;
+            background: white;
+            color: #2c5282;
+            border-bottom-color: #2c5282;
         }
 
         .tab-button:hover {
-            background: rgba(102, 126, 234, 0.05);
-            color: #667eea;
-            transform: translateY(-1px);
+            background: rgba(255, 255, 255, 0.5);
         }
 
-        /* 統計エリア */
+        /* タブコンテンツ */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
         .stats {
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            padding: 20px 30px;
+            background: #edf2f7;
+            padding: 10px 20px;
             display: flex;
-            gap: 40px;
-            font-size: 12px;
-            border-bottom: 1px solid rgba(203, 213, 224, 0.3);
+            gap: 30px;
+            font-size: 11px;
         }
 
         .stat-item {
             color: #4a5568;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .stat-number {
-            font-weight: 700;
-            color: #1a202c;
-            font-size: 16px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-weight: bold;
+            color: #2d3748;
         }
 
-        /* テーブルコンテナ */
         .table-container {
             overflow-x: auto;
             max-height: 80vh;
             overflow-y: auto;
-            background: white;
         }
 
         .schedule-table {
             width: 100%;
             border-collapse: collapse;
             font-size: 11px;
-            background: white;
         }
 
         .schedule-table th,
         .schedule-table td {
             border: 1px solid #e2e8f0;
-            padding: 8px 10px;
+            padding: 4px 6px;
             text-align: center;
             vertical-align: middle;
-            min-width: 40px;
-            max-width: 40px;
+            min-width: 35px;
+            max-width: 35px;
             overflow: hidden;
-            transition: all 0.2s ease;
         }
 
         .schedule-table th {
-            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
-            font-weight: 700;
+            background: #f7fafc;
+            font-weight: 600;
             color: #2d3748;
             position: sticky;
             top: 0;
             z-index: 10;
-            border-bottom: 2px solid #667eea;
         }
 
         .worker-name {
-            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
-            font-weight: 700;
+            background: #f7fafc;
+            font-weight: 600;
             color: #2d3748;
             text-align: left;
-            padding-left: 16px;
-            min-width: 120px;
-            max-width: 120px;
+            padding-left: 8px;
+            min-width: 100px;
+            max-width: 100px;
             position: sticky;
             left: 0;
             z-index: 5;
-            border-right: 2px solid #667eea;
         }
 
         .date-header {
-            writing-mode: horizontal-tb;
-            font-size: 11px;
-            height: auto;
-            padding: 12px 6px;
-            text-align: center;
-            line-height: 1.3;
-            font-weight: 600;
+            writing-mode: vertical-rl;
+            font-size: 10px;
+            height: 60px;
         }
 
         .weekend {
-            background: linear-gradient(135deg, #fed7e2 0%, #fbb6ce 100%) !important;
-            color: #702459 !important;
+            background: #fed7d7 !important;
         }
 
+        .holiday {
+            background: #fbb6ce !important;
+        }
+
+        /* 今日の日付ハイライト（平日のみ、薄い色） */
         .today:not(.weekend) {
-            background: linear-gradient(135deg, #fef5e7 0%, #fed7aa 100%) !important;
-            font-weight: 700;
-            color: #c05621 !important;
-            box-shadow: inset 0 0 0 2px #f6ad55;
+            background: #fff3cd !important;
+            font-weight: bold;
+            box-shadow: inset 0 0 0 1px #f0c419;
         }
 
         .task-cell {
             cursor: pointer;
             position: relative;
-            height: 35px;
+            height: 30px;
             font-size: 10px;
-            line-height: 1.3;
+            line-height: 1.2;
             background: white;
-            transition: all 0.2s ease;
         }
 
         .task-cell:hover {
-            background: linear-gradient(135deg, #bee3f8 0%, #90cdf4 100%) !important;
-            transform: scale(1.02);
-            box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
+            background: #bee3f8 !important;
         }
 
         .task-cell.editing {
@@ -388,312 +348,7 @@
             margin-top: 2px;
         }
 
-        /* 未アサインチケットエリア */
-        .unassigned-area {
-            background: #f7fafc;
-            border: 2px dashed #cbd5e0;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 20px 0;
-            min-height: 120px;
-        }
-
-        .unassigned-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-            gap: 10px;
-        }
-
-        .unassigned-title {
-            font-size: 16px;
-            font-weight: bold;
-            color: #2d3748;
-        }
-
-        .unassigned-count {
-            background: #e53e3e;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .unassigned-tickets {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            min-height: 60px;
-            border: 1px dashed #a0aec0;
-            border-radius: 8px;
-            padding: 15px;
-            background: white;
-        }
-
-        .unassigned-tickets.drag-over {
-            background: #e6fffa;
-            border-color: #38b2ac;
-            border-style: solid;
-        }
-
-        .unassigned-ticket {
-            background: linear-gradient(135deg, #fc8181 0%, #e53e3e 100%);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
-            cursor: move;
-            font-size: 11px;
-            min-width: 120px;
-            box-shadow: 0 2px 4px rgba(229, 62, 62, 0.3);
-            transition: all 0.2s ease;
-            position: relative;
-        }
-
-        .unassigned-ticket:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(229, 62, 62, 0.4);
-        }
-
-        .unassigned-ticket.dragging {
-            opacity: 0.5;
-            transform: rotate(5deg);
-        }
-
-        .unassigned-ticket-title {
-            font-weight: bold;
-            margin-bottom: 2px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .unassigned-ticket-details {
-            font-size: 9px;
-            opacity: 0.9;
-        }
-
-        .unassigned-ticket-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #f56565;
-            color: white;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-
-        .empty-unassigned {
-            text-align: center;
-            color: #a0aec0;
-            font-style: italic;
-            padding: 20px;
-            width: 100%;
-        }
-
-        /* 仮アサインされたチケット */
-        .temp-assigned-ticket {
-            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%) !important;
-            border: 2px dashed #90cdf4 !important;
-            position: relative;
-        }
-
-        .temp-assigned-ticket::after {
-            content: "仮";
-            position: absolute;
-            top: -8px;
-            left: -8px;
-            background: #3182ce;
-            color: white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            font-size: 10px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid white;
-        }
-        .personal-schedule {
-            display: none;
-            padding: 20px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            margin: 20px 0;
-        }
-
-        .personal-schedule.active {
-            display: block;
-        }
-
-        .personal-header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 12px;
-        }
-
-        .personal-worker-name {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-
-        .personal-date {
-            font-size: 18px;
-            opacity: 0.9;
-        }
-
-        .personal-timeline {
-            background: #f8fafc;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid #e2e8f0;
-        }
-
-        .personal-timeline-header {
-            background: #2d3748;
-            color: white;
-            padding: 15px 20px;
-            font-weight: bold;
-            font-size: 16px;
-        }
-
-        .personal-time-slot {
-            display: flex;
-            border-bottom: 1px solid #e2e8f0;
-            min-height: 80px;
-        }
-
-        .personal-time-slot:last-child {
-            border-bottom: none;
-        }
-
-        .personal-time-label {
-            width: 100px;
-            background: #4a5568;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        .personal-time-content {
-            flex: 1;
-            padding: 15px 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            background: white;
-        }
-
-        .personal-task-item {
-            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
-            color: white;
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            box-shadow: 0 2px 8px rgba(66, 153, 225, 0.3);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .personal-task-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(66, 153, 225, 0.4);
-        }
-
-        .personal-task-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .personal-task-item.vacation {
-            background: linear-gradient(135deg, #9f7aea 0%, #805ad5 100%);
-            box-shadow: 0 2px 8px rgba(159, 122, 234, 0.3);
-        }
-
-        .personal-task-item.planning {
-            background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
-            box-shadow: 0 2px 8px rgba(245, 101, 101, 0.3);
-        }
-
-        .personal-task-item.work {
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-            box-shadow: 0 2px 8px rgba(72, 187, 120, 0.3);
-        }
-
-        .personal-task-title {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 4px;
-        }
-
-        .personal-task-hours {
-            font-size: 12px;
-            opacity: 0.9;
-        }
-
-        .no-personal-tasks {
-            text-align: center;
-            color: #a0aec0;
-            font-style: italic;
-            padding: 20px;
-        }
-        .worker-filter {
-            margin-bottom: 20px;
-            padding: 15px;
-            background: #f7fafc;
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
-        }
-
-        .worker-filter label {
-            font-size: 14px;
-            font-weight: 600;
-            color: #2c5282;
-            margin-right: 10px;
-        }
-
-        .worker-filter select {
-            padding: 8px 12px;
-            border: 1px solid #cbd5e0;
-            border-radius: 6px;
-            background: white;
-            font-size: 14px;
-            color: #2d3748;
-            min-width: 200px;
-            cursor: pointer;
-        }
-
-        .worker-filter select:focus {
-            outline: none;
-            border-color: #3182ce;
-            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
-        }
-
-        .worker-filter optgroup {
-            font-weight: bold;
-            color: #4a5568;
-            background: #f7fafc;
-        }
-
-        .worker-filter option {
-            font-weight: normal;
-            color: #2d3748;
-            padding: 5px;
-        }
+        /* 日別スケジュール表示 */
         .daily-schedule {
             padding: 20px;
         }
@@ -765,58 +420,13 @@
         }
 
         .timeline-content {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .workers-header {
-            display: flex;
-            background: #f7fafc;
-            border-bottom: 2px solid #e2e8f0;
-            min-height: 50px;
-        }
-
-        .time-slots-header {
-            width: 80px;
-            background: #f7fafc;
-            border-right: 2px solid #e2e8f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #4a5568;
-            font-size: 12px;
-        }
-
-        .worker-names-header {
-            display: flex;
-            flex: 1;
-            overflow-x: auto;
-        }
-
-        .worker-name-header {
-            min-width: 120px;
-            max-width: 200px;
-            padding: 10px;
-            border-right: 1px solid #e2e8f0;
-            font-weight: bold;
-            color: #2c5282;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            background: #f7fafc;
-        }
-
-        .timeline-body {
-            display: flex;
+            display: grid;
+            grid-template-columns: 80px 1fr;
         }
 
         .time-slots {
-            width: 80px;
             background: #f7fafc;
-            border-right: 2px solid #e2e8f0;
+            border-right: 1px solid #e2e8f0;
         }
 
         .time-slot {
@@ -826,29 +436,37 @@
             font-weight: 500;
             text-align: center;
             color: #4a5568;
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .workers-timeline {
-            flex: 1;
             overflow-x: auto;
         }
 
-        .workers-timeline-row {
-            display: flex;
+        .worker-timeline-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             min-height: 60px;
             border-bottom: 1px solid #e2e8f0;
         }
 
         .worker-timeline-cell {
-            min-width: 120px;
-            max-width: 200px;
             padding: 8px;
             border-right: 1px solid #e2e8f0;
             position: relative;
+            min-height: 60px;
+        }
+
+        .worker-name-timeline {
+            position: sticky;
+            left: 0;
+            background: #f7fafc;
+            font-weight: bold;
+            padding: 15px 10px;
+            border-right: 2px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 12px;
+            color: #2d3748;
+            z-index: 5;
         }
 
         .task-timeline-item {
@@ -891,97 +509,47 @@
             margin-top: 2px;
         }
 
-        /* ツールチップ（詳細版） */
+        /* ツールチップ */
         .tooltip {
             position: absolute;
             background: #1a202c;
             color: white;
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-size: 12px;
-            max-width: 400px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            max-width: 300px;
             z-index: 1000;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s ease;
-            border: 1px solid #4a5568;
+            transition: opacity 0.2s ease;
         }
 
         .tooltip.show {
             opacity: 1;
         }
 
-        .tooltip-header {
-            font-size: 14px;
-            font-weight: bold;
-            color: #68d391;
-            margin-bottom: 10px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #4a5568;
-        }
-
         .tooltip-task {
-            margin-bottom: 12px;
-            padding: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 6px;
-            border-left: 3px solid #68d391;
+            margin-bottom: 6px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #4a5568;
         }
 
         .tooltip-task:last-child {
             margin-bottom: 0;
-        }
-
-        .tooltip-task.ticket {
-            border-left-color: #4299e1;
-        }
-
-        .tooltip-task.manual {
-            border-left-color: #f6ad55;
-        }
-
-        .tooltip-task.temp-assigned {
-            border-left-color: #9f7aea;
+            padding-bottom: 0;
+            border-bottom: none;
         }
 
         .tooltip-title {
             font-weight: 600;
-            color: #e2e8f0;
-            margin-bottom: 6px;
-            font-size: 13px;
+            color: #68d391;
+            margin-bottom: 2px;
         }
 
         .tooltip-details {
-            font-size: 11px;
-            color: #a0aec0;
-            line-height: 1.4;
-        }
-
-        .tooltip-details .detail-row {
-            margin-bottom: 3px;
-        }
-
-        .tooltip-details .detail-label {
-            color: #68d391;
-            font-weight: 500;
-            display: inline-block;
-            min-width: 60px;
-        }
-
-        .tooltip-separator {
-            margin: 8px 0;
-            height: 1px;
-            background: #4a5568;
-        }
-
-        .tooltip-summary {
-            margin-top: 10px;
-            padding-top: 8px;
-            border-top: 1px solid #4a5568;
-            font-size: 11px;
-            color: #9ca3af;
-            text-align: center;
+            font-size: 10px;
+            color: #cbd5e0;
         }
 
         /* 通知 */
@@ -1060,20 +628,10 @@
                 font-size: 10px;
             }
         }
-
-        /* デモデータ用のスタイル追加 */
-        .demo-notice {
-            background: #bee3f8;
-            color: #2a4365;
-            padding: 10px 20px;
-            font-size: 12px;
-            border-bottom: 1px solid #90cdf4;
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="demo-notice" style="display: none;"></div>
         <div class="header">
             <h1>作業スケジュール管理ダッシュボード</h1>
             <div class="controls">
@@ -1094,17 +652,6 @@
 
         <!-- 月別スケジュールタブ -->
         <div id="monthly-tab" class="tab-content active">
-            <!-- 未アサインチケットエリア -->
-            <div class="unassigned-area">
-                <div class="unassigned-header">
-                    <div class="unassigned-title">🎯 未アサインチケット</div>
-                    <div class="unassigned-count" id="unassignedCount">0</div>
-                </div>
-                <div class="unassigned-tickets" id="unassignedTickets">
-                    <div class="empty-unassigned">未アサインのチケットはありません</div>
-                </div>
-            </div>
-
             <div class="stats">
                 <div class="stat-item">総タスク数: <span class="stat-number" id="totalTasks">0</span></div>
                 <div class="stat-item">本アサイン: <span class="stat-number" id="assignedTasks">0</span></div>
@@ -1123,44 +670,12 @@
         <div id="daily-tab" class="tab-content">
             <div class="daily-schedule">
                 <div class="daily-header">
-                    <div class="daily-date" id="dailyDate">2025年6月16日 (月)</div>
+                    <div class="daily-date" id="dailyDate">2025年6月14日 (土)</div>
                     <div class="daily-navigation">
                         <button class="month-btn" onclick="changeDailyDate(-1)">◀ 前日</button>
                         <button class="month-btn" onclick="setDailyToday()">今日</button>
                         <button class="month-btn" onclick="changeDailyDate(1)">翌日 ▶</button>
                     </div>
-                </div>
-
-                <!-- 作業者選択プルダウン -->
-                <div class="worker-filter">
-                    <label for="workerSelect">作業者選択:</label>
-                    <select id="workerSelect" onchange="updateDailySchedule()">
-                        <option value="all">全員</option>
-                        <optgroup label="熊本拠点">
-                            <option value="紫藤 正之">紫藤 正之</option>
-                            <option value="村田 祐馬">村田 祐馬</option>
-                            <option value="入江 有香">入江 有香</option>
-                            <option value="末藤 千奈">末藤 千奈</option>
-                            <option value="松岡 隼">松岡 隼</option>
-                            <option value="園田 敏雄">園田 敏雄</option>
-                            <option value="塚本 祐太">塚本 祐太</option>
-                            <option value="宮崎 仁">宮崎 仁</option>
-                            <option value="山口 広生">山口 広生</option>
-                            <option value="竹田 愛美">竹田 愛美</option>
-                            <option value="有働 麻耶">有働 麻耶</option>
-                            <option value="井島 響香">井島 響香</option>
-                        </optgroup>
-                        <optgroup label="東京拠点">
-                            <option value="但馬 惟之">但馬 惟之</option>
-                            <option value="矢野 俊介">矢野 俊介</option>
-                            <option value="佐治 友里子">佐治 友里子</option>
-                            <option value="李 相旼">李 相旼</option>
-                            <option value="小泉 祐稀">小泉 祐稀</option>
-                            <option value="小菅 祐馬">小菅 祐馬</option>
-                            <option value="末廣 太一">末廣 太一</option>
-                            <option value="木暮 誉貴">木暮 誉貴</option>
-                        </optgroup>
-                    </select>
                 </div>
 
                 <div class="daily-stats">
@@ -1178,46 +693,20 @@
                     </div>
                 </div>
 
-                <!-- 個人スケジュール表示 -->
-                <div id="personal-schedule" class="personal-schedule">
-                    <div class="personal-header">
-                        <div class="personal-worker-name" id="personalWorkerName">作業者名</div>
-                        <div class="personal-date" id="personalDate">2025年6月16日 (月)</div>
-                    </div>
-                    
-                    <div class="personal-timeline">
-                        <div class="personal-timeline-header">📅 個人スケジュール</div>
-                        <div id="personalTimelineContent">
-                            <!-- 個人タイムラインがここに生成される -->
-                        </div>
-                    </div>
-                </div>
-
                 <!-- 時間軸スケジュール -->
                 <div class="timeline-schedule">
                     <div class="timeline-header">時間別スケジュール</div>
                     <div class="timeline-content">
-                        <!-- 作業者ヘッダー -->
-                        <div class="workers-header" id="workersHeader">
-                            <div class="time-slots-header">時間</div>
-                            <div class="worker-names-header" id="workerNamesHeader">
-                                <!-- 作業者名がここに動的に生成される -->
-                            </div>
+                        <div class="time-slots">
+                            <div class="time-slot">10-12</div>
+                            <div class="time-slot">12-14</div>
+                            <div class="time-slot">14-16</div>
+                            <div class="time-slot">16-18</div>
+                            <div class="time-slot">18-20</div>
+                            <div class="time-slot">20-22</div>
                         </div>
-                        
-                        <!-- タイムライン本体 -->
-                        <div class="timeline-body">
-                            <div class="time-slots">
-                                <div class="time-slot">10-12</div>
-                                <div class="time-slot">12-14</div>
-                                <div class="time-slot">14-16</div>
-                                <div class="time-slot">16-18</div>
-                                <div class="time-slot">18-20</div>
-                                <div class="time-slot">20-22</div>
-                            </div>
-                            <div class="workers-timeline" id="workersTimeline">
-                                <!-- 時間軸スケジュールが動的に生成される -->
-                            </div>
+                        <div class="workers-timeline" id="workersTimeline">
+                            <!-- 時間軸スケジュールが動的に生成される -->
                         </div>
                     </div>
                 </div>
@@ -1244,15 +733,15 @@
         let planningTaskCounter = 1;
         let draggedTask = null;
 
-        // 種別別の色とラベル（モダンカラー）
+        // 種別別の色とラベル
         const taskTypeConfig = {
-            vacation: { label: '休暇', color: 'linear-gradient(135deg, #fbb6ce 0%, #f687b3 100%)', textColor: '#702459' },
-            meeting: { label: '会議', color: 'linear-gradient(135deg, #90cdf4 0%, #63b3ed 100%)', textColor: '#2c5282' },
-            training: { label: '研修', color: 'linear-gradient(135deg, #9ae6b4 0%, #68d391 100%)', textColor: '#22543d' },
-            other: { label: 'その他', color: 'linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%)', textColor: '#4a5568' },
-            work: { label: '随時作業', color: 'linear-gradient(135deg, #fef5e7 0%, #fed7aa 100%)', textColor: '#c05621' },
-            planning: { label: '計画作業', color: 'linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%)', textColor: '#c53030' },
-            preparation: { label: '事前準備', color: 'linear-gradient(135deg, #bee3f8 0%, #90cdf4 100%)', textColor: '#2c5282' }
+            vacation: { label: '休暇', color: '#fed7e2', textColor: '#702459' },
+            meeting: { label: '会議', color: '#bee3f8', textColor: '#2a4365' },
+            training: { label: '研修', color: '#c6f6d5', textColor: '#22543d' },
+            other: { label: 'その他', color: '#e2e8f0', textColor: '#4a5568' },
+            work: { label: '随時作業', color: '#fefcbf', textColor: '#744210' },
+            planning: { label: '計画作業', color: '#fed7d7', textColor: '#e53e3e' },
+            preparation: { label: '事前準備', color: '#bee3f8', textColor: '#2b6cb0' }
         };
 
         // 作業者リスト（拠点別）
@@ -1266,143 +755,15 @@
             '小菅 祐馬', '末廣 太一', '木暮 誉貴'
         ];
 
-        // デモデータを生成
-        function generateDemoData() {
-            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
-            taskData[monthKey] = [];
-
-            // 全作業者の全日に随時作業を自動挿入
-            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-            
-            workers.forEach(worker => {
-                for (let day = 1; day <= daysInMonth; day++) {
-                    const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                    const date = new Date(currentYear, currentMonth, day);
-                    
-                    // 土日は除外（平日のみに随時作業を追加）
-                    if (date.getDay() !== 0 && date.getDay() !== 6) {
-                        const task = {
-                            id: `AUTO-WORK-${worker.replace(' ', '')}-${dateStr}`,
-                            title: '随時作業',
-                            worker: worker,
-                            date: dateStr,
-                            estimatedHours: 8,
-                            description: '随時作業（自動挿入）',
-                            taskType: 'work',
-                            redmineUrl: '',
-                            customerName: '',
-                            remoteFlag: '',
-                            tsetStatus: '',
-                            assignStatus: '計画中',
-                            createdDate: new Date().toISOString().split('T')[0],
-                            isManualEntry: true,
-                            isPlanningTask: false,
-                            isPreparationTask: false,
-                            isWorkTask: true,
-                            isAutoGenerated: true // 自動生成フラグ
-                        };
-                        taskData[monthKey].push(task);
-                    }
-                }
-            });
-
-            // 追加のサンプルデータ（休暇など）
-            const additionalTasks = [
-                { worker: '村田 祐馬', date: '2025-06-16', type: 'vacation', title: '休暇', hours: 8 },
-                { worker: '入江 有香', date: '2025-06-20', type: 'vacation', title: '休暇', hours: 8 }
-            ];
-
-            // 休暇などの特別なタスクを追加（随時作業を上書き）
-            additionalTasks.forEach((sample, index) => {
-                // 既存の随時作業を削除
-                const existingIndex = taskData[monthKey].findIndex(task => 
-                    task.worker === sample.worker && task.date === sample.date && task.isAutoGenerated
-                );
-                if (existingIndex !== -1) {
-                    taskData[monthKey].splice(existingIndex, 1);
-                }
-
-                // 新しいタスクを追加
-                const task = {
-                    id: `SPECIAL-${Date.now()}-${index}`,
-                    title: sample.title,
-                    worker: sample.worker,
-                    date: sample.date,
-                    estimatedHours: sample.hours,
-                    description: `${sample.title}（特別タスク）`,
-                    taskType: sample.type,
-                    redmineUrl: '',
-                    customerName: '',
-                    remoteFlag: '',
-                    tsetStatus: '',
-                    assignStatus: sample.type === 'vacation' ? '休暇/MTG/その他' : '計画中',
-                    createdDate: new Date().toISOString().split('T')[0],
-                    isManualEntry: true,
-                    isPlanningTask: sample.type === 'planning',
-                    isPreparationTask: sample.type === 'preparation',
-                    isWorkTask: sample.type === 'work'
-                };
-                taskData[monthKey].push(task);
-            });
-
-            // アサイン済みチケット系タスク
-            const assignedTickets = [
-                { worker: '松岡 隼', date: '2025-06-20', title: 'システム改修作業', hours: 8, status: '03.本アサイン' },
-                { worker: '園田 敏雄', date: '2025-06-21', title: 'DB調査・分析', hours: 6, status: '03.本アサイン' },
-                { worker: '佐治 友里子', date: '2025-06-18', title: 'テスト実施', hours: 4, status: '22.作業完全終了' }
-            ];
-
-            assignedTickets.forEach((sample, index) => {
-                const task = {
-                    id: `ASSIGNED-${Date.now()}-${index}`,
-                    title: sample.title,
-                    worker: sample.worker,
-                    date: sample.date,
-                    estimatedHours: sample.hours,
-                    description: `顧客: サンプル株式会社\nリモート: あり`,
-                    taskType: 'work',
-                    redmineUrl: 'https://example.com/redmine/issues/123',
-                    customerName: 'サンプル株式会社',
-                    remoteFlag: 'あり',
-                    tsetStatus: sample.status,
-                    assignStatus: 'アサイン完了',
-                    createdDate: '2025-06-10',
-                    isManualEntry: false
-                };
-                taskData[monthKey].push(task);
-            });
-
-            // 未アサインチケット（作業者・日付未定）
-            const unassignedTickets = [
-                { title: 'Webページ修正', hours: 4, customer: 'A社', priority: 'high' },
-                { title: 'データ移行作業', hours: 8, customer: 'B社', priority: 'medium' },
-                { title: 'バグ修正対応', hours: 2, customer: 'C社', priority: 'high' },
-                { title: 'レポート作成', hours: 6, customer: 'D社', priority: 'low' },
-                { title: 'システム調査', hours: 4, customer: 'E社', priority: 'medium' }
-            ];
-
-            unassignedTickets.forEach((sample, index) => {
-                const task = {
-                    id: `UNASSIGNED-${Date.now()}-${index}`,
-                    title: sample.title,
-                    worker: '', // 未アサイン
-                    date: '', // 日付未定
-                    estimatedHours: sample.hours,
-                    description: `顧客: ${sample.customer}\n優先度: ${sample.priority}`,
-                    taskType: 'work',
-                    redmineUrl: `https://example.com/redmine/issues/${200 + index}`,
-                    customerName: sample.customer,
-                    remoteFlag: 'あり',
-                    tsetStatus: '01.未アサイン',
-                    assignStatus: '未アサイン',
-                    priority: sample.priority,
-                    createdDate: '2025-06-10',
-                    isManualEntry: false,
-                    isUnassigned: true
-                };
-                taskData[monthKey].push(task);
-            });
-        }
+        // 時間軸の定義
+        const timeSlots = [
+            { label: '10-12', start: 10, end: 12 },
+            { label: '12-14', start: 12, end: 14 },
+            { label: '14-16', start: 14, end: 16 },
+            { label: '16-18', start: 16, end: 18 },
+            { label: '18-20', start: 18, end: 20 },
+            { label: '20-22', start: 20, end: 22 }
+        ];
 
         // セルクリック時のプルダウン表示（修正版）
         function showCellDropdown(cell, worker, dateStr) {
@@ -1413,10 +774,10 @@
             dropdown.className = 'cell-dropdown';
             dropdown.id = 'cell-dropdown';
             
-            // オプションの定義（随時作業をデフォルトで選択状態に）
+            // オプションの定義
             const options = [
-                { type: 'work', label: '随時作業', icon: '#744210', isDefault: true },
                 { type: 'planning', label: '計画作業', icon: '#e53e3e' },
+                { type: 'work', label: '随時作業', icon: '#744210' },
                 { type: 'vacation', label: '休暇', icon: '#702459' },
                 { type: 'preparation', label: '事前準備', icon: '#2b6cb0' },
                 { type: 'cancel', label: 'キャンセル', icon: null }
@@ -1426,16 +787,10 @@
                 const optionDiv = document.createElement('div');
                 optionDiv.className = `dropdown-option ${option.type}`;
                 
-                // デフォルト選択の視覚的表示
-                if (option.isDefault) {
-                    optionDiv.style.backgroundColor = '#e6fffa';
-                    optionDiv.style.fontWeight = 'bold';
-                }
-                
                 if (option.icon) {
                     optionDiv.innerHTML = `
                         <div class="dropdown-option-icon" style="background: ${option.icon}"></div>
-                        <span>${option.label}${option.isDefault ? ' (推奨)' : ''}</span>
+                        <span>${option.label}</span>
                     `;
                 } else {
                     optionDiv.innerHTML = `<span>${option.label}</span>`;
@@ -1491,7 +846,7 @@
                 title: taskLabel,
                 worker: worker,
                 date: dateStr,
-                estimatedHours: 8, // デフォルトを8時間に統一
+                estimatedHours: taskType === 'planning' ? 4 : 8,
                 description: `${taskLabel}（セル選択で追加）`,
                 taskType: taskType,
                 redmineUrl: '',
@@ -1525,11 +880,6 @@
 
         // ドラッグ&ドロップ機能（改良版）
         function makeCellDraggable(cell, task) {
-            // 自動生成された随時作業はドラッグ不可
-            if (task.isAutoGenerated) {
-                return;
-            }
-            
             cell.draggable = true;
             cell.style.cursor = 'move';
             
@@ -1576,25 +926,10 @@
         }
 
         function moveTaskToCell(task, newWorker, newDate) {
-            const oldMonthKey = task.date ? task.date.substring(0, 7) : `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+            const oldMonthKey = task.date.substring(0, 7);
             const newMonthKey = newDate.substring(0, 7);
             
-            // 未アサインタスクの場合
-            if (task.isUnassigned) {
-                task.worker = newWorker;
-                task.date = newDate;
-                task.isUnassigned = false;
-                task.isTempAssigned = true; // 仮アサインフラグ
-                task.tsetStatus = '02.仮アサイン';
-                task.assignStatus = '仮アサイン';
-                
-                generateTable();
-                updateUnassignedTickets();
-                showNotification(`${task.title}を${newWorker}の${newDate}に仮アサインしました`, 'success');
-                return;
-            }
-            
-            // 既存のアサイン済みタスクの移動
+            // 既存の位置から削除
             if (taskData[oldMonthKey]) {
                 const taskIndex = taskData[oldMonthKey].findIndex(t => t.id === task.id);
                 if (taskIndex !== -1) {
@@ -1870,25 +1205,18 @@
             });
 
             updateStats();
-            updateUnassignedTickets(); // 未アサインチケット表示を更新
         }
 
         // 日別スケジュール更新
         function updateDailySchedule() {
             const dateStr = dailyDate.toISOString().split('T')[0];
             const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][dailyDate.getDay()];
-            const selectedWorker = document.getElementById('workerSelect').value;
             
             document.getElementById('dailyDate').textContent = 
                 `${dailyDate.getFullYear()}年${dailyDate.getMonth() + 1}月${dailyDate.getDate()}日 (${dayOfWeek})`;
 
-            // その日のタスクを取得（作業者フィルタ適用）
-            let allTasks = getAllTasksForDate(dateStr);
-            
-            // 作業者フィルタリング
-            if (selectedWorker !== 'all') {
-                allTasks = allTasks.filter(task => task.worker === selectedWorker);
-            }
+            // その日のタスクを取得
+            const allTasks = getAllTasksForDate(dateStr);
             
             // 統計を更新
             document.getElementById('dailyTotalTasks').textContent = allTasks.length;
@@ -1900,151 +1228,40 @@
                 const futureDate = new Date(dailyDate);
                 futureDate.setDate(dailyDate.getDate() + i);
                 const futureDateStr = futureDate.toISOString().split('T')[0];
-                let futureTasks = getAllTasksForDate(futureDateStr);
-                
-                // 作業者フィルタリング
-                if (selectedWorker !== 'all') {
-                    futureTasks = futureTasks.filter(task => task.worker === selectedWorker);
-                }
-                upcomingCount += futureTasks.length;
+                upcomingCount += getAllTasksForDate(futureDateStr).length;
             }
             document.getElementById('upcomingTasks').textContent = upcomingCount;
 
-            // 個人スケジュールまたは時間軸スケジュールを表示
-            if (selectedWorker !== 'all') {
-                showPersonalSchedule(selectedWorker, dateStr, allTasks);
-                document.getElementById('personal-schedule').classList.add('active');
-                document.querySelector('.timeline-schedule').style.display = 'none';
-            } else {
-                document.getElementById('personal-schedule').classList.remove('active');
-                document.querySelector('.timeline-schedule').style.display = 'block';
-                updateTimelineSchedule(allTasks, selectedWorker);
-            }
-        }
-
-        // 個人スケジュール表示
-        function showPersonalSchedule(worker, dateStr, tasks) {
-            const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][dailyDate.getDay()];
-            
-            document.getElementById('personalWorkerName').textContent = worker;
-            document.getElementById('personalDate').textContent = 
-                `${dailyDate.getFullYear()}年${dailyDate.getMonth() + 1}月${dailyDate.getDate()}日 (${dayOfWeek})`;
-
-            const timelineContent = document.getElementById('personalTimelineContent');
-            timelineContent.innerHTML = '';
-
-            const timeSlots = [
-                { label: '10:00-12:00', start: 10, end: 12, displayName: '午前中' },
-                { label: '12:00-14:00', start: 12, end: 14, displayName: '昼休み' },
-                { label: '14:00-16:00', start: 14, end: 16, displayName: '午後前半' },
-                { label: '16:00-18:00', start: 16, end: 18, displayName: '午後後半' },
-                { label: '18:00-20:00', start: 18, end: 20, displayName: '残業時間' },
-                { label: '20:00-22:00', start: 20, end: 22, displayName: '深夜時間' }
-            ];
-
-            timeSlots.forEach(timeSlot => {
-                const slotDiv = document.createElement('div');
-                slotDiv.className = 'personal-time-slot';
-                
-                const timeLabel = document.createElement('div');
-                timeLabel.className = 'personal-time-label';
-                timeLabel.textContent = timeSlot.label;
-                
-                const timeContent = document.createElement('div');
-                timeContent.className = 'personal-time-content';
-                
-                // この時間帯のタスクを探す
-                const tasksInTimeSlot = tasks.filter(task => {
-                    const taskTime = getTaskTimeSlot(task);
-                    return taskTime && taskTime.start >= timeSlot.start && taskTime.end <= timeSlot.end;
-                });
-                
-                if (tasksInTimeSlot.length > 0) {
-                    tasksInTimeSlot.forEach(task => {
-                        const taskItem = document.createElement('div');
-                        taskItem.className = `personal-task-item ${task.taskType}`;
-                        taskItem.innerHTML = `
-                            <div class="personal-task-title">${task.title}</div>
-                            <div class="personal-task-hours">作業時間: ${task.estimatedHours}時間</div>
-                        `;
-                        
-                        // クリックでRedmineリンクに遷移
-                        if (task.redmineUrl && task.redmineUrl !== '') {
-                            taskItem.style.cursor = 'pointer';
-                            taskItem.addEventListener('click', () => {
-                                window.open(task.redmineUrl, '_blank');
-                            });
-                        }
-                        
-                        timeContent.appendChild(taskItem);
-                    });
-                } else {
-                    const noTaskDiv = document.createElement('div');
-                    noTaskDiv.className = 'no-personal-tasks';
-                    noTaskDiv.textContent = '予定なし';
-                    timeContent.appendChild(noTaskDiv);
-                }
-                
-                slotDiv.appendChild(timeLabel);
-                slotDiv.appendChild(timeContent);
-                timelineContent.appendChild(slotDiv);
-            });
+            // 時間軸スケジュールを更新
+            updateTimelineSchedule(allTasks);
         }
 
         // 時間軸スケジュールの更新
-        function updateTimelineSchedule(allTasks, selectedWorker = 'all') {
+        function updateTimelineSchedule(allTasks) {
             const workersTimeline = document.getElementById('workersTimeline');
-            const workerNamesHeader = document.getElementById('workerNamesHeader');
-            
             workersTimeline.innerHTML = '';
-            workerNamesHeader.innerHTML = '';
 
-            // 表示する作業者を決定
-            let displayWorkers;
-            if (selectedWorker === 'all') {
-                // その日にタスクがある作業者のみ表示
-                displayWorkers = workers.filter(worker => 
-                    allTasks.some(task => task.worker === worker)
-                );
-            } else {
-                // 選択された作業者のみ表示
-                displayWorkers = [selectedWorker];
-            }
+            // その日にタスクがある作業者のみ表示
+            const workersWithTasks = workers.filter(worker => 
+                allTasks.some(task => task.worker === worker)
+            );
 
-            if (displayWorkers.length === 0 || allTasks.length === 0) {
-                const noTaskMessage = selectedWorker === 'all' 
-                    ? 'この日に予定されている作業はありません'
-                    : `${selectedWorker}さんはこの日に予定されている作業はありません`;
-                    
-                workersTimeline.innerHTML = `<div style="width: 100%; text-align: center; padding: 40px; color: #4a5568;">${noTaskMessage}</div>`;
+            if (workersWithTasks.length === 0) {
+                workersTimeline.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #4a5568;">この日に予定されている作業はありません</div>';
                 return;
             }
 
-            const timeSlots = [
-                { label: '10-12', start: 10, end: 12 },
-                { label: '12-14', start: 12, end: 14 },
-                { label: '14-16', start: 14, end: 16 },
-                { label: '16-18', start: 16, end: 18 },
-                { label: '18-20', start: 18, end: 20 },
-                { label: '20-22', start: 20, end: 22 }
-            ];
-
-            // 作業者ヘッダーを生成
-            displayWorkers.forEach(worker => {
-                const workerHeader = document.createElement('div');
-                workerHeader.className = 'worker-name-header';
-                workerHeader.textContent = worker;
-                workerNamesHeader.appendChild(workerHeader);
-            });
-
-            // 各時間帯の行を生成
-            timeSlots.forEach(timeSlot => {
-                const timeRow = document.createElement('div');
-                timeRow.className = 'workers-timeline-row';
+            workersWithTasks.forEach(worker => {
+                const workerTasks = allTasks.filter(task => task.worker === worker);
                 
-                displayWorkers.forEach(worker => {
-                    const workerTasks = allTasks.filter(task => task.worker === worker);
-                    
+                // 作業者名
+                const workerNameDiv = document.createElement('div');
+                workerNameDiv.className = 'worker-name-timeline';
+                workerNameDiv.textContent = worker;
+                workersTimeline.appendChild(workerNameDiv);
+
+                // 各時間帯のセル
+                timeSlots.forEach(timeSlot => {
                     const timeCell = document.createElement('div');
                     timeCell.className = 'worker-timeline-cell';
                     
@@ -2063,7 +1280,7 @@
                         `;
                         
                         // クリックでRedmineリンクに遷移
-                        if (task.redmineUrl && task.redmineUrl !== '') {
+                        if (task.redmineUrl) {
                             taskItem.style.cursor = 'pointer';
                             taskItem.addEventListener('click', () => {
                                 window.open(task.redmineUrl, '_blank');
@@ -2073,10 +1290,8 @@
                         timeCell.appendChild(taskItem);
                     });
                     
-                    timeRow.appendChild(timeCell);
+                    workersTimeline.appendChild(timeCell);
                 });
-                
-                workersTimeline.appendChild(timeRow);
             });
         }
 
@@ -2126,11 +1341,6 @@
             }
             
             const matchingTasks = taskData[monthKey].filter(task => {
-                // 未アサインタスクは除外
-                if (task.isUnassigned && !task.worker) {
-                    return false;
-                }
-                
                 const workerMatch = task.worker === worker;
                 const dateMatch = task.date === date;
                 return workerMatch && dateMatch;
@@ -2145,45 +1355,18 @@
             cell.innerHTML = '';
             cell.style.backgroundColor = '';
             cell.style.color = '';
-            cell.classList.remove('temp-assigned-ticket');
             
             if (tasks.length === 0) {
                 return;
             }
             
-            // タスクを種別で分類
-            const ticketTasks = tasks.filter(task => !task.isManualEntry && !task.isUnassigned);
-            const manualTasks = tasks.filter(task => task.isManualEntry && !task.isAutoGenerated);
-            const autoWorkTasks = tasks.filter(task => task.isAutoGenerated); // 随時作業
-            const tempAssignedTasks = tasks.filter(task => task.isTempAssigned);
+            // チケット系タスク（CSV読み込み）と手動タスクを分離
+            const ticketTasks = tasks.filter(task => !task.isManualEntry);
+            const manualTasks = tasks.filter(task => task.isManualEntry);
             
-            // 仮アサインタスクがある場合は特別表示
-            if (tempAssignedTasks.length > 0) {
-                const primaryTask = tempAssignedTasks[0];
-                
-                // 仮アサイン用のスタイル
-                cell.classList.add('temp-assigned-ticket');
-                cell.style.backgroundColor = '#bee3f8';
-                cell.style.color = '#2a4365';
-                cell.style.border = '2px dashed #4299e1';
-                
-                const labelDiv = document.createElement('div');
-                labelDiv.className = 'task-type-label';
-                labelDiv.textContent = primaryTask.title;
-                labelDiv.style.fontWeight = 'bold';
-                labelDiv.style.fontSize = '9px';
-                cell.appendChild(labelDiv);
-                
-                const hoursDiv = document.createElement('div');
-                hoursDiv.textContent = `${primaryTask.estimatedHours}h`;
-                hoursDiv.style.fontSize = '8px';
-                cell.appendChild(hoursDiv);
-                
-                return;
-            }
-            
-            // 手動タスク（休暇、計画作業など）がある場合は最優先表示
+            // 手動タスクがある場合は手動タスクを優先表示
             if (manualTasks.length > 0) {
+                // 最初の手動タスクの種別で色とラベルを決定
                 const primaryTask = manualTasks[0];
                 const typeConfig = taskTypeConfig[primaryTask.taskType] || taskTypeConfig.other;
                 
@@ -2209,57 +1392,16 @@
                     cell.appendChild(ticketCountDiv);
                 }
                 
-                return;
-            }
-            
-            // 随時作業がある場合（デフォルト状態）
-            if (autoWorkTasks.length > 0) {
-                const typeConfig = taskTypeConfig.work;
-                
-                // セルの背景色と文字色を設定
-                cell.style.backgroundColor = typeConfig.color;
-                cell.style.color = typeConfig.textColor;
-                
-                // セルコンテナを作成
-                const cellContainer = document.createElement('div');
-                cellContainer.style.height = '100%';
-                cellContainer.style.display = 'flex';
-                cellContainer.style.flexDirection = 'column';
-                cellContainer.style.justifyContent = 'space-between';
-                
-                // 上半分：随時作業ラベル
-                const topHalf = document.createElement('div');
-                topHalf.style.flex = '1';
-                topHalf.style.display = 'flex';
-                topHalf.style.alignItems = 'center';
-                topHalf.style.justifyContent = 'center';
-                topHalf.style.fontSize = '9px';
-                topHalf.style.fontWeight = 'bold';
-                topHalf.textContent = '随時作業';
-                
-                cellContainer.appendChild(topHalf);
-                
-                // 下半分：チケット件数（ある場合のみ）
-                if (ticketTasks.length > 0) {
-                    const bottomHalf = document.createElement('div');
-                    bottomHalf.style.flex = '1';
-                    bottomHalf.style.display = 'flex';
-                    bottomHalf.style.alignItems = 'center';
-                    bottomHalf.style.justifyContent = 'center';
-                    bottomHalf.style.fontSize = '10px';
-                    bottomHalf.style.fontWeight = 'bold';
-                    bottomHalf.style.color = '#2d3748';
-                    bottomHalf.textContent = `(${ticketTasks.length})`;
-                    
-                    cellContainer.appendChild(bottomHalf);
+                // 複数の手動タスクがある場合は件数も表示
+                if (manualTasks.length > 1) {
+                    const manualCountDiv = document.createElement('div');
+                    manualCountDiv.className = 'task-count';
+                    manualCountDiv.textContent = `+${manualTasks.length - 1}`;
+                    manualCountDiv.style.fontSize = '8px';
+                    cell.appendChild(manualCountDiv);
                 }
-                
-                cell.appendChild(cellContainer);
-                return;
-            }
-            
-            // チケットのみの場合
-            if (ticketTasks.length > 0) {
+            } else if (ticketTasks.length > 0) {
+                // 手動タスクがない場合のみチケット件数を表示
                 const countDiv = document.createElement('div');
                 countDiv.className = 'task-count';
                 countDiv.textContent = ticketTasks.length;
@@ -2273,44 +1415,16 @@
 
         // セルのイベント設定（修正版）
         function setupCellEvents(cell, tasks, worker, dateStr) {
-            // チケットデータがある場合のみツールチップを表示
-            const hasTickets = tasks.some(task => !task.isManualEntry && !task.isUnassigned) || 
-                              tasks.some(task => task.isTempAssigned);
-            
-            if (hasTickets) {
-                // マウスホバーでツールチップ表示
-                cell.addEventListener('mouseenter', (e) => {
+            // マウスホバーでツールチップ表示
+            cell.addEventListener('mouseenter', (e) => {
+                if (tasks.length > 0) {
                     showTooltip(e, tasks);
-                });
+                }
+            });
 
-                cell.addEventListener('mouseleave', () => {
-                    hideTooltip();
-                });
-
-                // チケットがある場合はカーソルをpointerに
-                cell.style.cursor = 'pointer';
-                
-                // クリックでRedmineリンクに遷移（最初のチケット）
-                cell.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const ticketTask = tasks.find(task => 
-                        (!task.isManualEntry && task.redmineUrl) || 
-                        (task.isTempAssigned && task.redmineUrl)
-                    );
-                    if (ticketTask && ticketTask.redmineUrl) {
-                        window.open(ticketTask.redmineUrl, '_blank');
-                    }
-                });
-            } else {
-                // チケットがない場合は通常のカーソル
-                cell.style.cursor = 'default';
-                
-                // シングルクリックは無効化
-                cell.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                });
-            }
+            cell.addEventListener('mouseleave', () => {
+                hideTooltip();
+            });
 
             // ダブルクリックでプルダウン表示（最優先）
             cell.addEventListener('dblclick', (e) => {
@@ -2319,14 +1433,17 @@
                 showCellDropdown(cell, worker, dateStr);
             });
 
-            // ドラッグ可能なタスクを探す（手動タスクまたは仮アサインタスク）
-            const draggableTask = tasks.find(task => 
-                (task.isManualEntry && !task.isAutoGenerated) || task.isTempAssigned
-            );
-            
-            if (draggableTask) {
-                makeCellDraggable(cell, draggableTask);
-                cell.style.cursor = 'move';
+            // シングルクリックは無効化（Redmineリンクには飛ばない）
+            cell.addEventListener('click', (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                // 何もしない - ダブルクリックでのみプルダウンを表示
+            });
+
+            // 手動で追加されたタスクの場合はドラッグ可能にする
+            const manualTask = tasks.find(task => task.isManualEntry);
+            if (manualTask) {
+                makeCellDraggable(cell, manualTask);
             }
         }
 
@@ -2339,95 +1456,40 @@
             });
         }
 
-        // ツールチップ表示（詳細版）
+        // ツールチップ表示
         function showTooltip(event, tasks) {
             const tooltip = document.getElementById('tooltip');
             
-            // チケットデータのみを対象とする
-            const ticketTasks = tasks.filter(task => !task.isManualEntry && !task.isUnassigned);
-            const manualTasks = tasks.filter(task => task.isManualEntry && !task.isAutoGenerated);
-            const tempAssignedTasks = tasks.filter(task => task.isTempAssigned);
-            
-            // 表示するタスクがない場合は何もしない
-            if (ticketTasks.length === 0 && tempAssignedTasks.length === 0) {
-                return;
-            }
-            
             let tooltipContent = '';
-            
-            // ヘッダー
-            const totalTickets = ticketTasks.length + tempAssignedTasks.length;
-            tooltipContent += `<div class="tooltip-header">📋 チケット情報 (${totalTickets}件)</div>`;
-            
-            // 仮アサインチケット
-            tempAssignedTasks.forEach((task, index) => {
+            tasks.forEach((task, index) => {
+                const hours = task.estimatedHours || 0;
                 tooltipContent += `
-                    <div class="tooltip-task temp-assigned">
-                        <div class="tooltip-title">🔄 ${task.title} (仮アサイン)</div>
+                    <div class="tooltip-task">
+                        <div class="tooltip-title">${task.title}</div>
                         <div class="tooltip-details">
-                            <div class="detail-row"><span class="detail-label">ID:</span> ${task.id}</div>
-                            <div class="detail-row"><span class="detail-label">時間:</span> ${task.estimatedHours}h</div>
-                            <div class="detail-row"><span class="detail-label">顧客:</span> ${task.customerName || '未設定'}</div>
-                            <div class="detail-row"><span class="detail-label">リモート:</span> ${task.remoteFlag || '未設定'}</div>
-                            <div class="detail-row"><span class="detail-label">優先度:</span> ${task.priority || '通常'}</div>
+                            ID: ${task.id} | 作業時間: ${hours}h<br>
+                            顧客: ${task.customerName || 'なし'} | リモート: ${task.remoteFlag || 'なし'}
                         </div>
                     </div>
                 `;
             });
-            
-            // アサイン済みチケット
-            ticketTasks.forEach((task, index) => {
-                const statusLabel = task.tsetStatus === '03.本アサイン' ? '本アサイン' : 
-                                   task.tsetStatus === '22.作業完全終了' ? '作業完了' : 
-                                   task.assignStatus || 'ステータス不明';
-                
-                const priorityIcon = task.priority === 'high' ? '🔴' : 
-                                   task.priority === 'medium' ? '🟡' : '🟢';
-                
-                tooltipContent += `
-                    <div class="tooltip-task ticket">
-                        <div class="tooltip-title">${priorityIcon} ${task.title}</div>
-                        <div class="tooltip-details">
-                            <div class="detail-row"><span class="detail-label">ID:</span> ${task.id}</div>
-                            <div class="detail-row"><span class="detail-label">ステータス:</span> ${statusLabel}</div>
-                            <div class="detail-row"><span class="detail-label">時間:</span> ${task.estimatedHours}h</div>
-                            <div class="detail-row"><span class="detail-label">顧客:</span> ${task.customerName || '未設定'}</div>
-                            <div class="detail-row"><span class="detail-label">リモート:</span> ${task.remoteFlag || '未設定'}</div>
-                            <div class="detail-row"><span class="detail-label">作成日:</span> ${task.createdDate || '未設定'}</div>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            // サマリー
-            const totalHours = [...ticketTasks, ...tempAssignedTasks].reduce((sum, task) => sum + (task.estimatedHours || 0), 0);
-            tooltipContent += `
-                <div class="tooltip-summary">
-                    💼 合計作業時間: ${totalHours}h | 💻 クリックでRedmineを開く
-                </div>
-            `;
             
             tooltip.innerHTML = tooltipContent;
             tooltip.classList.add('show');
             
             // ツールチップの位置調整
             const rect = event.target.getBoundingClientRect();
-            tooltip.style.left = `${rect.right + 15}px`;
+            tooltip.style.left = `${rect.right + 10}px`;
             tooltip.style.top = `${rect.top}px`;
             
             // 画面外に出る場合の調整
-            setTimeout(() => {
-                const tooltipRect = tooltip.getBoundingClientRect();
-                if (tooltipRect.right > window.innerWidth) {
-                    tooltip.style.left = `${rect.left - tooltipRect.width - 15}px`;
-                }
-                if (tooltipRect.bottom > window.innerHeight) {
-                    tooltip.style.top = `${rect.bottom - tooltipRect.height}px`;
-                }
-                if (tooltipRect.top < 0) {
-                    tooltip.style.top = '10px';
-                }
-            }, 10);
+            const tooltipRect = tooltip.getBoundingClientRect();
+            if (tooltipRect.right > window.innerWidth) {
+                tooltip.style.left = `${rect.left - tooltipRect.width - 10}px`;
+            }
+            if (tooltipRect.bottom > window.innerHeight) {
+                tooltip.style.top = `${rect.bottom - tooltipRect.height}px`;
+            }
         }
 
         // ツールチップ非表示
@@ -2461,157 +1523,293 @@
             document.getElementById('cancelledTasks').textContent = cancelledTasks;
         }
 
-        // 未アサインチケット表示を更新
-        function updateUnassignedTickets() {
-            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
-            const tasks = taskData[monthKey] || [];
+        // CSV読み込み機能
+        function getCSVFileNames() {
+            const today = new Date();
+            const possibleFileNames = [];
             
-            // 未アサインチケットを取得
-            const unassignedTasks = tasks.filter(task => task.isUnassigned && !task.worker);
-            
-            const unassignedContainer = document.getElementById('unassignedTickets');
-            const unassignedCount = document.getElementById('unassignedCount');
-            
-            unassignedCount.textContent = unassignedTasks.length;
-            unassignedContainer.innerHTML = '';
-            
-            if (unassignedTasks.length === 0) {
-                const emptyDiv = document.createElement('div');
-                emptyDiv.className = 'empty-unassigned';
-                emptyDiv.textContent = '未アサインのチケットはありません';
-                unassignedContainer.appendChild(emptyDiv);
-            } else {
-                unassignedTasks.forEach(task => {
-                    const ticketDiv = document.createElement('div');
-                    ticketDiv.className = 'unassigned-ticket';
-                    ticketDiv.draggable = true;
-                    
-                    const priorityBadge = task.priority === 'high' ? '!' : task.priority === 'medium' ? '●' : '○';
-                    
-                    ticketDiv.innerHTML = `
-                        <div class="unassigned-ticket-title">${task.title}</div>
-                        <div class="unassigned-ticket-details">${task.customerName} | ${task.estimatedHours}h</div>
-                        <div class="unassigned-ticket-badge">${priorityBadge}</div>
-                    `;
-                    
-                    // ドラッグイベント
-                    ticketDiv.addEventListener('dragstart', (e) => {
-                        draggedTask = task;
-                        ticketDiv.classList.add('dragging');
-                        e.dataTransfer.effectAllowed = 'move';
-                        e.dataTransfer.setData('text/plain', task.id);
-                    });
-                    
-                    ticketDiv.addEventListener('dragend', (e) => {
-                        ticketDiv.classList.remove('dragging');
-                        draggedTask = null;
-                    });
-                    
-                    // ツールチップ
-                    ticketDiv.title = `${task.title}\n顧客: ${task.customerName}\n作業時間: ${task.estimatedHours}時間\n優先度: ${task.priority}`;
-                    
-                    unassignedContainer.appendChild(ticketDiv);
-                });
-            }
-            
-            // 未アサインエリアをドロップ可能にする
-            makeUnassignedAreaDroppable();
-        }
-
-        // 未アサインエリアをドロップ可能にする
-        function makeUnassignedAreaDroppable() {
-            const unassignedContainer = document.getElementById('unassignedTickets');
-            
-            unassignedContainer.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                unassignedContainer.classList.add('drag-over');
-                e.dataTransfer.dropEffect = 'move';
-            });
-
-            unassignedContainer.addEventListener('dragleave', (e) => {
-                if (!unassignedContainer.contains(e.relatedTarget)) {
-                    unassignedContainer.classList.remove('drag-over');
-                }
-            });
-
-            unassignedContainer.addEventListener('drop', (e) => {
-                e.preventDefault();
-                unassignedContainer.classList.remove('drag-over');
+            for (let i = 0; i <= 7; i++) {
+                const targetDate = new Date(today);
+                targetDate.setDate(today.getDate() - i);
                 
-                if (draggedTask && draggedTask.worker) {
-                    // アサイン済みタスクを未アサインに戻す
-                    returnTaskToUnassigned(draggedTask);
+                const year = targetDate.getFullYear();
+                const month = String(targetDate.getMonth() + 1).padStart(2, '0');
+                const day = String(targetDate.getDate()).padStart(2, '0');
+                
+                possibleFileNames.push(`redmine_issues_${year}_${month}_${day}.csv`);
+            }
+            
+            possibleFileNames.push('redmine_issues_latest.csv');
+            
+            return possibleFileNames;
+        }
+
+        async function loadDataFromCSV() {
+            const possibleFileNames = getCSVFileNames();
+            
+            showNotification('CSVファイルを検索中...', 'info');
+            
+            for (const fileName of possibleFileNames) {
+                try {
+                    const csvUrl = `https://raw.githubusercontent.com/koshi7778/schedule-dashboard/main/${fileName}`;
+                    
+                    const response = await fetch(csvUrl);
+                    if (response.ok) {
+                        const csvText = await response.text();
+                        
+                        const result = Papa.parse(csvText, {
+                            header: true,
+                            skipEmptyLines: true,
+                            encoding: 'UTF-8'
+                        });
+                        
+                        if (result.errors.length > 0) {
+                            // エラーがあっても処理を続行
+                        }
+                        
+                        const tickets = transformCSVToTickets(result.data);
+                        const monthlyData = groupTicketsByMonth(tickets);
+                        
+                        taskData = monthlyData;
+                        
+                        generateTable();
+                        updateDailySchedule();
+                        
+                        showNotification(`${fileName} から ${tickets.length}件のチケットを読み込みました`, 'success');
+                        return;
+                        
+                    } else {
+                        // ファイルが見つからない場合はログを出力しない
+                    }
+                    
+                } catch (error) {
+                    // エラーの場合もログを出力しない
+                }
+            }
+            
+            showNotification('CSVファイルが見つかりません。', 'error');
+        }
+
+        // CSV変換関数
+        function transformCSVToTickets(csvData) {
+            const filteredData = csvData.filter(row => {
+                const assignStatus = row['TSETアサイン状態'] || '';
+                const tsetStatus = row['TSETステータス'] || '';
+                
+                const validAssignStatus = [
+                    'アサイン完了', '対応完了', '中止'
+                ].some(status => assignStatus.includes(status));
+                
+                const validTsetStatus = [
+                    '03.本アサイン', '22.作業完全終了', '80.キャンセル', 'キャンセル（依頼者都合）'
+                ].some(status => tsetStatus.includes(status));
+                
+                return validAssignStatus || validTsetStatus;
+            });
+            
+            // 作業日ごとにタスクを分割
+            const allTickets = [];
+            
+            filteredData.forEach(row => {
+                const assignedWorker = mapWorkerName(row['TSET作業者']);
+                
+                // 作業日①〜⑤をチェック
+                for (let i = 1; i <= 5; i++) {
+                    const dateField = `作業日${['①', '②', '③', '④', '⑤'][i-1]}`;
+                    const timeField = `作業日${['①', '②', '③', '④', '⑤'][i-1]}_時間`;
+                    
+                    const workDate = formatDate(row[dateField]);
+                    const workHours = parseFloat(row[timeField]) || 0;
+                    
+                    if (workDate && workHours > 0) {
+                        const ticket = {
+                            id: `RDM-${row['Issue ID']}-${i}`,
+                            title: row['Subject'] || 'タイトルなし',
+                            worker: assignedWorker,
+                            date: workDate,
+                            estimatedHours: workHours,
+                            description: `顧客: ${row['お客様名'] || 'なし'}\nリモート: ${row['リモート有無'] || 'なし'}`,
+                            redmineUrl: row['URL'] || '',
+                            customerName: row['お客様名'] || '',
+                            remoteFlag: row['リモート有無'] || '',
+                            tsetStatus: row['TSETステータス'] || '',
+                            assignStatus: row['TSETアサイン状態'] || '',
+                            createdDate: row['作成日'] || '',
+                            assignHopeDate: row['アサイン希望日'] || '',
+                            startDate: row['作業開始可能日'] || '',
+                            dueDate: row['作業完了期限日'] || '',
+                            taskType: determineTaskType(row['TSETアサイン状態'], row['Subject']),
+                            workTimeSlot: parseWorkTimeSlot(row[`作業日${['①', '②', '③', '④', '⑤'][i-1]}_時間`])
+                        };
+                        
+                        allTickets.push(ticket);
+                    }
+                }
+                
+                // 作業日が設定されていない場合のフォールバック
+                if (!hasAnyWorkDate(row)) {
+                    const fallbackDate = getFirstValidWorkDate(row);
+                    if (fallbackDate && assignedWorker) {
+                        const ticket = {
+                            id: `RDM-${row['Issue ID']}`,
+                            title: row['Subject'] || 'タイトルなし',
+                            worker: assignedWorker,
+                            date: fallbackDate,
+                            estimatedHours: calculateEstimatedHours(row),
+                            description: `顧客: ${row['お客様名'] || 'なし'}\nリモート: ${row['リモート有無'] || 'なし'}`,
+                            redmineUrl: row['URL'] || '',
+                            customerName: row['お客様名'] || '',
+                            remoteFlag: row['リモート有無'] || '',
+                            tsetStatus: row['TSETステータス'] || '',
+                            assignStatus: row['TSETアサイン状態'] || '',
+                            createdDate: row['作成日'] || '',
+                            assignHopeDate: row['アサイン希望日'] || '',
+                            startDate: row['作業開始可能日'] || '',
+                            dueDate: row['作業完了期限日'] || '',
+                            taskType: determineTaskType(row['TSETアサイン状態'], row['Subject'])
+                        };
+                        
+                        allTickets.push(ticket);
+                    }
                 }
             });
+            
+            return allTickets.filter(ticket => 
+                ticket.id !== 'RDM-' && 
+                ticket.title !== 'タイトルなし' && 
+                ticket.date && 
+                ticket.worker
+            );
         }
 
-        // タスクを未アサインに戻す
-        function returnTaskToUnassigned(task) {
-            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+        // 作業時間から時間帯を解析
+        function parseWorkTimeSlot(timeStr) {
+            if (!timeStr) return null;
             
-            // タスクのアサイン情報をクリア
-            task.worker = '';
-            task.date = '';
-            task.isUnassigned = true;
-            task.tsetStatus = '01.未アサイン';
-            task.assignStatus = '未アサイン';
-            task.isTempAssigned = false;
-            
-            generateTable();
-            updateUnassignedTickets();
-            showNotification(`${task.title}を未アサインに戻しました`, 'info');
-        }
-        function loadDataFromCSV() {
-            showNotification('デモ版では追加のサンプルデータを読み込みます', 'info');
-            
-            // 追加のデモデータを生成
-            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
-            if (!taskData[monthKey]) {
-                taskData[monthKey] = [];
-            }
-
-            const additionalTasks = [
-                { worker: '塚本 祐太', date: '2025-06-17', title: 'Webアプリケーション開発', hours: 8 },
-                { worker: '宮崎 仁', date: '2025-06-18', title: 'データベース設計', hours: 6 },
-                { worker: '山口 広生', date: '2025-06-19', title: 'API開発', hours: 4 },
-                { worker: '小泉 祐稀', date: '2025-06-20', title: 'フロントエンド実装', hours: 8 },
-                { worker: '小菅 祐馬', date: '2025-06-21', title: 'テスト実行', hours: 4 }
-            ];
-
-            additionalTasks.forEach((sample, index) => {
-                const task = {
-                    id: `CSV-DEMO-${Date.now()}-${index}`,
-                    title: sample.title,
-                    worker: sample.worker,
-                    date: sample.date,
-                    estimatedHours: sample.hours,
-                    description: `顧客: テスト株式会社\nリモート: なし`,
-                    taskType: 'work',
-                    redmineUrl: `https://example.com/redmine/issues/${100 + index}`,
-                    customerName: 'テスト株式会社',
-                    remoteFlag: 'なし',
-                    tsetStatus: '03.本アサイン',
-                    assignStatus: 'アサイン完了',
-                    createdDate: '2025-06-15',
-                    isManualEntry: false
+            // "16-18"のような形式を探す
+            const timeMatch = timeStr.match(/(\d+)-(\d+)/);
+            if (timeMatch) {
+                return {
+                    start: parseInt(timeMatch[1]),
+                    end: parseInt(timeMatch[2])
                 };
-                taskData[monthKey].push(task);
-            });
+            }
+            
+            return null;
+        }
 
-            generateTable();
-            updateDailySchedule();
-            showNotification(`${additionalTasks.length}件の追加サンプルデータを読み込みました`, 'success');
+        function hasAnyWorkDate(row) {
+            for (let i = 1; i <= 5; i++) {
+                const dateField = `作業日${['①', '②', '③', '④', '⑤'][i-1]}`;
+                const timeField = `作業日${['①', '②', '③', '④', '⑤'][i-1]}_時間`;
+                
+                const workDate = row[dateField];
+                const workHours = parseFloat(row[timeField]) || 0;
+                
+                if (workDate && workDate.trim() !== '' && workDate !== 'null' && workHours > 0) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function determineTaskType(assignStatus, subject) {
+            // CSVから読み込まれるタスクは全て work タイプとする
+            return 'work';
+        }
+
+        function mapWorkerName(csvWorkerName) {
+            if (!csvWorkerName || csvWorkerName === 'null' || csvWorkerName.trim() === '') {
+                return '';
+            }
+            
+            let cleanName = csvWorkerName.replace(/^TSET_[A-Z]_/, '');
+            
+            const matchedWorker = workers.find(worker => 
+                worker.includes(cleanName) || 
+                cleanName.includes(worker.replace(' ', '')) ||
+                worker.replace(' ', '').includes(cleanName.replace(' ', '')) ||
+                worker === cleanName
+            );
+            
+            return matchedWorker || cleanName;
+        }
+
+        function getFirstValidWorkDate(row) {
+            for (let i = 1; i <= 5; i++) {
+                const dateField = `作業日${['①', '②', '③', '④', '⑤'][i-1]}`;
+                const date = row[dateField];
+                if (date && date.trim() !== '' && date !== 'null') {
+                    return formatDate(date);
+                }
+            }
+            
+            return formatDate(row['アサイン希望日']) || 
+                   formatDate(row['作業開始可能日']) || 
+                   '';
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr || dateStr.trim() === '' || dateStr === 'null') {
+                return '';
+            }
+            
+            try {
+                const date = new Date(dateStr);
+                if (isNaN(date.getTime())) {
+                    return '';
+                }
+                return date.toISOString().split('T')[0];
+            } catch (error) {
+                return '';
+            }
+        }
+
+        function calculateEstimatedHours(row) {
+            let totalHours = 0;
+            
+            for (let i = 1; i <= 5; i++) {
+                const timeField = `作業日${['①', '②', '③', '④', '⑤'][i-1]}_時間`;
+                const timeStr = row[timeField];
+                
+                if (timeStr && timeStr.trim() !== '' && timeStr !== 'null') {
+                    const hours = parseFloat(timeStr.replace(/[^\d.]/g, ''));
+                    if (!isNaN(hours)) {
+                        totalHours += hours;
+                    }
+                }
+            }
+            
+            return totalHours || 4;
+        }
+
+        function groupTicketsByMonth(tickets) {
+            const monthlyData = {};
+            
+            tickets.forEach(ticket => {
+                if (ticket.date) {
+                    const monthKey = ticket.date.substring(0, 7);
+                    if (!monthlyData[monthKey]) {
+                        monthlyData[monthKey] = [];
+                    }
+                    monthlyData[monthKey].push(ticket);
+                }
+            });
+            
+            return monthlyData;
         }
 
         // 初期化
         document.addEventListener('DOMContentLoaded', function() {
             // 今日の月を初期表示に設定
             updateMonthDisplay();
-            generateDemoData(); // デモデータを生成
             generateTable();
             updateDailySchedule();
             
-            showNotification('デモ版が読み込まれました。セルをダブルクリックしてタスクを追加できます！', 'success');
+            // 1秒後にCSV自動読み込み
+            setTimeout(() => {
+                loadDataFromCSV();
+            }, 1000);
         });
     </script>
 </body>
