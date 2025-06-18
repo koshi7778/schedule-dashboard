@@ -269,17 +269,22 @@
             box-shadow: inset 0 0 0 1px #f0c419;
         }
 
+        /* セルの改良版 */
         .task-cell {
             cursor: pointer;
             position: relative;
             height: 30px;
-            font-size: 10px;
+            font-size: 11px;
             line-height: 1.2;
             background: white;
+            transition: all 0.2s ease;
         }
 
         .task-cell:hover {
-            background: #bee3f8 !important;
+            background: #e6f3ff !important;
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            z-index: 10;
         }
 
         .task-cell.editing {
@@ -290,6 +295,40 @@
         .task-cell.drag-over {
             background: #e6fffa !important;
             border: 2px dashed #38b2ac;
+        }
+
+        /* 作業量別の色分け改良 */
+        .workload-1 { 
+            background: #f0fff4 !important; 
+            color: #22543d !important;
+            border: 1px solid #c6f6d5;
+        }
+
+        .workload-2 { 
+            background: #fef5e7 !important; 
+            color: #744210 !important;
+            border: 1px solid #fed7aa;
+        }
+
+        .workload-3 { 
+            background: #fff5f5 !important; 
+            color: #742a2a !important;
+            border: 1px solid #fed7d7;
+        }
+
+        .workload-4 { 
+            background: #ffebee !important; 
+            color: #7f1d1d !important;
+            border: 1px solid #fca5a5;
+            font-weight: bold;
+        }
+
+        .workload-5-plus { 
+            background: #fce4ec !important; 
+            color: #881337 !important;
+            border: 2px solid #f687b3;
+            font-weight: bold;
+            box-shadow: 0 0 8px rgba(236, 72, 153, 0.3);
         }
 
         .planning-task {
@@ -338,8 +377,8 @@
 
         .task-count {
             font-weight: bold;
-            color: #2d3748;
-            font-size: 11px;
+            font-size: 12px;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
         }
 
         .task-type-label {
@@ -587,47 +626,102 @@
             font-style: italic;
         }
 
-        /* ツールチップ */
+        /* ツールチップの改良 */
         .tooltip {
-            position: absolute;
-            background: #1a202c;
+            position: fixed;
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
             color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 11px;
-            max-width: 300px;
+            padding: 16px 20px;
+            border-radius: 12px;
+            font-size: 12px;
+            max-width: 400px;
+            min-width: 280px;
             z-index: 1000;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.2s ease;
+            transition: all 0.3s ease;
+            border: 1px solid #4a5568;
         }
 
         .tooltip.show {
             opacity: 1;
+            pointer-events: auto;
+        }
+
+        .tooltip-header {
+            border-bottom: 2px solid #4a5568;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            font-weight: bold;
+            color: #68d391;
+            font-size: 13px;
         }
 
         .tooltip-task {
-            margin-bottom: 6px;
-            padding-bottom: 6px;
-            border-bottom: 1px solid #4a5568;
+            background: rgba(255, 255, 255, 0.05);
+            margin-bottom: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #3182ce;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tooltip-task:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-left-color: #68d391;
+            transform: translateX(3px);
         }
 
         .tooltip-task:last-child {
             margin-bottom: 0;
-            padding-bottom: 0;
-            border-bottom: none;
         }
 
         .tooltip-title {
             font-weight: 600;
             color: #68d391;
-            margin-bottom: 2px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            line-height: 1.4;
         }
 
         .tooltip-details {
-            font-size: 10px;
+            font-size: 11px;
             color: #cbd5e0;
+            line-height: 1.5;
+        }
+
+        .tooltip-time {
+            display: inline-block;
+            background: #3182ce;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .tooltip-hours {
+            display: inline-block;
+            background: #38a169;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .tooltip-click-hint {
+            text-align: center;
+            margin-top: 12px;
+            padding-top: 8px;
+            border-top: 1px solid #4a5568;
+            font-size: 10px;
+            color: #a0aec0;
+            font-style: italic;
         }
 
         /* 通知 */
@@ -1623,12 +1717,15 @@
             return matchingTasks;
         }
 
-        // セル内容をレンダリング（修正版）
+        // セル内容をレンダリング（色分け改良版）
         function renderCellContent(cell, tasks) {
             // セルをクリア
             cell.innerHTML = '';
             cell.style.backgroundColor = '';
             cell.style.color = '';
+            
+            // 既存のworkloadクラスを削除
+            cell.classList.remove('workload-1', 'workload-2', 'workload-3', 'workload-4', 'workload-5-plus');
             
             if (tasks.length === 0) {
                 return;
@@ -1676,13 +1773,38 @@
                 }
             } else if (ticketTasks.length > 0) {
                 // 手動タスクがない場合のみチケット件数を表示
+                const taskCount = ticketTasks.length;
+                
+                // 作業量に応じた色分け
+                if (taskCount === 1) {
+                    cell.classList.add('workload-1');
+                } else if (taskCount === 2) {
+                    cell.classList.add('workload-2');
+                } else if (taskCount === 3) {
+                    cell.classList.add('workload-3');
+                } else if (taskCount === 4) {
+                    cell.classList.add('workload-4');
+                } else {
+                    cell.classList.add('workload-5-plus');
+                }
+                
                 const countDiv = document.createElement('div');
                 countDiv.className = 'task-count';
-                countDiv.textContent = ticketTasks.length;
-                countDiv.style.fontSize = '11px';
-                countDiv.style.fontWeight = 'bold';
-                countDiv.style.color = '#2d3748';
-                countDiv.title = 'ダブルクリックで手動タスクを追加 | チケット詳細はツールチップで確認';
+                countDiv.textContent = taskCount;
+                
+                // 総作業時間を計算して表示
+                const totalHours = ticketTasks.reduce((sum, task) => sum + (task.estimatedHours || 0), 0);
+                if (totalHours > 0) {
+                    const hoursDiv = document.createElement('div');
+                    hoursDiv.style.fontSize = '8px';
+                    hoursDiv.style.fontWeight = 'normal';
+                    hoursDiv.style.opacity = '0.8';
+                    hoursDiv.textContent = `${totalHours}h`;
+                    countDiv.appendChild(document.createElement('br'));
+                    countDiv.appendChild(hoursDiv);
+                }
+                
+                countDiv.title = 'ダブルクリックで手動タスクを追加 | ホバーでチケット詳細を確認';
                 cell.appendChild(countDiv);
             }
         }
@@ -1730,46 +1852,90 @@
             });
         }
 
-        // ツールチップ表示
+        // ツールチップ表示（改良版）
         function showTooltip(event, tasks) {
             const tooltip = document.getElementById('tooltip');
             
-            let tooltipContent = '';
+            if (tasks.length === 0) return;
+            
+            // ヘッダー作成
+            let tooltipContent = `<div class="tooltip-header">📋 作業予定 (${tasks.length}件)</div>`;
+            
+            // 各タスクの情報を表示
             tasks.forEach((task, index) => {
                 const hours = task.estimatedHours || 0;
+                const timeInfo = task.originalTimeString || '';
+                const customerInfo = task.customerName || 'なし';
+                const remoteInfo = task.remoteFlag || 'なし';
+                const redmineUrl = task.redmineUrl || '';
+                
+                // タスクタイトルを短縮（長すぎる場合）
+                let shortTitle = task.title;
+                if (shortTitle.length > 60) {
+                    shortTitle = shortTitle.substring(0, 57) + '...';
+                }
+                
                 tooltipContent += `
-                    <div class="tooltip-task">
-                        <div class="tooltip-title">${task.title}</div>
+                    <div class="tooltip-task" data-url="${redmineUrl}" onclick="openRedmineTicket('${redmineUrl}')">
+                        <div class="tooltip-title">${shortTitle}</div>
                         <div class="tooltip-details">
-                            ID: ${task.id} | 作業時間: ${hours}h<br>
-                            顧客: ${task.customerName || 'なし'} | リモート: ${task.remoteFlag || 'なし'}
+                            ${timeInfo ? `<span class="tooltip-time">${timeInfo}</span>` : ''}
+                            ${hours > 0 ? `<span class="tooltip-hours">${hours}h</span>` : ''}
+                            <br>
+                            <strong>ID:</strong> ${task.id}<br>
+                            <strong>顧客:</strong> ${customerInfo}<br>
+                            <strong>リモート:</strong> ${remoteInfo}
+                            ${task.assignStatus ? `<br><strong>状態:</strong> ${task.assignStatus}` : ''}
                         </div>
                     </div>
                 `;
             });
+            
+            // クリック案内を追加
+            const hasRedmineLinks = tasks.some(task => task.redmineUrl);
+            if (hasRedmineLinks) {
+                tooltipContent += '<div class="tooltip-click-hint">🔗 クリックでRedmineチケットを開く</div>';
+            }
             
             tooltip.innerHTML = tooltipContent;
             tooltip.classList.add('show');
             
             // ツールチップの位置調整
             const rect = event.target.getBoundingClientRect();
-            tooltip.style.left = `${rect.right + 10}px`;
+            tooltip.style.left = `${rect.right + 15}px`;
             tooltip.style.top = `${rect.top}px`;
             
             // 画面外に出る場合の調整
-            const tooltipRect = tooltip.getBoundingClientRect();
-            if (tooltipRect.right > window.innerWidth) {
-                tooltip.style.left = `${rect.left - tooltipRect.width - 10}px`;
-            }
-            if (tooltipRect.bottom > window.innerHeight) {
-                tooltip.style.top = `${rect.bottom - tooltipRect.height}px`;
+            setTimeout(() => {
+                const tooltipRect = tooltip.getBoundingClientRect();
+                if (tooltipRect.right > window.innerWidth) {
+                    tooltip.style.left = `${rect.left - tooltipRect.width - 15}px`;
+                }
+                if (tooltipRect.bottom > window.innerHeight) {
+                    tooltip.style.top = `${rect.bottom - tooltipRect.height}px`;
+                }
+                if (tooltipRect.top < 0) {
+                    tooltip.style.top = `${rect.bottom + 10}px`;
+                }
+            }, 10);
+        }
+
+        // Redmineチケットを開く関数
+        function openRedmineTicket(url) {
+            if (url && url.trim() !== '') {
+                window.open(url, '_blank');
+                hideTooltip(); // ツールチップを非表示
             }
         }
 
-        // ツールチップ非表示
+        // ツールチップ非表示（改良版）
         function hideTooltip() {
             const tooltip = document.getElementById('tooltip');
             tooltip.classList.remove('show');
+            // ツールチップ内のクリックイベントをクリア
+            setTimeout(() => {
+                tooltip.innerHTML = '';
+            }, 300);
         }
 
         // 統計更新
