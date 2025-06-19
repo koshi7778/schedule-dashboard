@@ -1852,7 +1852,7 @@
             });
         }
 
-        // ツールチップ表示（改良版）
+// ツールチップ表示（修正版）
         function showTooltip(event, tasks) {
             const tooltip = document.getElementById('tooltip');
             
@@ -1868,24 +1868,25 @@
                 const customerInfo = task.customerName || 'なし';
                 const remoteInfo = task.remoteFlag || 'なし';
                 const redmineUrl = task.redmineUrl || '';
+                const assignStatus = task.assignStatus || task.tsetStatus || 'なし';
                 
                 // タスクタイトルを短縮（長すぎる場合）
                 let shortTitle = task.title;
-                if (shortTitle.length > 60) {
-                    shortTitle = shortTitle.substring(0, 57) + '...';
+                if (shortTitle.length > 40) {
+                    shortTitle = shortTitle.substring(0, 37) + '...';
                 }
                 
                 tooltipContent += `
-                    <div class="tooltip-task" data-url="${redmineUrl}" onclick="openRedmineTicket('${redmineUrl}')">
+                    <div class="tooltip-task" data-url="${redmineUrl}" onclick="event.stopPropagation(); openRedmineTicket('${redmineUrl}')">
                         <div class="tooltip-title">${shortTitle}</div>
                         <div class="tooltip-details">
                             ${timeInfo ? `<span class="tooltip-time">${timeInfo}</span>` : ''}
                             ${hours > 0 ? `<span class="tooltip-hours">${hours}h</span>` : ''}
                             <br>
-                            <strong>ID:</strong> ${task.id}<br>
+                            <strong>作業者:</strong> ${task.worker}<br>
                             <strong>顧客:</strong> ${customerInfo}<br>
-                            <strong>リモート:</strong> ${remoteInfo}
-                            ${task.assignStatus ? `<br><strong>状態:</strong> ${task.assignStatus}` : ''}
+                            <strong>リモート:</strong> ${remoteInfo}<br>
+                            <strong>状態:</strong> ${assignStatus}
                         </div>
                     </div>
                 `;
@@ -1894,11 +1895,12 @@
             // クリック案内を追加
             const hasRedmineLinks = tasks.some(task => task.redmineUrl);
             if (hasRedmineLinks) {
-                tooltipContent += '<div class="tooltip-click-hint">🔗 クリックでRedmineチケットを開く</div>';
+                tooltipContent += '<div class="tooltip-click-hint">🔗 リンクをクリックでRedmineチケットを開く</div>';
             }
             
             tooltip.innerHTML = tooltipContent;
             tooltip.classList.add('show');
+            tooltip.setAttribute('data-fixed', 'false');
             
             // ツールチップの位置調整
             const rect = event.target.getBoundingClientRect();
@@ -1919,7 +1921,6 @@
                 }
             }, 10);
         }
-
         // Redmineチケットを開く関数
         function openRedmineTicket(url) {
             if (url && url.trim() !== '') {
