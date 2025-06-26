@@ -155,10 +155,10 @@ Issue ID,TSET作業者,Subject,作業日①,作業日①_時間,作業日②,作
 369333,TSET_K_木暮 誉貴,【@SP】会計共通： 【CTU各位】ACデータログ取得依頼_Classic：コネクシオ様【重要度中】,2025-06-30,10-12,,,,,,,,,アサイン完了,,2025-06-19,2025-06-25,,,コネクシオ株式会社様,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/369333
 352740,TSET_K_木暮 誉貴,【重要度：中】日本無線様：環境同期依頼（本番⇒テスト) 2025/07/03（木）,2025-07-03,終日,,,,,,,,,,03.本アサイン,2025-01-10,2025-06-02,,,日本無線株式会社,Classic_共有端末,http://achyperopi-prod.internal.worksap.com/redmine/issues/352740
 369224,TSET_K_木暮 誉貴,【AC】【株式会社サンエス様】環境同期依頼（本番環境→テスト環境）,2025-07-09,終日,,,,,,,,,,03.本アサイン,2025-06-18,2025-06-25,,,株式会社サンエス,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369224
-356006,TSET_K_木暮 誉貴,【@SP】プロダクト以外： 【CTU各位】ACデータログ取得依頼_Classic：共同印刷様【重要度中】,2025-02-18,10-12,,,,,,,,,対応完了,,2025-02-12,2025-02-14,,,共同印刷株式会社様,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/356006
 356487,TSET_K_木暮 誉貴,【@SP】CAM： 【CTU各位】ACデータログ取得依頼_Classic：株式会社ジェイテクト様【重要度中】,2025-02-19,10-12,,,,,,,,,対応完了,,2025-02-17,2025-02-20,,,株式会社ジェイテクト（AC/Ariel）様,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/356487
-357103,TSET_K_木暮 誉貴,【@SP】プロダクト以外： 【CTU各位】ACデータログ取得依頼：株式会社サンエー様【重要度中】,2025-02-26,12-14,,,,,,,,,対応完了,,2025-02-21,2025-02-26,,,株式会社サンエー様,Classic_共有端末,http://achyperopi-prod.internal.worksap.com/redmine/issues/357103
 356270,TSET_K_木暮 誉貴,送別会,2025-02-25,"18-20, 20-22",2025-06-30,"18-20, 20-22",,,,,,,休暇/MTG/その他,,2025-02-14,,,,,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/356270
+356006,TSET_K_木暮 誉貴,【@SP】プロダクト以外： 【CTU各位】ACデータログ取得依頼_Classic：共同印刷様【重要度中】,2025-02-18,10-12,,,,,,,,,対応完了,,2025-02-12,2025-02-14,,,共同印刷株式会社様,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/356006
+357103,TSET_K_木暮 誉貴,【@SP】プロダクト以外： 【CTU各位】ACデータログ取得依頼：株式会社サンエー様【重要度中】,2025-02-26,12-14,,,,,,,,,対応完了,,2025-02-21,2025-02-26,,,株式会社サンエー様,Classic_共有端末,http://achyperopi-prod.internal.worksap.com/redmine/issues/357103
 368576,TSET_S_佐治 友里子,【@SP】HUE Purchase： 【CTU各位】HUE-PUデータログ取得依頼：小島プレス工業様【重要度中】,,,,,,,,,,,中止,,2025-06-12,2025-06-12,,,小島プレス工業株式会社様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/368576
 299511,TSET_S_佐治 友里子,【@SP】CSA： 【CTU各位】SCM都度依頼：JAT様【重要度中】DBメンテナンス（9/12実施）,2023-09-12,"18-20, 20-22",,,,,,,,,対応完了,,2023-08-24,2023-09-06,,,日本空港ビルデング株式会社様,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/299511
 330582,TSET_S_佐治 友里子,【@SP】プロダクト以外： 【CTU各位】端末返却依頼：日本曹達株式会社様【重要度中】,2024-06-05,10-12,,,,,,,,,中止,,2024-05-30,2024-06-07,,,日本曹達株式会社（AC）様,157,http://achyperopi-prod.internal.worksap.com/redmine/issues/330582
@@ -171,9 +171,9 @@ Issue ID,TSET作業者,Subject,作業日①,作業日①_時間,作業日②,作
 337179,TSET_S_佐治 友里子,【@SP】HUE Expense： 【CTU各位】HUE-ACデータログ取得依頼：石油資源開発様【重要度中】,2024-08-05,10-12,,,,,,,,,中止,,2024-07-31,2024-08-02,,,石油資源開発株式会社様,167,http://achyperopi-prod.internal.worksap.com/redmine/issues/337179
 342536,TSET_S_佐治 友里子,【@SP】プロダクト以外： 【CTU各位】AC都度依頼：SOMPOケア様【重要度中】,2024-10-03,20-22,,,,,,,,,中止,,2024-09-27,,,,SOMPOケア株式会社様,161,http://achyperopi-prod.internal.worksap.com/redmine/issues/342536
 342534,TSET_S_佐治 友里子,【@SP】プロダクト以外： 【CTU各位】AC設定ファイル関連依頼_Classic：SOMPOケア様【重要度中】,2024-10-03,20-22,,,,,,,,,中止,,2024-09-27,2024-09-30,,,SOMPOケア株式会社様,161,http://achyperopi-prod.internal.worksap.com/redmine/issues/342534
-343662,TSET_S_佐治 友里子,【@SP】CSA： 【CTU各位】SCMデータログ取得依頼：アールエム東セロ様【重要度高】,2024-10-08,,,,,,,,,,対応完了,,2024-10-08,2024-10-08,,,アールエム東セロ株式会社様,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/343662
 344925,TSET_S_佐治 友里子,【@SP】プロダクト以外： 【CTU各位】HUE-ACデータログ取得依頼：株式会社フォレストホールディングス【重要度中】,2024-10-23,12-14,,,,,,,,,中止,,2024-10-22,2024-10-23,,,株式会社フォレストホールディングス様,167,http://achyperopi-prod.internal.worksap.com/redmine/issues/344925
 345617,TSET_S_佐治 友里子,【@SP】CCO： 【CTU各位】SCMデータログ取得依頼_Classic：フジミ様【重要度低】,2024-10-29,12-14,,,,,,,,,中止,,2024-10-28,2024-10-29,,,株式会社フジミインコーポレーテッド様,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/345617
+343662,TSET_S_佐治 友里子,【@SP】CSA： 【CTU各位】SCMデータログ取得依頼：アールエム東セロ様【重要度高】,2024-10-08,,,,,,,,,,対応完了,,2024-10-08,2024-10-08,,,アールエム東セロ株式会社様,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/343662
 347408,TSET_S_佐治 友里子,送別会,2024-11-28,"14-16, 16-18, 18-20, 20-22",2024-11-29,10-12,2025-02-25,"18-20, 20-22",2025-06-30,"18-20, 20-22",,,休暇/MTG/その他,,2024-11-15,,,,,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/347408
 347265,TSET_S_佐治 友里子,【伊藤忠商事株式会社様】環境同期依頼（本番環境→検証環境）,2024-12-06,終日,,,,,,,,,,22.作業完全終了,2024-11-14,2024-11-22,,,伊藤忠商事株式会社様,157,http://achyperopi-prod.internal.worksap.com/redmine/issues/347265
 350068,TSET_S_佐治 友里子,【@SP】CCO： 【CTU各位】SCM都度依頼_Classic：ICTマテリア様【重要度中】自動統計取得スケジュール変更,2024-12-12,16-18,,,,,,,,,対応完了,,2024-12-10,,,,アールエム東セロ株式会社様,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/350068
@@ -312,11 +312,11 @@ Issue ID,TSET作業者,Subject,作業日①,作業日①_時間,作業日②,作
 366119,TSET_S_佐治 友里子,【@SP】プロダクト以外： 【CTU各位】AC都度依頼：三井不動産リアルティ株式会社【重要度中】,2025-07-01,10-12,,,,,,,,,アサイン完了,,2025-05-21,,,,三井不動産リアルティ株式会社様,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/366119
 366449,TSET_S_佐治 友里子,フジミインコーポレーテッド様 SCM本番環境_サバリプ,2025-07-04,終日,2025-07-07,終日,2025-07-08,終日,2025-07-09,終日,2025-07-10,終日,,03.本アサイン,2025-05-23,2025-06-13,,,フジミインコーポレーテッド様,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/366449
 365774,TSET_S_佐治 友里子,【依頼】2025-07月PTF適用テスト,2025-07-22,終日,2025-07-23,終日,,,,,,,,03.本アサイン,2025-05-19,2025-06-20,,,,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/365774
+341956,TSET_K_小菅 祐馬,【@SP】CBM： 【CTU各位】ACデータ更新依頼：株式会社ヤナセ様【重要度高】,2024-09-27,14-16,,,,,,,,,中止,,2024-09-24,2024-09-27,,,株式会社ヤナセ様,161,http://achyperopi-prod.internal.worksap.com/redmine/issues/341956
 340052,TSET_K_小菅 祐馬,【@SP】CBM： 【CTU各位】ACデータログ取得依頼：蝶理様【重要度高】,2024-09-03,12-14,,,,,,,,,対応完了,,2024-09-02,2024-09-03,,,蝶理株式会社様,157,http://achyperopi-prod.internal.worksap.com/redmine/issues/340052
 343818,TSET_K_小菅 祐馬,【@SP】HUE Financials & Str： 【CTU各位】HUE-ACデータログ取得依頼：RYONDEN様【重要度中】,2024-10-10,12-14,,,,,,,,,中止,,2024-10-09,2024-10-10,,,株式会社RYODEN様,167,http://achyperopi-prod.internal.worksap.com/redmine/issues/343818
 343689,TSET_K_小菅 祐馬,【@SP】CBM： 【CTU各位】ACデータログ取得依頼：エクソル様【重要度中】,2024-10-10,12-14,,,,,,,,,中止,,2024-10-08,2024-10-10,,,株式会社エクソル様,163,http://achyperopi-prod.internal.worksap.com/redmine/issues/343689
 346695,TSET_K_小菅 祐馬,【@SP】CFM： 【CTU各位】ACデータ更新依頼_Classic：トーシンパートナーズ様【重要度高】,2024-11-11,12-14,,,,,,,,,対応完了,,2024-11-08,2024-11-08,,,株式会社トーシンパートナーズ様,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/346695
-341956,TSET_K_小菅 祐馬,【@SP】CBM： 【CTU各位】ACデータ更新依頼：株式会社ヤナセ様【重要度高】,2024-09-27,14-16,,,,,,,,,中止,,2024-09-24,2024-09-27,,,株式会社ヤナセ様,161,http://achyperopi-prod.internal.worksap.com/redmine/issues/341956
 347551,TSET_K_小菅 祐馬,【重要度中】カワチ薬品様_表領域拡張依頼（本番環境）,2024-11-20,14-16,,,,,,,,,,22.作業完全終了,2024-11-18,2024-11-25,,,株式会社カワチ薬品,169,http://achyperopi-prod.internal.worksap.com/redmine/issues/347551
 348590,TSET_K_小菅 祐馬,【@SP】CBM： 【CTU各位】ACリモート作業同席依頼_Classic：株式会社ジェイテクト（AC/Ariel）【重要度高】,2024-11-27,12-14,,,,,,,,,対応完了,,2024-11-26,2024-11-27,,,株式会社ジェイテクト（AC/Ariel）様,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/348590
 347411,TSET_K_小菅 祐馬,送別会,2024-11-28,"14-16, 16-18, 18-20, 20-22",2024-11-29,10-12,2025-02-25,"18-20, 20-22",2025-06-30,"18-20, 20-22",,,休暇/MTG/その他,,2024-11-15,,,,,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/347411
@@ -447,9 +447,9 @@ Issue ID,TSET作業者,Subject,作業日①,作業日①_時間,作業日②,作
 368096,TSET_K_小菅 祐馬,【@SP】プロダクト以外： 【CTU各位】AC 都度依頼：桜美林学園様【重要度中】　2025年7月分,2025-07-01,18-20,,,,,,,,,アサイン完了,,2025-06-09,2025-06-27,,,学校法人桜美林学園様,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/368096
 369024,TSET_K_小菅 祐馬,私用(17:00退社),2025-07-04,"16-18, 18-20, 20-22",,,,,,,,,休暇/MTG/その他,,2025-06-17,,,,,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/369024
 368157,TSET_K_小菅 祐馬,【環境同期依頼】東急エージェンシー様【本番⇒検証A環境】【重要度中】,2025-07-10,終日,2025-07-11,"10-12, 12-14",,,,,,,,03.本アサイン,2025-06-09,2025-06-13,,,株式会社東急エージェンシー,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/368157
-338153,TSET_U_有働 麻耶,【@SP】プロダクト以外： 【CTU各位】CPMデータ更新依頼：小島プレス工業様（本番環境）【重要度高】,2024-08-23,,,,,,,,,,中止,,2024-08-09,2024-08-23,,,小島プレス工業株式会社様,167,http://achyperopi-prod.internal.worksap.com/redmine/issues/338153
 337089,TSET_U_有働 麻耶,【@SP】CPM： 【CTU各位】AC都度依頼：オリエンタルモーター様【重要度中】,2024-08-02,"12-14, 14-16",,,,,,,,,中止,,2024-07-31,,,,オリエンタルモーター株式会社様,159,http://achyperopi-prod.internal.worksap.com/redmine/issues/337089
 341491,TSET_U_有働 麻耶,【本田技研工業様】【PU】Production環境への暫定適用依頼,2024-09-24,"18-20, 20-22",,,,,,,,,,22.作業完全終了,2024-09-17,2024-09-24,,,本田技研工業様,167,http://achyperopi-prod.internal.worksap.com/redmine/issues/341491
+338153,TSET_U_有働 麻耶,【@SP】プロダクト以外： 【CTU各位】CPMデータ更新依頼：小島プレス工業様（本番環境）【重要度高】,2024-08-23,,,,,,,,,,中止,,2024-08-09,2024-08-23,,,小島プレス工業株式会社様,167,http://achyperopi-prod.internal.worksap.com/redmine/issues/338153
 344556,TSET_U_有働 麻耶,【@SP】HUE Expense： 【CTU各位】HUE-EXデータログ取得依頼：株式会社明治様【重要度中】,2024-10-18,16-18,,,,,,,,,中止,,2024-10-17,,,,株式会社明治様,169,http://achyperopi-prod.internal.worksap.com/redmine/issues/344556
 347708,TSET_U_有働 麻耶,【学校法人共立女子学園様】【Develop環境】暫定適用依頼（AC）※VerUpに伴うスライド暫定適用,2024-11-25,"12-14, 14-16",,,,,,,,,,22.作業完全終了,2024-11-18,2024-11-20,,,学校法人　共立女子学園様,157,http://achyperopi-prod.internal.worksap.com/redmine/issues/347708
 350174,TSET_U_有働 麻耶,【@SP】HUE AC-COMMON： 【CTU各位】HUE-EXデータログ取得依頼：株式会社ＮＳＤ様【重要度高】,2024-12-12,10-12,,,,,,,,,対応完了,,2024-12-11,2024-12-11,,,株式会社ＮＳＤ様,HUE(ACESオンプレ)_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/350174
@@ -577,12 +577,12 @@ Issue ID,TSET作業者,Subject,作業日①,作業日①_時間,作業日②,作
 366590,TSET_U_有働 麻耶,【日本空港ビルデング株式会社様】ACテスト環境PTF適用（2025年07月PTF）,2025-07-08,終日,2025-07-09,終日,2025-07-10,終日,,,,,,03.本アサイン,2025-05-26,2025-06-02,,,日本空港ビルデング株式会社,Classic_CCMS,http://achyperopi-prod.internal.worksap.com/redmine/issues/366590
 366593,TSET_U_有働 麻耶,【日本空港ビルデング株式会社様】CREテスト環境PTF適用（2025年07月PTF）,2025-07-08,終日,2025-07-09,終日,2025-07-10,終日,,,,,,03.本アサイン,2025-05-26,2025-06-02,,,日本空港ビルデング株式会社,Classic_CCMS,http://achyperopi-prod.internal.worksap.com/redmine/issues/366593
 363116,TSET_U_有働 麻耶,【PTF適用】フクダ電子様 25年7月（本番環境）,2025-07-20,終日,2025-07-21,終日,,,,,,,,03.本アサイン,2025-04-17,2025-06-13,,,フクダ電子株式会社,Classic_顧客端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/363116
-347602,TSET_S_末廣 太一,【@SP】HUE APAR： 【CTU各位】ACデータログ取得依頼：株式会社RYODEN様【重要度中】,2024-11-19,12-14,,,,,,,,,中止,,2024-11-18,,,,株式会社RYODEN様,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/347602
+347581,TSET_S_末廣 太一,【@SP】HUE APAR： 【CTU各位】HUE-ACデータログ取得依頼：株式会社RYODEN様【重要度中】,2024-11-19,12-14,,12-14,,,,,,,中止,,2024-11-18,,,,株式会社RYODEN様,167,http://achyperopi-prod.internal.worksap.com/redmine/issues/347581
 349721,TSET_S_末廣 太一,【@SP】CBM： 【CTU各位】ACデータ更新依頼_Classic：東急エージェンシー様【重要度高】,2024-12-06,14-16,,,,,,,,,中止,,2024-12-05,2024-12-06,,,株式会社東急エージェンシー様,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/349721
 349936,TSET_S_末廣 太一,【@SP】CBM： 【CTU各位】ACデータ更新依頼_Classic：共同印刷株式会社様【重要度中】,2024-12-13,10-12,,,,,,,,,対応完了,,2024-12-09,2024-12-12,,,共同印刷株式会社様,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/349936
 350349,TSET_S_末廣 太一,【@SP】HUE Treasury： 【CTU各位】HUE-ACデータログ取得依頼：RYODEN様【重要度中】,2024-12-13,14-16,,,,,,,,,中止,,2024-12-12,2024-12-12,,,株式会社RYODEN様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/350349
 354089,TSET_S_末廣 太一,【@SP】プロダクト以外： 【CTU各位】HUE-ACデータログ取得依頼：TOPPAN様【重要度中】,2025-01-29,16-18,,,,,,,,,対応完了,,2025-01-24,2025-01-27,,,TOPPAN株式会社様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/354089
-347581,TSET_S_末廣 太一,【@SP】HUE APAR： 【CTU各位】HUE-ACデータログ取得依頼：株式会社RYODEN様【重要度中】,2024-11-19,12-14,,12-14,,,,,,,中止,,2024-11-18,,,,株式会社RYODEN様,167,http://achyperopi-prod.internal.worksap.com/redmine/issues/347581
+347602,TSET_S_末廣 太一,【@SP】HUE APAR： 【CTU各位】ACデータログ取得依頼：株式会社RYODEN様【重要度中】,2024-11-19,12-14,,,,,,,,,中止,,2024-11-18,,,,株式会社RYODEN様,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/347602
 347548,TSET_S_末廣 太一,【@SP】CBM： 【CTU各位】ACデータログ取得依頼：日本ハウズイング株式会社様 【重要度中】,2024-11-19,10-12,,,,,,,,,中止,,2024-11-18,2024-11-18,,,日本ハウズイング株式会社様,157,http://achyperopi-prod.internal.worksap.com/redmine/issues/347548
 348226,TSET_S_末廣 太一,【@SP】HUE APAR： 【CTU各位】HUE-ACデータログ取得依頼：フォレストホールディングス様【重要度中】,2024-11-26,16-18,,,,,,,,,対応完了,,2024-11-22,2024-11-25,,,株式会社フォレストホールディングス様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/348226
 355996,TSET_S_末廣 太一,【@SP】会計共通： 【CTU各位】ACデータ更新依頼_Classic：三井住友ファイナンス&リース様【重要度中】,2025-02-21,16-18,,,,,,,,,対応完了,,2025-02-12,2025-02-14,,,三井住友ファイナンス＆リース株式会社様,Classic_訪問(東京),http://achyperopi-prod.internal.worksap.com/redmine/issues/355996
@@ -705,8 +705,8 @@ Issue ID,TSET作業者,Subject,作業日①,作業日①_時間,作業日②,作
 370125,TSET_S_末廣 太一,サンエー様【本番環境】PTF適用104102(369920)事前準備,2025-07-03,"10-12, 12-14, 14-16",2025-07-04,"10-12, 12-14",,,,,,,アサイン完了,,2025-06-26,,,,,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/370125
 357240,TSET_S_末廣 太一,サンエー様【本番環境】PTF適用104102(369920),2025-07-06,終日,,,,,,,,,,03.本アサイン,2025-02-25,2025-06-02,,,株式会社サンエー,Classic_共有端末,http://achyperopi-prod.internal.worksap.com/redmine/issues/357240
 326187,TSET_M_松岡 隼,【@SP】プロダクト以外： 【CTU各位】AC 都度依頼：桜美林学園様【重要度中】,2024-04-19,18-20,,,,,,,,,対応完了,,2024-04-15,,,,学校法人桜美林学園様,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/326187
-330621,TSET_M_松岡 隼,【太陽生命保険様】PTF（本番環境、AC、369914→369918）,2024-09-07,終日,2024-09-08,終日,,,,,,,,22.作業完全終了,2024-05-30,2024-08-23,,,太陽生命保険株式会社,165,http://achyperopi-prod.internal.worksap.com/redmine/issues/330621
 330623,TSET_M_松岡 隼,【太陽生命保険様】PTF（テスト1環境、CRE、135102→137100）,2024-07-29,終日,2024-07-30,終日,,,,,,,,22.作業完全終了,2024-05-30,2024-07-12,,,太陽生命保険株式会社,165,http://achyperopi-prod.internal.worksap.com/redmine/issues/330623
+330621,TSET_M_松岡 隼,【太陽生命保険様】PTF（本番環境、AC、369914→369918）,2024-09-07,終日,2024-09-08,終日,,,,,,,,22.作業完全終了,2024-05-30,2024-08-23,,,太陽生命保険株式会社,165,http://achyperopi-prod.internal.worksap.com/redmine/issues/330621
 346459,TSET_M_松岡 隼,【CPM】【オリエンタルモーター様】【新本番環境】暫定適用依頼,2024-11-15,"10-12, 12-14",,,,,,,,,,22.作業完全終了,2024-11-06,2024-11-08,,,オリエンタルモーター株式会社様,159,http://achyperopi-prod.internal.worksap.com/redmine/issues/346459
 346351,TSET_M_松岡 隼,【@SP】CPM： 【CTU各位】CPMデータ更新依頼：プレス工業様【重要度中】本番環境,2024-11-19,12-14,,,,,,,,,中止,,2024-11-05,2024-11-08,,,プレス工業株式会社様,159,http://achyperopi-prod.internal.worksap.com/redmine/issues/346351
 347286,TSET_M_松岡 隼,【@SP】会計共通： 【CTU各位】ACデータ更新依頼_Classic：ニフティ様【重要度中】,2024-11-21,,,,,,,,,,対応完了,,2024-11-14,2024-11-20,,,ニフティ株式会社様,161,http://achyperopi-prod.internal.worksap.com/redmine/issues/347286
@@ -824,8 +824,8 @@ Issue ID,TSET作業者,Subject,作業日①,作業日①_時間,作業日②,作
 360715,TSET_M_松岡 隼,【アンダーツリー様】_本番環境_2025年4月PTF_104103（369921）,2025-07-09,終日,2025-07-10,終日,,,,,,,,03.本アサイン,2025-03-28,2025-06-16,,,アンダーツリー株式会社様,Classic_特殊端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/360715
 360718,TSET_M_松岡 隼,【アンダーツリー様】_ミラー環境_2025年4月PTF_104103（369921）,2025-07-17,終日,2025-07-18,終日,,,,,,,,03.本アサイン,2025-03-28,2025-06-13,,,アンダーツリー株式会社様,Classic_特殊端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/360718
 364896,TSET_T_竹田 愛美,【AC】【SOMPOケア株式会社様】【テスト・バージョンアップ環境】DBサーバーファイル整理依頼【重要度：中】,,,,,,,,,,,,22.作業完全終了,2025-05-09,,,,SOMPOケア株式会社,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/364896
-362544,TSET_T_竹田 愛美,【@SP】HUE Purchase： 【CTU各位】HUE-PUデータログ取得依頼：本田技研工業様【重要度高】,,,,,,,,,,,中止,,2025-04-14,2025-04-14,,,本田技研工業株式会社様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/362544
 364901,TSET_T_竹田 愛美,【AC】【SOMPOケア株式会社様】【テスト・バージョンアップ環境】APサーバーファイル整理依頼【重要度：中】,,,,,,,,,,,,22.作業完全終了,2025-05-09,,,,SOMPOケア株式会社,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/364901
+362544,TSET_T_竹田 愛美,【@SP】HUE Purchase： 【CTU各位】HUE-PUデータログ取得依頼：本田技研工業様【重要度高】,,,,,,,,,,,中止,,2025-04-14,2025-04-14,,,本田技研工業株式会社様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/362544
 338044,TSET_T_竹田 愛美,【@SP】CBM： 【CTU各位】ACデータログ取得依頼：NDS株式会社様【重要度中】,2024-08-13,,,,,,,,,,中止,,2024-08-08,2024-08-13,,,NDS株式会社様,161,http://achyperopi-prod.internal.worksap.com/redmine/issues/338044
 342616,TSET_T_竹田 愛美,【@SP】会計業務共通： 【CTU各位】ACデータログ取得依頼：広成建設様【重要度中】,2024-10-02,,,10-12,,,,,,,対応完了,,2024-09-30,2024-10-02,,,広成建設株式会社様,Classic_特殊端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/342616
 344029,TSET_T_竹田 愛美,【@SP】会計業務共通： 【CTU各位】ACデータログ取得依頼： パーソルホールディングス株式会社様【重要度中】,2024-10-15,,,,,,,,,,中止,,2024-10-11,2024-10-15,,,パーソルホールディングス株式会社様,161,http://achyperopi-prod.internal.worksap.com/redmine/issues/344029
@@ -923,10 +923,10 @@ Issue ID,TSET作業者,Subject,作業日①,作業日①_時間,作業日②,作
 369808,TSET_T_竹田 愛美,【@SP】HUE Expense： 【CTU各位】HUE-ACESデータログ取得依頼：株式会社OSPホールディングス様【重要度高】,2025-06-24,,,,,,,,,,対応完了,,2025-06-24,2025-06-24,,,株式会社OSPホールディングス様,HUE(ACESのみ)_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/369808
 368435,TSET_T_竹田 愛美,【@SP】HUE AC-COMMON： 【CTU各位】HUE-AC/HUE-ACESデータ更新依頼：南海電気鉄道様【重要度中】,2025-06-25,,,,,,,,,,アサイン完了,,2025-06-11,,,,南海電気鉄道株式会社様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/368435
 369666,TSET_T_竹田 愛美,【小田急電鉄株式会社様】【Stg環境】【重要度：中】暫定適用依頼,2025-06-25,"10-12, 12-14",,,,,,,,,,03.本アサイン,2025-06-23,,,,,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/369666
-369662,TSET_T_竹田 愛美,【@SP】プロダクト以外： 【CTU各位】ACデータログ取得依頼：広成建設株式会社様【重要度中】,2025-06-26,10-12,,,,,,,,,アサイン完了,,2025-06-23,2025-06-23,,,広成建設株式会社様,Classic_特殊端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369662
 369814,TSET_T_竹田 愛美,【@SP】会計共通： 【CTU各位】ACデータログ取得依頼_Classic：ユタカ技研様【重要度中】,2025-06-26,12-14,,,,,,,,,アサイン完了,,2025-06-24,2025-06-26,,,株式会社ユタカ技研様,Classic_顧客端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369814
 369909,TSET_T_竹田 愛美,【@SP】プロダクト以外： 【CTU各位】ACデータログ取得依頼_Classic：小森コーポレーション様【重要度中】,2025-06-26,,,,,,,,,,アサイン完了,,2025-06-24,,,,株式会社小森コーポレーション様,Classic_CCMS,http://achyperopi-prod.internal.worksap.com/redmine/issues/369909
 369873,TSET_T_竹田 愛美,【@SP】プロダクト以外： 【CTU各位】ACデータログ取得依頼_Classic：阿波銀行様【重要度低】,2025-06-26,10-12,,,,,,,,,アサイン完了,,2025-06-24,2025-06-25,,,株式会社阿波銀行様,Classic_専用線(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369873
+369662,TSET_T_竹田 愛美,【@SP】プロダクト以外： 【CTU各位】ACデータログ取得依頼：広成建設株式会社様【重要度中】,2025-06-26,10-12,,,,,,,,,アサイン完了,,2025-06-23,2025-06-23,,,広成建設株式会社様,Classic_特殊端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369662
 369659,TSET_T_竹田 愛美,【@SP】HCC： 【CTU各位】CPMデータログ取得依頼_Classic：株式会社エイチ・アイ・エス【重要度中】,2025-06-27,"10-12, 12-14",,,,,,,,,アサイン完了,,2025-06-23,2025-06-26,,,株式会社エイチ・アイ・エス様,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/369659
 369694,TSET_T_竹田 愛美,事前確認準備,2025-06-27,,,,,,,,,,休暇/MTG/その他,,2025-06-23,,,,,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/369694
 369658,TSET_T_竹田 愛美,【@SP】HCC： 【CTU各位】ACデータログ取得依頼_Classic：株式会社エイチ・アイ・エス【重要度中】,2025-06-27,10-12,,,,,,,,,アサイン完了,,2025-06-23,2025-06-26,,,株式会社エイチ・アイ・エス様,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/369658
@@ -1148,8 +1148,8 @@ Issue ID,TSET作業者,Subject,作業日①,作業日①_時間,作業日②,作
 362330,TSET_K_小泉 祐稀,【@SP】HCC： 【CTU各位】ホスト名変更_Classic ：日鉄ケミカル＆マテリアル株式会社【重要度最低】,2025-07-03,終日,2025-07-04,終日,,,,,,,アサイン完了,,2025-04-10,2025-06-06,,,日鉄ケミカル＆マテリアル株式会社様,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/362330
 369856,TSET_K_小泉 祐稀,休暇,2025-07-10,終日,2025-07-11,終日,,,,,,,休暇/MTG/その他,,2025-06-24,,,,,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/369856
 369857,TSET_K_小泉 祐稀,振替休日(6/14分),2025-07-14,終日,,,,,,,,,休暇/MTG/その他,,2025-06-24,,,,,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/369857
-368209,TSET_L_李 相旼,出光興産様_準備関連,,"10-12, 12-14",,,,,,,,,休暇/MTG/その他,,2025-06-10,,,,,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/368209
 366903,TSET_L_李 相旼,三井食品様_固定アカウント登録(訪問),,,,,,,,,,,休暇/MTG/その他,,2025-05-29,,,,,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/366903
+368209,TSET_L_李 相旼,出光興産様_準備関連,,"10-12, 12-14",,,,,,,,,休暇/MTG/その他,,2025-06-10,,,,,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/368209
 300280,TSET_L_李 相旼,休暇,2023-09-27,終日,2025-06-02,終日,,,,,,,休暇/MTG/その他,,2023-08-30,,,,,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/300280
 335497,TSET_L_李 相旼,【@SP】会計共通： 【CTU各位】ACデータ更新依頼：ニフティ様【重要度高】,2024-07-19,10-12,,,,,,,,,中止,,2024-07-16,2024-07-17,,,ニフティ株式会社様,161,http://achyperopi-prod.internal.worksap.com/redmine/issues/335497
 335881,TSET_L_李 相旼,【CTU各位】HUE-ACデータ更新依頼：RYODEN様【重要度中】,2024-07-19,10-12,,,,,,,,,中止,,2024-07-19,2024-07-19,,,株式会社RYODEN様,167,http://achyperopi-prod.internal.worksap.com/redmine/issues/335881
@@ -1418,7 +1418,7 @@ Issue ID,TSET作業者,Subject,作業日①,作業日①_時間,作業日②,作
 369303,TSET_S_末藤 千奈,【@SP】プロダクト以外： 【CTU各位】AC都度依頼_Classic：株式会社メディセオ様【重要度中】,2025-06-25,10-12,,,,,,,,,アサイン完了,,2025-06-19,2025-06-23,,,株式会社メディセオ様,Classic_特殊端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369303
 363197,TSET_S_末藤 千奈,丸石製薬様　テスト環境PTF適用_25年4月PTF/Ver104103(369921),2025-06-26,終日,2025-06-27,終日,,,,,,,,03.本アサイン,2025-04-18,2025-06-16,,,丸石製薬株式会社,Classic_顧客端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/363197
 369921,TSET_S_末藤 千奈,【@SP】会計共通： 【CTU各位】ACデータログ取得依頼_Classic：株式会社延田エンタープライズ様【重要度低】,2025-06-30,"10-12, 12-14",,,,,,,,,アサイン完了,,2025-06-24,2025-06-27,,,株式会社延田エンタープライズ様,Classic_顧客端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369921
-369046,TSET_S_末藤 千奈,[TOPPAN様][develop][6/30] 暫定適用依頼,2025-06-30,,,,,,,,,,,03.本アサイン,2025-06-17,2025-06-20,,,TOPPAN,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/369046
+369046,TSET_S_末藤 千奈,[TOPPAN様][develop][6/30] 暫定適用依頼,2025-06-30,"18-20, 20-22",,,,,,,,,,03.本アサイン,2025-06-17,2025-06-20,,,TOPPAN,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/369046
 369634,TSET_S_末藤 千奈,【事前準備】中国塗料様_サバリプ,2025-07-01,終日,,,,,,,,,休暇/MTG/その他,,2025-06-23,,,,,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/369634
 367352,TSET_S_末藤 千奈,【中国塗料様】HCC本番環境セットアップ依頼,2025-07-02,終日,2025-07-03,終日,2025-07-04,終日,2025-07-07,終日,2025-07-08,終日,,03.本アサイン,2025-06-02,2025-06-06,,,中国塗料株式会社,Classic_CCMS,http://achyperopi-prod.internal.worksap.com/redmine/issues/367352
 368351,TSET_S_末藤 千奈,【サラヤ様】CAM/CCM環境追加（本番）,2025-07-18,"16-18, 18-20",2025-07-19,終日,2025-07-20,終日,,,,,,03.本アサイン,2025-06-11,2025-06-20,,,サラヤ株式会社,Classic_顧客端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/368351
@@ -1583,8 +1583,8 @@ Issue ID,TSET作業者,Subject,作業日①,作業日①_時間,作業日②,作
 357041,TSET_M_宮崎 仁,【丸全昭和運輸株式会社様】【Oracle】Windows Bundle Patch 19.16適用(本番環境)【重要度：中】,2025-07-06,終日,,,,,,,,,,03.本アサイン,2025-02-21,2025-02-26,,,丸全昭和運輸株式会社様,Classic_顧客端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/357041
 366414,TSET_M_宮崎 仁,【備忘】午前離席,2025-07-09,,,,,,,,,,休暇/MTG/その他,,2025-05-23,,,,,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/366414
 369994,TSET_M_宮崎 仁,フジミインコーポレーテッド様_SCM本番環境構築_ダブルチェック,2025-07-10,終日,,,,,,,,,休暇/MTG/その他,,2025-06-25,,,,,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/369994
-336687,TSET_W_渡辺 智也,【@SP】HUE Financials & Str： 【CTU各位】HUE-ACデータ更新依頼：南海電気鉄道様【重要度高】,2024-07-26,"12-14, 14-16",,,,,,,,,中止,,2024-07-26,,,,南海電気鉄道株式会社様,167,http://achyperopi-prod.internal.worksap.com/redmine/issues/336687
 331061,TSET_W_渡辺 智也,【@SP】CPM： 【CTU各位】CPMデータ更新依頼：サンエス様【重要度中】テスト環境,2024-06-04,"12-14, 14-16",,,,,,,,,中止,,2024-06-03,2024-06-04,,,株式会社サンエス様,161,http://achyperopi-prod.internal.worksap.com/redmine/issues/331061
+336687,TSET_W_渡辺 智也,【@SP】HUE Financials & Str： 【CTU各位】HUE-ACデータ更新依頼：南海電気鉄道様【重要度高】,2024-07-26,"12-14, 14-16",,,,,,,,,中止,,2024-07-26,,,,南海電気鉄道株式会社様,167,http://achyperopi-prod.internal.worksap.com/redmine/issues/336687
 336264,TSET_W_渡辺 智也,【@SP】CPM： 【CTU各位】CPM都度依頼：ＥＮＥＯＳ喜入基地株式会社様【重要度中】,2024-07-23,"14-16, 16-18",,,,,,,,,対応完了,,2024-07-23,,,,ＥＮＥＯＳ喜入基地株式会社様,157,http://achyperopi-prod.internal.worksap.com/redmine/issues/336264
 347409,TSET_W_渡辺 智也,送別会,2024-11-28,"14-16, 16-18, 18-20, 20-22",2024-11-29,10-12,2025-02-25,"18-20, 20-22",2025-06-30,"18-20, 20-22",,,休暇/MTG/その他,,2024-11-15,,,,,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/347409
 355160,TSET_W_渡辺 智也,【ユニプレス様】【本番環境】Oracleバージョンアップ,2025-03-30,終日,,,,,,,,,,22.作業完全終了,2025-02-04,2025-03-07,,,ユニプレス株式会社,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/355160
@@ -1725,14 +1725,14 @@ Issue ID,TSET作業者,Subject,作業日①,作業日①_時間,作業日②,作
 369754,TSET_T_但馬 惟之,【木暮同席依頼】TSET #369677 【@SP】プロダクト以外： 【CTU各位】AC設定ファイル関連依頼_Classic：ヤナセ様【重要度中】,2025-06-25,14-16,,,,,,,,,休暇/MTG/その他,,2025-06-23,,,,,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/369754
 369887,TSET_T_但馬 惟之,【NDS様】【本番環境】【AC】暫定適用依頼,2025-06-27,"16-18, 18-20",,,,,,,,,,03.本アサイン,2025-06-24,2025-06-25,,,NDS株式会社様,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369887
 297632,TSET_M_村田 祐馬,暫定適用依頼_明治様【重要度低】,2022-10-28,,,,,,,,,,,22.作業完全終了,2022-10-28,,,,株式会社明治,167,http://achyperopi-prod.internal.worksap.com/redmine/issues/297632
-300746,TSET_M_村田 祐馬,【明治様】【本番環境】【AC】暫定適用依頼　インシデント対応,2023-09-02,12-14,,,,,,,,,,22.作業完全終了,2023-09-01,2023-09-01,,,,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/300746
 300747,TSET_M_村田 祐馬,【明治様】【テスト環境】【AC】暫定適用依頼　インシデント対応,2023-09-02,10-12,,,,,,,,,,22.作業完全終了,2023-09-01,2023-09-01,,,,167,http://achyperopi-prod.internal.worksap.com/redmine/issues/300747
-302756,TSET_M_村田 祐馬,【重要度:中】【明治様】【Pro】インボイス関連の暫定,2023-09-22,20-22,,,,,,,,,,22.作業完全終了,2023-09-15,,,,株式会社明治,168,http://achyperopi-prod.internal.worksap.com/redmine/issues/302756
+300746,TSET_M_村田 祐馬,【明治様】【本番環境】【AC】暫定適用依頼　インシデント対応,2023-09-02,12-14,,,,,,,,,,22.作業完全終了,2023-09-01,2023-09-01,,,,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/300746
+297763,TSET_M_村田 祐馬,【明治様】【Dev環境】暫定適用 IIS再起動あり,2023-08-03,20-22,,,,,,,,,,22.作業完全終了,2023-08-03,2023-08-03,,,株式会社明治,167,http://achyperopi-prod.internal.worksap.com/redmine/issues/297763
 297762,TSET_M_村田 祐馬,【明治様】【Pro環境】暫定適用 IIS再起動あり,2023-08-03,20-22,,,,,,,,,,22.作業完全終了,2023-08-03,2023-08-03,,,株式会社明治,167,http://achyperopi-prod.internal.worksap.com/redmine/issues/297762
+302756,TSET_M_村田 祐馬,【重要度:中】【明治様】【Pro】インボイス関連の暫定,2023-09-22,20-22,,,,,,,,,,22.作業完全終了,2023-09-15,,,,株式会社明治,168,http://achyperopi-prod.internal.worksap.com/redmine/issues/302756
 303471,TSET_M_村田 祐馬,明治様　テスト環境　暫定適用,2023-10-02,"20-22, 18-20",,,,,,,,,,22.作業完全終了,2023-09-22,2023-09-26,,,,156,http://achyperopi-prod.internal.worksap.com/redmine/issues/303471
 303244,TSET_M_村田 祐馬,明治様　HUE　本番環境　暫定適用,2023-10-03,20-22,,,,,,,,,,22.作業完全終了,2023-09-21,2023-09-26,,,株式会社明治,167,http://achyperopi-prod.internal.worksap.com/redmine/issues/303244
 305813,TSET_M_村田 祐馬,【暫定適用依頼】【テスト環境】明治様　,2023-10-20,20-22,,,,,,,,,,22.作業完全終了,2023-10-12,2023-10-13,,,株式会社明治,157,http://achyperopi-prod.internal.worksap.com/redmine/issues/305813
-297763,TSET_M_村田 祐馬,【明治様】【Dev環境】暫定適用 IIS再起動あり,2023-08-03,20-22,,,,,,,,,,22.作業完全終了,2023-08-03,2023-08-03,,,株式会社明治,167,http://achyperopi-prod.internal.worksap.com/redmine/issues/297763
 326738,TSET_M_村田 祐馬,【明治様】【Dev環境】暫定適用依頼_CBM431002_63,2024-04-22,,,,,,,,,,,22.作業完全終了,2024-04-18,2024-04-19,,,株式会社明治,167,http://achyperopi-prod.internal.worksap.com/redmine/issues/326738
 333829,TSET_M_村田 祐馬,【旭洋工業製作所様】【PU】Production環境への暫定適用依頼,2024-07-04,"16-18, 18-20",,,,,,,,,,22.作業完全終了,2024-06-28,2024-07-01,,,旭洋工業製作所様,277,http://achyperopi-prod.internal.worksap.com/redmine/issues/333829
 352665,TSET_M_村田 祐馬,【@SP】プロダクト以外： 【CTU各位】HUE-AC都度依頼：株式会社明治様【重要度高】,2025-01-10,,,,,,,,,,対応完了,,2025-01-09,,,,株式会社明治様,HUE(オンプレ)_共有端末,http://achyperopi-prod.internal.worksap.com/redmine/issues/352665
@@ -1825,153 +1825,154 @@ Issue ID,TSET作業者,Subject,作業日①,作業日①_時間,作業日②,作
 326382,TSET_Y_湯川 周平,【@SP】HUE Treasury： 【CTU各位】AC都度依頼：株式会社コシダテック様【重要度高】,2024-04-18,14-16,,,,,,,,,対応完了,,2024-04-16,,,,株式会社コシダテック様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/326382
 332182,TSET_Y_湯川 周平,【@SP】HUE APAR： 【CTU各位】●HUE-AC●データログ取得依頼：RYODEN様【重要度中】,2024-06-13,12-14,,,,,,,,,中止,,2024-06-12,2024-06-13,,,株式会社RYODEN様,167,http://achyperopi-prod.internal.worksap.com/redmine/issues/332182
 366633,TSET_A_朝倉 康朗,出光興産様_新本番環境構築_ダブルチェック,,終日,,,,,,,,,休暇/MTG/その他,,2025-05-27,,,,,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/366633
-369094,,【東海理化様】【dev環境】暫定適用依頼,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-06-17,2025-06-19,,,株式会社東海理化様,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/369094
-351378,,【ヤナセ様】【AC】新VerUP検証環境構築依頼,,,,,,,,,,,,01.未アサイン,2024-12-23,2025-01-31,,,株式会社ヤナセ,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/351378
-368573,,【AC】【アイフル（ライフカード）様】環境同期（本番環境→テスト環境）,,,,,,,,,,,,01.未アサイン,2025-06-12,2025-07-21,,,アイフル（ライフカード）株式会社,Classic_特殊端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/368573
-351373,,【ヤナセ様】【AC】新テスト環境構築依頼,,,,,,,,,,,,01.未アサイン,2024-12-23,2025-01-31,,,株式会社ヤナセ,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/351373
-369110,,【京成電鉄様】本番環境セットアップ,,,,,,,,,,,,01.未アサイン,2025-06-17,,,,京成電鉄株式会社,Classic_顧客端末(東京),http://achyperopi-prod.internal.worksap.com/redmine/issues/369110
-366867,,【@SP】プロダクト以外： 【CTU各位】ACデータログ取得依頼_Classic：はるやまホールディングス様【重要度中】,,,,,,,,,,,中止,,2025-05-28,2025-05-29,,,株式会社はるやまホールディングス様,Classic_共有端末,http://achyperopi-prod.internal.worksap.com/redmine/issues/366867
-361362,,【@SP】HUE APAR： 【CTU各位】HUE-ACデータログ取得依頼：株式会社RYODEN【重要度高】,,,,,,,,,,,中止,,2025-04-02,2025-04-03,,,株式会社RYODEN様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/361362
-369069,,【@SP】HUE AC-COMMON： 【CTU各位】HUE-ACESデータログ取得依頼：小島プレス工業株式会社【重要度高】,,,,,,,,,,,中止,,2025-06-17,,,,小島プレス工業株式会社様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/369069
-366764,,【@SP】プロダクト以外： 【CTU各位】AC都度依頼_Classic：ジェイテクト様【重要度中】,,,,,,,,,,,中止,,2025-05-28,,,,株式会社ジェイテクト（AC/Ariel）様,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/366764
-368712,,【キリン堂】開発環境　2024年10月PTF,,,,,,,,,,,,01.未アサイン,2025-06-13,2025-06-30,,,株式会社キリン堂,Classic_顧客端末(東京),http://achyperopi-prod.internal.worksap.com/redmine/issues/368712
-366797,,【@SP】HUE Purchase： 【CTU各位】HUE-PUデータ更新依頼：株式会社鈴木商会様【重要度中】,,,,,,,,,,,中止,,2025-05-28,2025-06-05,,,株式会社鈴木商会様,HUE_OCI,http://achyperopi-prod.internal.worksap.com/redmine/issues/366797
 359300,,【@SP】CAM： 【CTU各位】AC都度依頼_Classic：株式会社ジェイテクト（AC/Ariel）様【重要度中】,,,,,,,,,,,中止,,2025-03-14,,,,株式会社ジェイテクト（AC/Ariel）様,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/359300
-366050,,【@SP】プロダクト以外： 【CTU各位】ACデータログ取得依頼：調理様【重要度低】,,,,,,,,,,,中止,,2025-05-21,,,,蝶理株式会社様,Classic_顧客端末(東京),http://achyperopi-prod.internal.worksap.com/redmine/issues/366050
+369849,,【ジェイテクト様】【検証4環境】PTF適用依頼,,,,,,,,,,,,01.未アサイン,2025-06-24,,,,株式会社ジェイテクト,Classic_特殊端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369849
+370152,,【@SP】HUE Purchase： 【CTU各位】●HUE-AC/HUE-PU/HUE-ACES●データ更新依頼：ユーザ名【重要度XX】,,,,,,,,,,,未アサイン,,2025-06-26,2025-06-26,,,本田技研工業株式会社様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/370152
 368865,,【暫定適用】愛仁会様_本番環境（2025年4月PTF)【重要度：中】,,,,,,,,,,,,01.未アサイン,2025-06-16,,,,社会医療法人愛仁会,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/368865
 366606,,【@SP】プロダクト以外： 【CTU各位】ACデータログ取得依頼_Classic：株式会社ヤナセ様【重要度中】,,,,,,,,,,,中止,,2025-05-26,2025-05-29,,,株式会社ヤナセ様,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/366606
-364601,,【@SP】CAM： 【CTU各位】ACデータログ取得依頼_Classic：PGM様【重要度中】,,,,,,,,,,,中止,,2025-05-07,,,,パシフィックゴルフマネージメント株式会社様,Classic_共有端末,http://achyperopi-prod.internal.worksap.com/redmine/issues/364601
+364682,,【太陽生命保険様】PTF（テスト2環境、AC、369918→369922）,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-05-07,2025-06-20,,,太陽生命保険株式会社,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/364682
+370166,,【@SP】HUE Accounts Payable： 【CTU各位】HUE-ACデータログ取得依頼：市民生活協同組合ならコープ様【重要度高】,,,,,,,,,,,未アサイン,,2025-06-26,,,,市民生活協同組合ならコープ様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/370166
 368708,,【暫定適用】【Dev環境】出光興産株式会社（HUE）,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-06-13,,,,出光興産株式会社(HUE),なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/368708
 364768,,【HUE_AC】ShortCutVerUP(202510)適用テスト,,,,,,,,,,,,01.未アサイン,2025-05-08,,,,,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/364768
-364224,,【@SP】HUE APAR： 【CTU各位】HUE-ACデータログ取得依頼：フォレストホールディングス様【重要度中】,,,,,,,,,,,中止,,2025-04-29,2025-05-08,,,株式会社フォレストホールディングス様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/364224
-363270,,【@SP】プロダクト以外： 【CTU各位】AC都度依頼_Classic：泉州電業様【重要度中】,,,,,,,,,,,中止,,2025-04-18,,,,泉州電業株式会社様,Classic_顧客端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/363270
+364680,,【太陽生命保険様】PTF（テスト1環境、AC、369918→369922）,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-05-07,2025-06-20,,,太陽生命保険株式会社,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/364680
+370162,,【@SP】CFM： 【CTU各位】ACデータ更新依頼_Classic：出光興産様【重要度中】,,,,,,,,,,,未アサイン,,2025-06-26,,,,出光興産株式会社様,Classic_訪問(東京),http://achyperopi-prod.internal.worksap.com/redmine/issues/370162
 368067,,【@SP】CBM： 【CTU各位】ACデータログ取得依頼：株式会社大庄様【重要度中】,,,,,,,,,,,中止,,2025-06-09,,,,株式会社大庄様,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/368067
 365350,,【サーバーリプレイス】【出光興産株式会社（Classic）】新検証環境構築（「ミラー」「検証」）,,,,,,,,,,,,01.未アサイン,2025-05-14,,,,出光興産株式会社,Classic_訪問(東京),http://achyperopi-prod.internal.worksap.com/redmine/issues/365350
+364799,,【太陽生命保険様】PTF（テスト2環境、CRE、137100→138100）,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-05-08,2025-06-20,,,太陽生命保険株式会社,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/364799
+370154,,【@SP】HUE Purchase： 【CTU各位】HUE-PUデータ更新依頼：本田技研工業様【重要度高】,,,,,,,,,,,未アサイン,,2025-06-26,,,,本田技研工業株式会社様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/370154
 367633,,ACセットアップ研修_末廣さんの同席,,,,,,,,,,,未アサイン,,2025-06-04,2025-06-12,,,,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/367633
 355859,,【@SP】CBM： 【CTU各位】ACデータログ取得依頼_Classic：ケイミュー様【重要度中】,,,,,,,,,,,中止,,2025-02-10,,,,ケイミュー株式会社様,HUE(ACESオンプレ)_顧客端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/355859
+364798,,【太陽生命保険様】PTF（テスト1環境、CRE、137100→138100）,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-05-08,2025-06-20,,,太陽生命保険株式会社,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/364798
+363270,,【@SP】プロダクト以外： 【CTU各位】AC都度依頼_Classic：泉州電業様【重要度中】,,,,,,,,,,,中止,,2025-04-18,,,,泉州電業株式会社様,Classic_顧客端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/363270
+370149,,【@SP】CSA： 【CTU各位】SCMデータログ取得依頼_Classic：TAG様【重要度中】環境同期直後のデータ取得,,,,,,,,,,,未アサイン,,2025-06-26,,,,株式会社東急エージェンシー様,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/370149
 368428,,【重要度：高】【ディップ様】【AC】環境同期（VerUP検証環境）,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-06-11,2025-06-13,,,ディップ株式会社,Classic_顧客端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/368428
 363119,,愛仁会様　テスト環境PTF適用（2025年4月PTF),,終日,,終日,,,,,,,,80.キャンセル（依頼者都合）,2025-04-17,,,,社会医療法人愛仁会,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/363119
+369888,,【@SP】HUE Purchase： 【CTU各位】HUE-PUデータログ取得依頼：本田技研工業株式会社様【重要度高】,,,,,,,,,,,中止,,2025-06-24,2025-06-24,,,本田技研工業株式会社様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/369888
+364224,,【@SP】HUE APAR： 【CTU各位】HUE-ACデータログ取得依頼：フォレストホールディングス様【重要度中】,,,,,,,,,,,中止,,2025-04-29,2025-05-08,,,株式会社フォレストホールディングス様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/364224
+370061,,【@SP】HUE AC-COMMON： 【CTU各位】AC都度依頼_Classic：ヤナセ様【重要度中】,,,,,,,,,,,未アサイン,,2025-06-25,,,,株式会社ヤナセ様,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/370061
 368381,,【@SP】HUE Purchase： 【CTU各位】HUE-PUデータログ取得依頼：ファルコバイオシステムズ様【重要度中】,,,,,,,,,,,中止,,2025-06-11,2025-06-11,,,株式会社ファルコバイオシステムズ様,HUE_OCI,http://achyperopi-prod.internal.worksap.com/redmine/issues/368381
 365699,,【@SP】CFM： 【CTU各位】ACデータログ取得依頼_Classic：SOMPOケア株式会社【重要度中】,,,,,,,,,,,中止,,2025-05-16,,,,SOMPOケア株式会社様,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/365699
-364183,,【@SP】CFM： 【CTU各位】ACリモート作業同席依頼_Classic：中部国際空港様【重要度中】,,,,,,,,,,,中止,,2025-04-28,,,,中部国際空港株式会社様,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/364183
+368449,,延田エンタープライズ様　アンインストール作業（テスト環境）,,,,,,,,,,,,01.未アサイン,2025-06-11,,,,株式会社延田エンタープライズ,Classic_顧客端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/368449
+361362,,【@SP】HUE APAR： 【CTU各位】HUE-ACデータログ取得依頼：株式会社RYODEN【重要度高】,,,,,,,,,,,中止,,2025-04-02,2025-04-03,,,株式会社RYODEN様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/361362
+370058,,【@SP】HUE共通： 【CTU各位】HUE-AC都度依頼：小田急様【重要度高】,,,,,,,,,,,未アサイン,,2025-06-25,,,,小田急電鉄株式会社様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/370058
 368389,,【暫定適用】【sta環境】スカパーJSAT株式会社様【重要度：高】,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-06-11,2025-06-12,,,スカパーJSAT株式会社,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/368389
 366252,,【@SP】HUE Expense： 【CTU各位】HUE-ACESデータ更新依頼：ケイミュー株式会社 【重要度高】テスト環境バックアップ,,,,,,,,,,,中止,,2025-05-22,,,,ケイミュー株式会社様,HUE(ACESオンプレ)_顧客端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/366252
+369847,,【日鉄ケミカル&マテリアル株式会社】HCC本切り替え(7/19-20),,,,,,,,,,,,01.未アサイン,2025-06-24,,,,,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/369847
+364183,,【@SP】CFM： 【CTU各位】ACリモート作業同席依頼_Classic：中部国際空港様【重要度中】,,,,,,,,,,,中止,,2025-04-28,,,,中部国際空港株式会社様,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/364183
+370145,,【@SP】プロダクト以外： 【CTU各位】ACデータログ取得依頼_Classic：丸全昭和運輸様【重要度中】,,,,,,,,,,,未アサイン,,2025-06-26,,,,丸全昭和運輸株式会社様,Classic_顧客端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/370145
 368108,,【ジェイテクト様】環境同期作業（本番→検証1）,,,,,,,,,,,,01.未アサイン,2025-06-09,,,,株式会社ジェイテクト,Classic_特殊端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/368108
+364601,,【@SP】CAM： 【CTU各位】ACデータログ取得依頼_Classic：PGM様【重要度中】,,,,,,,,,,,中止,,2025-05-07,,,,パシフィックゴルフマネージメント株式会社様,Classic_共有端末,http://achyperopi-prod.internal.worksap.com/redmine/issues/364601
 361847,,【中部国際空港株式会社様】【本番環境】25年1月PTF適用,,終日,,終日,,,,,,,,01.未アサイン,2025-04-07,2025-04-28,,,中部国際空港,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/361847
+367677,,【AC】【日鉄ケミカル＆マテリアル株式会社様】環境同期依頼（本番環境→第三環境）【重要度中】,,,,,,,,,,,,01.未アサイン,2025-06-04,2025-07-02,,,日鉄ケミカル＆マテリアル株式会社,Classic_顧客端末(東京),http://achyperopi-prod.internal.worksap.com/redmine/issues/367677
+370138,,【@SP】プロダクト以外： 【CTU各位】端末管理依頼_Classic：ユーザ名【重要度中】,,,,,,,,,,,未アサイン,,2025-06-26,,,,株式会社ＴＤモバイル様,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/370138
 368105,,【ジェイテクト様】環境同期作業（本番→検証2）,,,,,,,,,,,,01.未アサイン,2025-06-09,,,,株式会社ジェイテクト,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/368105
 361851,,【中部国際空港株式会社様】【本番環境】CRE25年1月PTF適用,,終日,,終日,,,,,,,,01.未アサイン,2025-04-07,2025-04-28,,,中部国際空港,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/361851
+369763,,【小田急電鉄様】Staging環境2025年4月PTF【AC】,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-06-23,,,,小田急電鉄株式会社,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/369763
+370136,,【@SP】CSA： 【CTU各位】SCM都度依頼_Classic：JAT様【重要度中】DBメンテナンス（7/22実施）　再起動のみ,,,,,,,,,,,未アサイン,,2025-06-26,,,,日本空港ビルデング株式会社様,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/370136
 367795,,【ヤナセ様】【サバリプ本切替】環境同期依頼（AC）【リハーサル】,,,,,,,,,,,,01.未アサイン,2025-06-05,2025-06-30,,,株式会社ヤナセ,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/367795
 366265,,【@SP】プロダクト以外： 【CTU各位】AC都度依頼_Classic：アンダーツリー様【重要度中】,,,,,,,,,,,中止,,2025-05-22,,,,アンダーツリー株式会社様,Classic_顧客端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/366265
+369835,,広成建設様　テスト環境PTF適用（2025年7月PTF）,,,,,,,,,,,,01.未アサイン,2025-06-24,2025-07-16,,,広成建設株式会社,Classic_特殊端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369835
+370133,,【@SP】CSA： 【CTU各位】SCM都度依頼_Classic：JAT様【重要度中】DBメンテナンス（7/15実施）,,,,,,,,,,,未アサイン,,2025-06-26,,,,日本空港ビルデング株式会社様,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/370133
 365608,,【AC】【広済堂ホールディングス様】【本番環境】watool設置依頼【重要度：中】,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-05-16,,,,,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/365608
 368328,,【木暮同席依頼】TSET #367544 【日鉄様】【第三環境】暫定適用依頼_CAC369914_15,,,,,,,,,,,中止,,2025-06-10,,,,,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/368328
+369733,,【@SP】プロダクト以外： 【CTU各位】AC都度依頼_Classic：東急エージェンシー様【重要度中】,,,,,,,,,,,未アサイン,,2025-06-23,,,,株式会社東急エージェンシー様,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369733
 365593,,【AC】【広済堂ホールディングス様】【テスト環境】watool設置依頼【重要度：中】,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-05-16,,,,,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/365593
+370128,,【@SP】CPJ： 【CTU各位】SCM都度依頼：TDK様【重要度中】　ver76,,,,,,,,,,,未アサイン,,2025-06-26,,,,TDK株式会社様,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/370128
 367845,,【立命館様】【CPMのみ】本番環境アンインストール依頼,,,,,,,,,,,,01.未アサイン,2025-06-05,2025-06-13,,,学校法人立命館,Classic_特殊端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/367845
+369386,,【中部国際空港株式会社様】【テスト環境】CRE25年7月PTF適用,,,,,,,,,,,,01.未アサイン,2025-06-19,,,,中部国際空港,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369386
 364574,,【泉州電業様】PTF適用_本番環境（369921）,,,,,,,,,,,,01.未アサイン,2025-05-07,,,,泉州電業株式会社,Classic_顧客端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/364574
+370109,,HUE_ACES暫定適用：SMC株式会社様Development【重要度：高】,,,,,,,,,,,,01.未アサイン,2025-06-25,,,,,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/370109
 367842,,【立命館様】【CPMのみ】テスト環境アンインストール依頼 ,,,,,,,,,,,,01.未アサイン,2025-06-05,2025-06-13,,,学校法人立命館,Classic_特殊端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/367842
+369383,,【中部国際空港株式会社様】【テスト環境】25年7月PTF適用,,,,,,,,,,,,01.未アサイン,2025-06-19,,,,中部国際空港,Classic_特殊端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369383
 365773,,【@SP】HUE DI： 【CTU各位】HUE-ACリモート作業同席依頼：ワークスあかりんご様【重要度中】,,,,,,,,,,,中止,,2025-05-19,,,,株式会社ワークスあかりんご（テスト用）様,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/365773
+370099,,NDS様 AC本番環境25年7月PTF適用,,,,,,,,,,,,01.未アサイン,2025-06-25,,,,NDS,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/370099
 367843,,【立命館様】【CPMのみ】ミラー環境アンインストール依頼,,,,,,,,,,,,01.未アサイン,2025-06-05,2025-06-13,,,学校法人立命館,Classic_特殊端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/367843
 365282,,【@SP】プロダクト以外： 【CTU各位】HUE-AC都度依頼：明治様【重要度中】,,,,,,,,,,,中止,,2025-05-13,2025-05-16,,,株式会社明治様,HUE(オンプレ)_共有端末,http://achyperopi-prod.internal.worksap.com/redmine/issues/365282
+369382,,【中部国際空港株式会社様】【ミラー環境】CRE25年7月PTF適用,,,,,,,,,,,,01.未アサイン,2025-06-19,,,,中部国際空港,Classic_特殊端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369382
+370098,,NDS様 ACES本番環境25年7月PTF適用,,,,,,,,,,,,01.未アサイン,2025-06-25,,,,NDS,HUE(ACESオンプレ)_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/370098
 365189,,【@SP】プロダクト以外： 【CTU各位】AC都度依頼_Classic：シップヘルスケアHD様【重要度低】,,,,,,,,,,,中止,,2025-05-13,,,,シップヘルスケアホールディングス株式会社様,Classic_顧客端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/365189
 367886,,【アジア航測様】【本番環境】CPJ　2025-06PTF,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-06-06,2025-06-27,,,アジア航測株式会社,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/367886
+369380,,【中部国際空港株式会社様】【ミラー環境】25年7月PTF適用,,,,,,,,,,,,01.未アサイン,2025-06-19,,,,中部国際空港,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369380
 365639,,【@SP】プロダクト以外： 【CTU各位】HUE-AC都度依頼：明治様【重要度高】【事前確認】,,,,,,,,,,,中止,,2025-05-16,,,,株式会社明治様,HUE(オンプレ)_共有端末,http://achyperopi-prod.internal.worksap.com/redmine/issues/365639
+370095,,NDS様 ACES開発環境25年7月PTF適用,,,,,,,,,,,,01.未アサイン,2025-06-25,,,,NDS,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/370095
 367884,,【アジア航測様】【develop環境】CPJ　2025-06PTF,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-06-06,2025-06-13,,,アジア航測株式会社,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/367884
 369444,,フジミインコーポレーテッド様 SCM開発環境_サバリプ,,,,,,,,,,,,01.未アサイン,2025-06-19,,,,フジミインコーポレーテッド様,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369444
 365456,,【スカパーJSAT様】【ACES】Pro環境への暫定適用依頼,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-05-15,,,,,Classic_共有端末,http://achyperopi-prod.internal.worksap.com/redmine/issues/365456
+370094,,NDS様 AC開発環境25年7月PTF適用,,,,,,,,,,,,01.未アサイン,2025-06-25,,,,NDS,Classic_特殊端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/370094
 368077,,【@SP】CBM： 【CTU各位】ACデータログ取得依頼：株式会社大庄様【重要度中】（取り下げ）,,,,,,,,,,,中止,,2025-06-09,,,,株式会社大庄様,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/368077
 369441,,フジミインコーポレーテッド様 AC開発環境_サバリプ,,,,,,,,,,,,01.未アサイン,2025-06-19,,,,フジミインコーポレーテッド様,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369441
 364197,,【@SP】プロダクト以外： 【CTU各位】端末更新関連依頼_Classic：ジェイテクト様【重要度中】,,,,,,,,,,,中止,,2025-04-28,,,,株式会社ジェイテクト（AC/Ariel）様,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/364197
+370079,,【暫定適用】【Staging環境】RYODEN様【重要度中】,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-06-25,,,,株式会社RYODEN 様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/370079
 365397,,【AC】【株式会社IMAGICA GROUP様】【本番環境】サーバーファイル整理,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-05-14,2025-05-14,,,株式会社IMAGICA GROUP,Classic_CCMS,http://achyperopi-prod.internal.worksap.com/redmine/issues/365397
 367994,,【@SP】CFM： 【CTU各位】AC都度依頼_Classic：株式会社Francfranc様【重要度高】,,,,,,,,,,,中止,,2025-06-06,,,,株式会社Francfranc様,Classic_CCMS,http://achyperopi-prod.internal.worksap.com/redmine/issues/367994
 369440,,フジミインコーポレーテッド様 ACテスト環境_サバリプ,,,,,,,,,,,,01.未アサイン,2025-06-19,,,,フジミインコーポレーテッド様,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369440
 365191,,【@SP】プロダクト以外： 【CTU各位】AC都度依頼_Classic：シップヘルスケアHD様【重要度低】,,,,,,,,,,,中止,,2025-05-13,,,,シップヘルスケアホールディングス株式会社様,Classic_顧客端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/365191
+370088,,【暫定適用】Production環境_西松建設株式会社様,,,,,,,,,,,,01.未アサイン,2025-06-25,2025-06-27,,,西松建設株式会社,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/370088
 368019,,【@SP】CFM： 【CTU各位】ACデータ更新依頼_Classic：株式会社Francfranc様【重要度高】,,,,,,,,,,,中止,,2025-06-06,,,,株式会社Francfranc様,Classic_CCMS,http://achyperopi-prod.internal.worksap.com/redmine/issues/368019
 369439,,フジミインコーポレーテッド様 SCMテスト環境_サバリプ,,,,,,,,,,,,01.未アサイン,2025-06-19,,,,フジミインコーポレーテッド様,Classic_特殊端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369439
+370085,,【暫定適用】Staging環境_西松建設株式会社様,,,,,,,,,,,,01.未アサイン,2025-06-25,2025-06-26,,,西松建設株式会社,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/370085
 367785,,【大庄様】環境同期依頼_テスト環境,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-06-05,2025-06-19,,,株式会社大庄,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/367785
 369192,,【東京都営交通様】環境同期依頼（本番→テスト環境）【重要度：中】,,,,,,,,,,,,01.未アサイン,2025-06-18,,,,一般財団法人東京都営交通協力会,Classic_顧客端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369192
 365297,,【@SP】HUE Purchase： 【CTU各位】HUE-PUデータログ取得依頼：小島プレス工業様【重要度高】,,,,,,,,,,,中止,,2025-05-13,,,,小島プレス工業株式会社様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/365297
+370080,,【@SP】会計共通： 【CTU各位】ACデータログ取得依頼_Classic：共同印刷株式会社様【重要度中】,,,,,,,,,,,未アサイン,,2025-06-25,,,,共同印刷株式会社様,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/370080
 367769,,【日鉄様】【HCC本番環境】暫定適用依頼_CAC369914_15,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-06-05,2025-06-09,,,日鉄ケミカル＆マテリアル株式会社,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/367769
-369562,,【ケイミュー様】【HUE EX環境同期】本番⇒テスト（PTF適用前同期）,,,,,,,,,,,,01.未アサイン,2025-06-20,,,,ケイミュー株式会社,Classic_顧客端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369562
 362488,,【サーバーリプレイス】【三重県厚生農業協同組合連合会様】新本番環境構築,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-04-11,,,,三重県厚生農業協同組合連合会,Classic_顧客端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/362488
+369562,,【ケイミュー様】【HUE EX環境同期】本番⇒テスト（PTF適用前同期）,,,,,,,,,,,,01.未アサイン,2025-06-20,,,,ケイミュー株式会社,Classic_顧客端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369562
+369998,,【株式会社平和様】PTF適用_本番環境(369921),,,,,,,,,,,,01.未アサイン,2025-06-25,,,,株式会社平和,Classic_共有端末,http://achyperopi-prod.internal.worksap.com/redmine/issues/369998
 367623,,SCM_販売調達Setup研修_井島さんの同席,,,,,,,,,,,未アサイン,,2025-06-04,,,,,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/367623
 369560,,【ケイミュー様】【HUE EXテスト環境】2507PTF(ACES)適用依頼,,,,,,,,,,,,01.未アサイン,2025-06-20,,,,ケイミュー株式会社,Classic_顧客端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369560
+369948,,【株式会社平和様】PTF適用_テスト環境(369921),,,,,,,,,,,,01.未アサイン,2025-06-24,,,,株式会社平和,Classic_共有端末,http://achyperopi-prod.internal.worksap.com/redmine/issues/369948
 366852,,【@SP】プロダクト以外： 【CTU各位】AC都度依頼_Classic：はるやまホールディングス様【重要度中】,,,,,,,,,,,中止,,2025-05-28,,,,株式会社はるやまホールディングス様,Classic_共有端末,http://achyperopi-prod.internal.worksap.com/redmine/issues/366852
 369546,,【ケイミュー様】【HUE EXテスト環境】2507PTF(ACES)適用依頼,,,,,,,,,,,,01.未アサイン,2025-06-20,,,,ケイミュー株式会社,Classic_顧客端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369546
 365237,,【CTU各位】ACリモート作業同席依頼：京都生活協同組合様【重要度低】,,,,,,,,,,,中止,,2025-05-13,,,,,None,http://achyperopi-prod.internal.worksap.com/redmine/issues/365237
 365171,,【ACES】愛仁会様【develop環境】暫定適用依頼【重要度中】,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-05-12,2025-05-16,,,社会医療法人愛仁会,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/365171
+370056,,【キングジム様】APサーバー サーバーファイル整理,,,,,,,,,,,,01.未アサイン,2025-06-25,2025-06-30,,,株式会社キングジム,Classic_特殊端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/370056
 367632,,ACリプレイス研修_末廣さん,,,,,,,,,,,,01.未アサイン,2025-06-04,2025-04-15,,,,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/367632
-369469,,【AC】【佐藤工業】【本番環境】表領域拡張依頼【重要度：高】,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-06-20,,,,,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/369469
 364623,,【@SP】プロダクト以外： 【CTU各位】端末更新関連依頼_Classic：日鉄ケミカル＆マテリアル株式会社様【重要度中】,,,,,,,,,,,中止,,2025-05-07,2025-05-12,,,日鉄ケミカル＆マテリアル株式会社様,Classic_顧客端末(東京),http://achyperopi-prod.internal.worksap.com/redmine/issues/364623
+369469,,【AC】【佐藤工業】【本番環境】表領域拡張依頼【重要度：高】,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-06-20,,,,,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/369469
+370031,,広成建設様　本番環境PTF適用（2025年7月PTF）,,,,,,,,,,,,01.未アサイン,2025-06-25,2025-08-11,,,広成建設株式会社,Classic_特殊端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/370031
 367621,,SCM_販売調達Setup研修_井島さん,,,,,,,,,,,,01.未アサイン,2025-06-04,,,,,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/367621
 369466,,【AC】【佐藤工業】【本番環境】表領域拡張依頼【重要度：高】,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-06-20,,,,,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/369466
+369893,,【広成建設様】 25年7月PTF/Ver105100(369922)適用前_環境同期（本番→テスト）　,,,,,,,,,,,,01.未アサイン,2025-06-24,,,,広成建設株式会社,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369893
 351379,,【ヤナセ様】【サバリプ本切替】環境同期依頼（AC）,,,,,,,,,,,,01.未アサイン,2024-12-23,2025-02-07,,,株式会社ヤナセ,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/351379
 369467,,【AC】【佐藤工業】【本番環境】表領域拡張依頼【重要度：高】,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-06-20,,,,,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/369467
 364480,,【村田機械株式会社様】【AC本番環境】【AC】暫定適用依頼,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-05-02,2025-05-07,,,村田機械株式会社様,Classic_CCMS,http://achyperopi-prod.internal.worksap.com/redmine/issues/364480
+367362,,【@SP】HUE Financials & Str： 【CTU各位】HUE-ACデータログ取得依頼：森永乳業様_staging環境【重要度低】,,,,,,,,,,,中止,,2025-06-02,,,,森永乳業株式会社様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/367362
 367143,,【杉田エース様】オンプレ→オンプレへのサーバーリプレイス（新本番環境）,,,,,,,,,,,,01.未アサイン,2025-05-30,2025-06-04,,,杉田エース株式会社,Classic_共有端末,http://achyperopi-prod.internal.worksap.com/redmine/issues/367143
 369470,,【AC】【佐藤工業】【本番環境】表領域拡張依頼【重要度：高】,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-06-20,,,,,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/369470
 364552,,【暫定適用】【テスト環境】株式会社明電舎様,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-05-07,2025-05-09,,,株式会社明電舎様,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/364552
+370003,,【日本毛織様】環境同期　開発環境2025年8月,,,,,,,,,,,,01.未アサイン,2025-06-25,,,,日本毛織株式会社,Classic_共有端末,http://achyperopi-prod.internal.worksap.com/redmine/issues/370003
+364122,,【小島プレス工業株式会社様】【develop環境】暫定適用依頼（PU）,,"16-18, 18-20",,,,,,,,,,80.キャンセル（依頼者都合）,2025-04-28,2025-05-09,,,小島プレス工業株式会社様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/364122
 365378,,神奈川中央交通様：環境同期依頼（本番→テスト）,,終日,,,,,,,,,,80.キャンセル（依頼者都合）,2025-05-14,2025-05-15,,,神奈川中央交通株式会社様,Classic_顧客端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/365378
 369095,,【東海理化様】【pro環境】暫定適用依頼,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-06-17,2025-06-20,,,株式会社東海理化様,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/369095
-364122,,【小島プレス工業株式会社様】【develop環境】暫定適用依頼（PU）,,"16-18, 18-20",,,,,,,,,,80.キャンセル（依頼者都合）,2025-04-28,2025-05-09,,,小島プレス工業株式会社様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/364122
-369382,,【中部国際空港株式会社様】【ミラー環境】CRE25年7月PTF適用,,,,,,,,,,,,01.未アサイン,2025-06-19,,,,中部国際空港,Classic_特殊端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369382
-369383,,【中部国際空港株式会社様】【テスト環境】25年7月PTF適用,,,,,,,,,,,,01.未アサイン,2025-06-19,,,,中部国際空港,Classic_特殊端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369383
-369386,,【中部国際空港株式会社様】【テスト環境】CRE25年7月PTF適用,,,,,,,,,,,,01.未アサイン,2025-06-19,,,,中部国際空港,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369386
-369733,,【@SP】プロダクト以外： 【CTU各位】AC都度依頼_Classic：東急エージェンシー様【重要度中】,,,,,,,,,,,未アサイン,,2025-06-23,,,,株式会社東急エージェンシー様,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369733
-369835,,広成建設様　テスト環境PTF適用（2025年7月PTF）,,,,,,,,,,,,01.未アサイン,2025-06-24,2025-07-16,,,広成建設株式会社,Classic_特殊端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369835
-369763,,【小田急電鉄様】Staging環境2025年4月PTF【AC】,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-06-23,,,,小田急電鉄株式会社,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/369763
-367677,,【AC】【日鉄ケミカル＆マテリアル株式会社様】環境同期依頼（本番環境→第三環境）【重要度中】,,,,,,,,,,,,01.未アサイン,2025-06-04,2025-07-02,,,日鉄ケミカル＆マテリアル株式会社,Classic_顧客端末(東京),http://achyperopi-prod.internal.worksap.com/redmine/issues/367677
-369847,,【日鉄ケミカル&マテリアル株式会社】HCC本切り替え(7/19-20),,,,,,,,,,,,01.未アサイン,2025-06-24,,,,,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/369847
-368449,,延田エンタープライズ様　アンインストール作業（テスト環境）,,,,,,,,,,,,01.未アサイン,2025-06-11,,,,株式会社延田エンタープライズ,Classic_顧客端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/368449
-369888,,【@SP】HUE Purchase： 【CTU各位】HUE-PUデータログ取得依頼：本田技研工業株式会社様【重要度高】,,,,,,,,,,,中止,,2025-06-24,2025-06-24,,,本田技研工業株式会社様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/369888
-364798,,【太陽生命保険様】PTF（テスト1環境、CRE、137100→138100）,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-05-08,2025-06-20,,,太陽生命保険株式会社,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/364798
-364799,,【太陽生命保険様】PTF（テスト2環境、CRE、137100→138100）,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-05-08,2025-06-20,,,太陽生命保険株式会社,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/364799
-364680,,【太陽生命保険様】PTF（テスト1環境、AC、369918→369922）,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-05-07,2025-06-20,,,太陽生命保険株式会社,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/364680
-364682,,【太陽生命保険様】PTF（テスト2環境、AC、369918→369922）,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-05-07,2025-06-20,,,太陽生命保険株式会社,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/364682
-369849,,【ジェイテクト様】【検証4環境】PTF適用依頼,,,,,,,,,,,,01.未アサイン,2025-06-24,,,,株式会社ジェイテクト,Classic_特殊端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369849
-369878,,【@SP】プロダクト以外： 【CTU各位】AC都度依頼：三井不動産リアルティ株式会社【重要度中】,,,,,,,,,,,未アサイン,,2025-06-24,,,,三井不動産リアルティ株式会社様,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/369878
-369996,,【株式会社平和様】環境同期依頼_PTF適用前(同日も可能)（本番環境→テスト環境）【重要度中】,,,,,,,,,,,,01.未アサイン,2025-06-25,,,,株式会社平和,Classic_共有端末,http://achyperopi-prod.internal.worksap.com/redmine/issues/369996
-369977,,HUE_ACES暫定適用：小田急電鉄様Development【重要度：高】,,,,,,,,,,,,01.未アサイン,2025-06-25,2025-06-27,,,小田急電鉄株式会社様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/369977
-369976,,HUE_ACES暫定適用：小田急電鉄様staging【重要度：高】,,,,,,,,,,,,01.未アサイン,2025-06-25,2025-06-27,,,小田急電鉄株式会社様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/369976
 370002,,【日本毛織様】環境同期　テスト環境2025年7月,,,,,,,,,,,,01.未アサイン,2025-06-25,,,,日本毛織株式会社,Classic_共有端末,http://achyperopi-prod.internal.worksap.com/redmine/issues/370002
-370003,,【日本毛織様】環境同期　開発環境2025年8月,,,,,,,,,,,,01.未アサイン,2025-06-25,,,,日本毛織株式会社,Classic_共有端末,http://achyperopi-prod.internal.worksap.com/redmine/issues/370003
-367362,,【@SP】HUE Financials & Str： 【CTU各位】HUE-ACデータログ取得依頼：森永乳業様_staging環境【重要度低】,,,,,,,,,,,中止,,2025-06-02,,,,森永乳業株式会社様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/367362
-369893,,【広成建設様】 25年7月PTF/Ver105100(369922)適用前_環境同期（本番→テスト）　,,,,,,,,,,,,01.未アサイン,2025-06-24,,,,広成建設株式会社,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369893
-370031,,広成建設様　本番環境PTF適用（2025年7月PTF）,,,,,,,,,,,,01.未アサイン,2025-06-25,2025-08-11,,,広成建設株式会社,Classic_特殊端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/370031
-370056,,【キングジム様】APサーバー サーバーファイル整理,,,,,,,,,,,,01.未アサイン,2025-06-25,2025-06-30,,,株式会社キングジム,Classic_特殊端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/370056
-369948,,【株式会社平和様】PTF適用_テスト環境(369921),,,,,,,,,,,,01.未アサイン,2025-06-24,,,,株式会社平和,Classic_共有端末,http://achyperopi-prod.internal.worksap.com/redmine/issues/369948
-369998,,【株式会社平和様】PTF適用_本番環境(369921),,,,,,,,,,,,01.未アサイン,2025-06-25,,,,株式会社平和,Classic_共有端末,http://achyperopi-prod.internal.worksap.com/redmine/issues/369998
-370080,,【@SP】会計共通： 【CTU各位】ACデータログ取得依頼_Classic：共同印刷株式会社様【重要度中】,,,,,,,,,,,未アサイン,,2025-06-25,,,,共同印刷株式会社様,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/370080
-370085,,【暫定適用】Staging環境_西松建設株式会社様,,,,,,,,,,,,01.未アサイン,2025-06-25,2025-06-26,,,西松建設株式会社,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/370085
-370088,,【暫定適用】Production環境_西松建設株式会社様,,,,,,,,,,,,01.未アサイン,2025-06-25,2025-06-27,,,西松建設株式会社,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/370088
-370079,,【暫定適用】【Staging環境】RYODEN様【重要度中】,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-06-25,,,,株式会社RYODEN 様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/370079
-370094,,NDS様 AC開発環境25年7月PTF適用,,,,,,,,,,,,01.未アサイン,2025-06-25,,,,NDS,Classic_特殊端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/370094
-370095,,NDS様 ACES開発環境25年7月PTF適用,,,,,,,,,,,,01.未アサイン,2025-06-25,,,,NDS,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/370095
-370098,,NDS様 ACES本番環境25年7月PTF適用,,,,,,,,,,,,01.未アサイン,2025-06-25,,,,NDS,HUE(ACESオンプレ)_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/370098
-370099,,NDS様 AC本番環境25年7月PTF適用,,,,,,,,,,,,01.未アサイン,2025-06-25,,,,NDS,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/370099
-370109,,HUE_ACES暫定適用：SMC株式会社様Development【重要度：高】,,,,,,,,,,,,01.未アサイン,2025-06-25,,,,,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/370109
-370128,,【@SP】CPJ： 【CTU各位】SCM都度依頼：TDK様【重要度中】　ver76,,,,,,,,,,,未アサイン,,2025-06-26,,,,TDK株式会社様,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/370128
-370133,,【@SP】CSA： 【CTU各位】SCM都度依頼_Classic：JAT様【重要度中】DBメンテナンス（7/15実施）,,,,,,,,,,,未アサイン,,2025-06-26,,,,日本空港ビルデング株式会社様,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/370133
-370136,,【@SP】CSA： 【CTU各位】SCM都度依頼_Classic：JAT様【重要度中】DBメンテナンス（7/22実施）　再起動のみ,,,,,,,,,,,未アサイン,,2025-06-26,,,,日本空港ビルデング株式会社様,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/370136
-370138,,【@SP】プロダクト以外： 【CTU各位】端末管理依頼_Classic：ユーザ名【重要度中】,,,,,,,,,,,未アサイン,,2025-06-26,,,,株式会社ＴＤモバイル様,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/370138
-370145,,【@SP】プロダクト以外： 【CTU各位】ACデータログ取得依頼_Classic：丸全昭和運輸様【重要度中】,,,,,,,,,,,未アサイン,,2025-06-26,,,,丸全昭和運輸株式会社様,Classic_顧客端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/370145
-370058,,【@SP】HUE共通： 【CTU各位】HUE-AC都度依頼：小田急様【重要度高】,,,,,,,,,,,未アサイン,,2025-06-25,,,,小田急電鉄株式会社様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/370058
-370061,,【@SP】HUE AC-COMMON： 【CTU各位】AC都度依頼_Classic：ヤナセ様【重要度中】,,,,,,,,,,,未アサイン,,2025-06-25,,,,株式会社ヤナセ様,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/370061
-370149,,【@SP】CSA： 【CTU各位】SCMデータログ取得依頼_Classic：TAG様【重要度中】環境同期直後のデータ取得,,,,,,,,,,,未アサイン,,2025-06-26,,,,株式会社東急エージェンシー様,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/370149
-370152,,【@SP】HUE Purchase： 【CTU各位】●HUE-AC/HUE-PU/HUE-ACES●データ更新依頼：ユーザ名【重要度XX】,,,,,,,,,,,未アサイン,,2025-06-26,,,,本田技研工業株式会社様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/370152
-370154,,【@SP】HUE Purchase： 【CTU各位】HUE-PUデータ更新依頼：本田技研工業様【重要度高】,,,,,,,,,,,未アサイン,,2025-06-26,,,,本田技研工業株式会社様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/370154
-370162,,【@SP】CFM： 【CTU各位】ACデータ更新依頼_Classic：出光興産様【重要度中】,,,,,,,,,,,未アサイン,,2025-06-26,,,,出光興産株式会社様,Classic_訪問(東京),http://achyperopi-prod.internal.worksap.com/redmine/issues/370162
-369380,,【中部国際空港株式会社様】【ミラー環境】25年7月PTF適用,,,,,,,,,,,,01.未アサイン,2025-06-19,,,,中部国際空港,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/369380
+351378,,【ヤナセ様】【AC】新VerUP検証環境構築依頼,,,,,,,,,,,,01.未アサイン,2024-12-23,2025-01-31,,,株式会社ヤナセ,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/351378
+369094,,【東海理化様】【dev環境】暫定適用依頼,,,,,,,,,,,,80.キャンセル（依頼者都合）,2025-06-17,2025-06-19,,,株式会社東海理化様,なし,http://achyperopi-prod.internal.worksap.com/redmine/issues/369094
+369976,,HUE_ACES暫定適用：小田急電鉄様staging【重要度：高】,,,,,,,,,,,,01.未アサイン,2025-06-25,2025-06-27,,,小田急電鉄株式会社様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/369976
+366050,,【@SP】プロダクト以外： 【CTU各位】ACデータログ取得依頼：調理様【重要度低】,,,,,,,,,,,中止,,2025-05-21,,,,蝶理株式会社様,Classic_顧客端末(東京),http://achyperopi-prod.internal.worksap.com/redmine/issues/366050
+351373,,【ヤナセ様】【AC】新テスト環境構築依頼,,,,,,,,,,,,01.未アサイン,2024-12-23,2025-01-31,,,株式会社ヤナセ,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/351373
+368573,,【AC】【アイフル（ライフカード）様】環境同期（本番環境→テスト環境）,,,,,,,,,,,,01.未アサイン,2025-06-12,2025-07-21,,,アイフル（ライフカード）株式会社,Classic_特殊端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/368573
+369977,,HUE_ACES暫定適用：小田急電鉄様Development【重要度：高】,,,,,,,,,,,,01.未アサイン,2025-06-25,2025-06-27,,,小田急電鉄株式会社様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/369977
+366867,,【@SP】プロダクト以外： 【CTU各位】ACデータログ取得依頼_Classic：はるやまホールディングス様【重要度中】,,,,,,,,,,,中止,,2025-05-28,2025-05-29,,,株式会社はるやまホールディングス様,Classic_共有端末,http://achyperopi-prod.internal.worksap.com/redmine/issues/366867
+369110,,【京成電鉄様】本番環境セットアップ,,,,,,,,,,,,01.未アサイン,2025-06-17,,,,京成電鉄株式会社,Classic_顧客端末(東京),http://achyperopi-prod.internal.worksap.com/redmine/issues/369110
+369996,,【株式会社平和様】環境同期依頼_PTF適用前(同日も可能)（本番環境→テスト環境）【重要度中】,,,,,,,,,,,,01.未アサイン,2025-06-25,,,,株式会社平和,Classic_共有端末,http://achyperopi-prod.internal.worksap.com/redmine/issues/369996
+366764,,【@SP】プロダクト以外： 【CTU各位】AC都度依頼_Classic：ジェイテクト様【重要度中】,,,,,,,,,,,中止,,2025-05-28,,,,株式会社ジェイテクト（AC/Ariel）様,Classic_顧客端末(東京+熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/366764
+369069,,【@SP】HUE AC-COMMON： 【CTU各位】HUE-ACESデータログ取得依頼：小島プレス工業株式会社【重要度高】,,,,,,,,,,,中止,,2025-06-17,,,,小島プレス工業株式会社様,HUE_AWS,http://achyperopi-prod.internal.worksap.com/redmine/issues/369069
+369878,,【@SP】プロダクト以外： 【CTU各位】AC都度依頼：三井不動産リアルティ株式会社【重要度中】,,,,,,,,,,,未アサイン,,2025-06-24,,,,三井不動産リアルティ株式会社様,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/369878
+366797,,【@SP】HUE Purchase： 【CTU各位】HUE-PUデータ更新依頼：株式会社鈴木商会様【重要度中】,,,,,,,,,,,中止,,2025-05-28,2025-06-05,,,株式会社鈴木商会様,HUE_OCI,http://achyperopi-prod.internal.worksap.com/redmine/issues/366797
+368712,,【キリン堂】開発環境　2024年10月PTF,,,,,,,,,,,,01.未アサイン,2025-06-13,2025-06-30,,,株式会社キリン堂,Classic_顧客端末(東京),http://achyperopi-prod.internal.worksap.com/redmine/issues/368712
 301024,,【@SP】プロダクト以外： 【CTU各位】ACデータログ取得依頼：ゼビオ【重要度中】,2023-09-05,14-16,,,,,,,,,対応完了,,2023-09-05,2023-09-05,,,ゼビオ株式会社（AC）様,Classic_CCMS,http://achyperopi-prod.internal.worksap.com/redmine/issues/301024
-303711,,【@SP】CPM： 【CTU各位】CPMデータログ取得依頼：KDDIエボルバ様【重要度中】,2023-09-26,14-16,,,,,,,,,対応完了,,2023-09-25,2023-09-26,,,アルティウスリンク株式会社様,Classic_共有端末,http://achyperopi-prod.internal.worksap.com/redmine/issues/303711
 302963,,【@SP】CPM： 【CTU各位】CPMデータログ取得依頼：ＥＮＥＯＳ喜入基地株式会社様【重要度中】,2023-09-20,10-12,,,,,,,,,対応完了,,2023-09-19,2023-09-20,,,ＥＮＥＯＳ喜入基地株式会社様,Classic_顧客端末(熊本),http://achyperopi-prod.internal.worksap.com/redmine/issues/302963
 316604,,【@SP】プロダクト以外： 【CTU各位】ACデータログ取得依頼：京成電鉄株式会社【重要度低】,2024-01-25,14-16,,,,,,,,,対応完了,,2024-01-23,2024-01-26,,,京成電鉄株式会社様,Classic_専用線(東京),http://achyperopi-prod.internal.worksap.com/redmine/issues/316604
+303711,,【@SP】CPM： 【CTU各位】CPMデータログ取得依頼：KDDIエボルバ様【重要度中】,2023-09-26,14-16,,,,,,,,,対応完了,,2023-09-25,2023-09-26,,,アルティウスリンク株式会社様,Classic_共有端末,http://achyperopi-prod.internal.worksap.com/redmine/issues/303711
 330591,,【@SP】CPM： 【CTU各位】CPMデータログ取得依頼：日鉄ケミカル＆マテリアル株式会社様【重要度中】,2024-05-30,14-16,,,,,,,,,対応完了,,2024-05-30,2024-05-31,,,日鉄ケミカル＆マテリアル株式会社様,Classic_HCC,http://achyperopi-prod.internal.worksap.com/redmine/issues/330591
 332719,,【@SP】CCM： 【CTU各位】ACリモート作業同席依頼：サントリー様【重要度中】,2024-06-18,"18-20, 20-22",,,,,,,,,中止,,2024-06-18,2024-06-18,,,サントリーホールディングス株式会社様,160,http://achyperopi-prod.internal.worksap.com/redmine/issues/332719
 332685,,【@SP】CPM： 【CTU各位】CPMデータ更新依頼：プレス工業様【重要度中】,2024-06-21,14-16,,,,,,,,,中止,,2024-06-18,2024-06-21,,,プレス工業株式会社様,157,http://achyperopi-prod.internal.worksap.com/redmine/issues/332685
 333803,,【@SP】会計業務共通： 【CTU各位】ACデータ更新依頼：学校法人立命館様【重要度中】,2024-07-02,12-14,,,,,,,,,中止,,2024-06-28,2024-07-02,,,学校法人立命館様,168,http://achyperopi-prod.internal.worksap.com/redmine/issues/333803
 334234,,【@SP】CPM： 【CTU各位】CPMデータ更新依頼：プレス工業様【重要度中】,2024-07-03,18-20,,,,,,,,,対応完了,,2024-07-03,2024-07-03,,,プレス工業株式会社様,157,http://achyperopi-prod.internal.worksap.com/redmine/issues/334234
 334174,,【@SP】HUE APAR： 【CTU各位】HUE-ACデータ更新依頼：RYODEN様【重要度中】,2024-07-03,14-16,,,,,,,,,対応完了,,2024-07-02,2024-07-03,,,株式会社RYODEN様,167,http://achyperopi-prod.internal.worksap.com/redmine/issues/334174
-331128,,【@SP】CAM： 【CTU各位】ACリモート作業同席依頼：ジェイテクト様【重要度中】,2024-06-05,,,,,,,,,,対応完了,,2024-06-04,2024-06-05,,,株式会社ジェイテクト（AC/Ariel）様,161,http://achyperopi-prod.internal.worksap.com/redmine/issues/331128
 335463,,【旭洋工業製作所様】【PU】develop環境へのSSL証明書インストール作業依頼,2024-07-18,,,,,,,,,,中止,,2024-07-16,2024-07-17,,,旭洋工業製作所様,277,http://achyperopi-prod.internal.worksap.com/redmine/issues/335463
+331128,,【@SP】CAM： 【CTU各位】ACリモート作業同席依頼：ジェイテクト様【重要度中】,2024-06-05,,,,,,,,,,対応完了,,2024-06-04,2024-06-05,,,株式会社ジェイテクト（AC/Ariel）様,161,http://achyperopi-prod.internal.worksap.com/redmine/issues/331128
 336382,,【@SP】会計共通： 【CTU各位】ACデータログ取得依頼：スガキコシステムズ様【重要度中】,2024-07-24,12-14,,,,,,,,,中止,,2024-07-24,,,,スガキコシステムズ株式会社様,161,http://achyperopi-prod.internal.worksap.com/redmine/issues/336382
 335466,,【旭洋工業製作所様】【PU】Production環境へのSSL証明書インストール作業依頼,2024-07-30,"16-18, 18-20",2024-07-31,"16-18, 18-20",2024-08-01,"16-18, 18-20",2024-08-02,"16-18, 18-20",,,中止,,2024-07-16,2024-07-22,,,旭洋工業製作所様,277,http://achyperopi-prod.internal.worksap.com/redmine/issues/335466
 338305,,【@SP】HUE AC-COMMON： 【CTU各位】HUE-ACデータログ取得依頼：ワークスアプリケーションズ様【重要度低】,2024-08-14,14-16,,,,,,,,,中止,,2024-08-13,2024-08-13,,,株式会社ワークスアプリケーションズ様,167,http://achyperopi-prod.internal.worksap.com/redmine/issues/338305
