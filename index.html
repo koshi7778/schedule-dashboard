@@ -190,8 +190,21 @@
             background: #edf2f7;
             padding: 10px 20px;
             display: flex;
-            gap: 30px;
+            flex-direction: column;
+            gap: 15px;
             font-size: 11px;
+        }
+
+        .stats-row {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .stats-label {
+            font-weight: bold;
+            color: #2c5282;
+            min-width: 80px;
         }
 
         .stat-item {
@@ -241,11 +254,15 @@
             color: #2d3748;
             text-align: left;
             padding-left: 8px;
-            min-width: 100px;
-            max-width: 100px;
+            width: 120px;
+            min-width: 120px;
+            max-width: 120px;
             position: sticky;
             left: 0;
             z-index: 5;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .date-header {
@@ -829,10 +846,21 @@
         <!-- 月別スケジュールタブ -->
         <div id="monthly-tab" class="tab-content active">
             <div class="stats">
-                <div class="stat-item">総タスク数: <span class="stat-number" id="totalTasks">0</span></div>
-                <div class="stat-item">本アサイン: <span class="stat-number" id="assignedTasks">0</span></div>
-                <div class="stat-item">作業完了: <span class="stat-number" id="completedTasks">0</span></div>
-                <div class="stat-item">キャンセル: <span class="stat-number" id="cancelledTasks">0</span></div>
+                <div class="stats-row">
+                    <div class="stats-label">月集計:</div>
+                    <div class="stat-item">総タスク数: <span class="stat-number" id="totalTasks">0</span></div>
+                    <div class="stat-item">本アサイン: <span class="stat-number" id="assignedTasks">0</span></div>
+                    <div class="stat-item">作業完了: <span class="stat-number" id="completedTasks">0</span></div>
+                    <div class="stat-item">キャンセル: <span class="stat-number" id="cancelledTasks">0</span></div>
+                </div>
+                <div class="stats-row">
+                    <div class="stats-label">週集計:</div>
+                    <div class="stat-item">第1週: <span class="stat-number" id="week1Tasks">0</span></div>
+                    <div class="stat-item">第2週: <span class="stat-number" id="week2Tasks">0</span></div>
+                    <div class="stat-item">第3週: <span class="stat-number" id="week3Tasks">0</span></div>
+                    <div class="stat-item">第4週: <span class="stat-number" id="week4Tasks">0</span></div>
+                    <div class="stat-item">第5週: <span class="stat-number" id="week5Tasks">0</span></div>
+                </div>
             </div>
 
             <div class="table-container">
@@ -1735,6 +1763,37 @@
             return matchingTasks;
         }
 
+        // 顧客名を省略する関数
+        function abbreviateCustomerName(customerName) {
+            if (!customerName) return '顧客不明';
+            
+            // 株式会社、有限会社などの法人格を削除
+            let abbreviated = customerName
+                .replace(/株式会社/g, '')
+                .replace(/有限会社/g, '')
+                .replace(/合同会社/g, '')
+                .replace(/合資会社/g, '')
+                .replace(/合名会社/g, '')
+                .replace(/一般財団法人/g, '')
+                .replace(/公益財団法人/g, '')
+                .replace(/一般社団法人/g, '')
+                .replace(/公益社団法人/g, '')
+                .replace(/学校法人/g, '')
+                .replace(/医療法人/g, '')
+                .replace(/社会福祉法人/g, '')
+                .replace(/宗教法人/g, '')
+                .replace(/特定非営利活動法人/g, '')
+                .replace(/NPO法人/g, '')
+                .replace(/\s+/g, ''); // 空白を削除
+            
+            // 10文字以上の場合は短縮
+            if (abbreviated.length > 8) {
+                abbreviated = abbreviated.substring(0, 8) + '...';
+            }
+            
+            return abbreviated || '顧客不明';
+        }
+
         // セル内容をレンダリング（色分け改良版）
         function renderCellContent(cell, tasks) {
             // セルをクリア
@@ -1811,18 +1870,18 @@
                 // プロジェクト系タスクがある場合のみタスク名表示
                 if (specialProjectTasks.length > 0) {
                     showTaskName = true;
-                    taskName = '計画枠';
+                    taskName = '計画'; // '計画枠' → '計画'
                 } else {
                     // 通常タスクの場合
                     showTaskName = true;
-                    taskName = '随時枠';
+                    taskName = '随時'; // '随時枠' → '随時'
                 }
                 
                 if (showTaskName) {
                     const taskNameDiv = document.createElement('div');
-                    taskNameDiv.style.fontSize = '9px'; // 7px → 9px に拡大
-                    taskNameDiv.style.color = '#444';   // #666 → #444 に濃く
-                    taskNameDiv.style.fontWeight = '500'; // 300 → 500 に太く
+                    taskNameDiv.style.fontSize = '9px';
+                    taskNameDiv.style.color = '#444';
+                    taskNameDiv.style.fontWeight = '500';
                     taskNameDiv.style.lineHeight = '1.1';
                     taskNameDiv.style.marginBottom = '2px';
                     taskNameDiv.style.textAlign = 'center';
@@ -1840,7 +1899,7 @@
                 // 特別プロジェクトのタスクがある場合の表示
                 if (specialProjectTasks.length > 0) {
                     // 顧客名とプロジェクト名を取得（最初の特別プロジェクトタスクから）
-                    const customerName = specialProjectTasks[0].customerName || '顧客不明';
+                    const customerName = abbreviateCustomerName(specialProjectTasks[0].customerName);
                     const projectName = specialProjectTasks[0].projectName || '';
                     
                     // プロジェクト名を短縮表示用に変換
@@ -1859,11 +1918,11 @@
                     cell.style.border = '2px solid #40a9ff';
                     cell.style.fontWeight = 'bold';
                     
-                    // 表示内容を変更
+                    // 表示内容を変更（プロジェクト名を見やすく）
                     countDiv.innerHTML = `
                         <div style="font-size: 10px; font-weight: bold;">${taskCount}</div>
                         <div style="font-size: 8px; color: #1c4ed8; margin-top: 1px;">${customerName}</div>
-                        <div style="font-size: 7px; color: #0f62fe; font-weight: bold;">${shortProjectName}</div>
+                        <div style="font-size: 8px; color: #000; font-weight: bold; background: rgba(255,255,255,0.8); padding: 1px 2px; border-radius: 2px; margin-top: 1px;">${shortProjectName}</div>
                     `;
                 } else {
                     // 通常のタスク表示（白背景）
