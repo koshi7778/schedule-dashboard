@@ -1803,7 +1803,7 @@
             updateTimelineSchedule(filteredTasks);
         }
 
-        // 本日の計画作業リスト更新（修正版）
+        // 本日の計画作業リスト更新（簡略版）
         function updatePlanningTasksList(tasks) {
             const planningTasksList = document.getElementById('planningTasksList');
             planningTasksList.innerHTML = '';
@@ -1823,34 +1823,13 @@
                 const taskItem = document.createElement('div');
                 taskItem.className = 'planning-task-item';
 
-                const customerName = task.customerName || '顧客不明';
-                const projectName = task.projectName || '';
-                
-                // プロジェクト名を短縮表示用に変換
-                let shortProjectName = projectName;
-                if (projectName.includes('SETUP（サーバーリプレイス、環境追加）')) {
-                    shortProjectName = 'SETUP';
-                } else if (projectName.includes('M/Wバージョンアップ')) {
-                    shortProjectName = 'M/W Ver-UP';
-                } else if (projectName.includes('環境アンインストール')) {
-                    shortProjectName = '環境削除';
-                } else if (projectName.includes('PTF')) {
-                    shortProjectName = 'PTF';
-                } else if (projectName.includes('環境同期')) {
-                    shortProjectName = '環境同期';
-                }
-
                 taskItem.innerHTML = `
                     <div class="planning-task-main">
                         <div class="planning-task-title" ${task.redmineUrl ? `onclick="window.open('${task.redmineUrl}', '_blank')" style="cursor: pointer; text-decoration: underline;"` : ''}>${task.title}</div>
                         <div class="planning-task-details">
-                            <span class="planning-task-customer">${customerName}</span>
-                            <span class="planning-task-project">${shortProjectName}</span>
                             <span class="planning-task-worker">担当: ${task.worker}</span>
-                            ${task.originalTimeString ? `<span>時間帯: ${task.originalTimeString}</span>` : ''}
                         </div>
                     </div>
-                    ${task.redmineUrl ? `<a href="${task.redmineUrl}" target="_blank" class="planning-task-link">Redmine</a>` : ''}
                 `;
 
                 planningTasksList.appendChild(taskItem);
