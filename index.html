@@ -1821,32 +1821,41 @@
             // デバッグ用：タスク数をログ出力
             console.log(`Setting up events for cell with ${tasks.length} tasks`);
             
+            let cellHoverTimeout = null;
+            let isMouseInCell = false;
+            
             // マウスホバーでツールチップ表示（タスク数に関係なく表示）
             cell.addEventListener('mouseenter', (e) => {
                 console.log(`Mouse enter - tasks: ${tasks.length}`);
+                isMouseInCell = true;
                 if (tasks.length > 0) {
+                    clearTimeout(cellHoverTimeout);
                     clearTimeout(tooltipTimeout);
-                    tooltipTimeout = setTimeout(() => {
+                    cellHoverTimeout = setTimeout(() => {
                         console.log(`Showing tooltip for ${tasks.length} tasks`);
-                        if (!isTooltipFixed) {
+                        if (isMouseInCell && !isTooltipFixed) {
                             showTooltip(e, tasks);
                         }
-                    }, 200);
+                    }, 300);
                 }
             });
 
             cell.addEventListener('mouseleave', (e) => {
-                clearTimeout(tooltipTimeout);
-                // ツールチップに向かう場合は少し遅延を入れる
+                console.log('Mouse leave cell');
+                isMouseInCell = false;
+                clearTimeout(cellHoverTimeout);
+                
+                // ツールチップに向かう可能性があるので少し遅延
                 tooltipTimeout = setTimeout(() => {
-                    if (!isTooltipFixed) {
+                    if (!isTooltipFixed && !isMouseInCell) {
+                        console.log('Hiding tooltip after cell leave');
                         hideTooltip();
                     }
-                }, 100);
+                }, 200);
             });
 
             cell.addEventListener('mousemove', (e) => {
-                if (document.getElementById('tooltip').classList.contains('show')) {
+                if (document.getElementById('tooltip').classList.contains('show') && !isTooltipFixed) {
                     updateTooltipPosition(e);
                 }
             });
@@ -1855,6 +1864,7 @@
             cell.addEventListener('dblclick', (e) => {
                 e.stopPropagation();
                 e.preventDefault();
+                isTooltipFixed = false;
                 hideTooltip(); // ツールチップを隠す
                 showCellDropdown(cell, worker, dateStr);
             });
