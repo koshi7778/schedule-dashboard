@@ -1891,21 +1891,18 @@
             // ヘッダー作成
             let tooltipContent = `<div class="tooltip-header">📋 作業予定 (${tasks.length}件)</div>`;
             
-            // 各タスクの情報を表示（簡潔版、推定作業時間なし）
+            // 各タスクの情報を表示（タイトル全量表示）
             tasks.forEach((task, index) => {
                 const timeInfo = task.originalTimeString || '';
                 const redmineUrl = task.redmineUrl || '';
                 const assignStatus = task.assignStatus || task.tsetStatus || '';
                 
-                // タスクタイトルを短縮（さらに短く）
-                let shortTitle = task.title;
-                if (shortTitle.length > 30) {
-                    shortTitle = shortTitle.substring(0, 27) + '...';
-                }
+                // タスクタイトルは短縮せずに全量表示
+                const fullTitle = task.title || 'タイトルなし';
                 
                 tooltipContent += `
                     <div class="tooltip-task" data-url="${redmineUrl}" onclick="event.stopPropagation(); openRedmineTicket('${redmineUrl}')">
-                        <div class="tooltip-title">${shortTitle}</div>
+                        <div class="tooltip-title">${fullTitle}</div>
                         <div class="tooltip-details">
                             ${timeInfo ? `<span class="tooltip-time">${timeInfo}</span>` : ''}
                             ${assignStatus && assignStatus !== 'なし' ? assignStatus : ''}
