@@ -46,6 +46,65 @@
             display: flex;
             gap: 15px;
             align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .view-mode-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px;
+            border-radius: 6px;
+        }
+
+        .view-mode-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.2s ease;
+        }
+
+        .view-mode-btn.active {
+            background: rgba(255, 255, 255, 0.9);
+            color: #2c5282;
+            font-weight: bold;
+        }
+
+        .view-mode-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .location-toggle {
+            background: #4a5568;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            margin-right: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .location-toggle:hover {
+            background: #2d3748;
+        }
+
+        .location-toggle.collapsed {
+            background: #e53e3e;
+        }
+
+        .location-section {
+            transition: all 0.3s ease;
+        }
+
+        .location-section.collapsed {
+            display: none;
         }
 
         .month-selector {
@@ -293,6 +352,15 @@
         }
 
         .today-column.weekend {
+            background: #ffe8cc !important;
+        }
+
+        /* 今日の列の強制適用 */
+        .schedule-table .today-column {
+            background: #fff3cd !important;
+        }
+
+        .schedule-table .today-column.weekend {
             background: #ffe8cc !important;
         }
 
@@ -837,6 +905,11 @@
         <div class="header">
             <h1>作業スケジュール管理ダッシュボード</h1>
             <div class="controls">
+                <div class="view-mode-selector">
+                    <button class="view-mode-btn active" onclick="setViewMode('month')">1か月</button>
+                    <button class="view-mode-btn" onclick="setViewMode('twoWeeks')">2週間</button>
+                    <button class="view-mode-btn" onclick="setViewMode('week')">1週間</button>
+                </div>
                 <div class="month-selector">
                     <button class="month-btn" onclick="changeMonth(-1)">◀</button>
                     <span id="currentMonth">2025年6月</span>
@@ -940,6 +1013,13 @@
     <div id="tooltip" class="tooltip"></div>
 
     <script>
+        // 表示モード管理
+        let currentViewMode = 'month'; // 'week', 'twoWeeks', 'month'
+        let locationVisibility = {
+            kumamoto: true,
+            tokyo: true
+        };
+
         // 現在の日付
         const today = new Date();
         let currentDate = new Date();
@@ -970,15 +1050,85 @@
             preparation: { label: '事前準備', color: '#bee3f8', textColor: '#2b6cb0' }
         };
 
+        // 表示モード設定
+        function setViewMode(mode) {
+            currentViewMode = mode;
+            
+            // アクティブボタンの更新
+            document.querySelectorAll('.view-mode-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`[onclick="setViewMode('${mode}')"]`).classList.add('active');
+            
+            generateTable();
+        }
+
+        // 拠点表示切り替え
+        function toggleLocation(location) {
+            locationVisibility[location] = !locationVisibility[location];
+            generateTable();
+        }
+
+        // 表示期間の計算
+        function getDisplayDateRange() {
+            const today = new Date();
+            const currentMonthFirst = new Date(currentYear, currentMonth, 1);
+            
+            switch (currentViewMode) {
+                case 'week':
+                    // 今週の月曜日から日曜日
+                    const todayInMonth = new Date(currentYear, currentMonth, today.getDate());
+                    const dayOfWeek = todayInMonth.getDay();
+                    const monday = new Date(todayInMonth);
+                    monday.setDate(todayInMonth.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+                    
+                    const sunday = new Date(monday);
+                    sunday.setDate(monday.getDate() + 6);
+                    
+                    return {
+                        start: Math.max(1, monday.getDate()),
+                        end: Math.min(new Date(currentYear, currentMonth + 1, 0).getDate(), sunday.getDate())
+                    };
+                    
+                case 'twoWeeks':
+                    // 今週から翌週
+                    const todayInMonth2 = new Date(currentYear, currentMonth, today.getDate());
+                    const dayOfWeek2 = todayInMonth2.getDay();
+                    const monday2 = new Date(todayInMonth2);
+                    monday2.setDate(todayInMonth2.getDate() - (dayOfWeek2 === 0 ? 6 : dayOfWeek2 - 1));
+                    
+                    const twoWeeksEnd = new Date(monday2);
+                    twoWeeksEnd.setDate(monday2.getDate() + 13);
+                    
+                    return {
+                        start: Math.max(1, monday2.getDate()),
+                        end: Math.min(new Date(currentYear, currentMonth + 1, 0).getDate(), twoWeeksEnd.getDate())
+                    };
+                    
+                case 'month':
+                default:
+                    // 月全体
+                    return {
+                        start: 1,
+                        end: new Date(currentYear, currentMonth + 1, 0).getDate()
+                    };
+            }
+        }
         // 作業者リスト（拠点別）
+        const workersByLocation = {
+            kumamoto: [
+                '紫藤 正之', '村田 祐馬', '入江 有香', '末藤 千奈', '松岡 隼',
+                '園田 敏雄', '塚本 祐太', '宮崎 仁', '山口 広生', '竹田 愛美',
+                '有働 麻耶', '井島 響香'
+            ],
+            tokyo: [
+                '但馬 惟之', '矢野 俊介', '佐治 友里子', '李 相旼', '小泉 祐稀',
+                '小菅 祐馬', '末廣 太一', '木暮 誉貴'
+            ]
+        };
+
+        // 全作業者リスト（後方互換性のため）
         const workers = [
-            // 熊本拠点
-            '紫藤 正之', '村田 祐馬', '入江 有香', '末藤 千奈', '松岡 隼',
-            '園田 敏雄', '塚本 祐太', '宮崎 仁', '山口 広生', '竹田 愛美',
-            '有働 麻耶', '井島 響香',
-            // 東京拠点  
-            '但馬 惟之', '矢野 俊介', '佐治 友里子', '李 相旼', '小泉 祐稀',
-            '小菅 祐馬', '末廣 太一', '木暮 誉貴'
+            ...workersByLocation.kumamoto,
+            ...workersByLocation.tokyo
         ];
 
         // 時間軸の定義
@@ -1394,19 +1544,29 @@
             const table = document.getElementById('scheduleTable');
             table.innerHTML = '';
 
-            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const dateRange = getDisplayDateRange();
+            const startDay = dateRange.start;
+            const endDay = dateRange.end;
 
             // ヘッダー行生成
             const headerRow = document.createElement('tr');
             
-            // 作業者列ヘッダー
+            // 拠点切り替えボタン付きの作業者列ヘッダー
             const workerHeader = document.createElement('th');
-            workerHeader.textContent = '作業者';
+            workerHeader.innerHTML = `
+                <div>作業者</div>
+                <div style="margin-top: 5px;">
+                    <button class="location-toggle ${locationVisibility.kumamoto ? '' : 'collapsed'}" 
+                            onclick="toggleLocation('kumamoto')" title="熊本拠点の表示切り替え">熊</button>
+                    <button class="location-toggle ${locationVisibility.tokyo ? '' : 'collapsed'}" 
+                            onclick="toggleLocation('tokyo')" title="東京拠点の表示切り替え">東</button>
+                </div>
+            `;
             workerHeader.className = 'worker-name';
             headerRow.appendChild(workerHeader);
 
             // 日付列ヘッダー
-            for (let day = 1; day <= daysInMonth; day++) {
+            for (let day = startDay; day <= endDay; day++) {
                 const dayHeader = document.createElement('th');
                 const date = new Date(currentYear, currentMonth, day);
                 const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()];
@@ -1440,26 +1600,32 @@
             assignedHeaderCell.style.fontWeight = 'bold';
             assignedRow.appendChild(assignedHeaderCell);
             
-            for (let day = 1; day <= daysInMonth; day++) {
+            for (let day = startDay; day <= endDay; day++) {
                 const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 const assignedCount = getTaskCountByStatus(dateStr, 'assigned');
                 
                 const assignedCell = document.createElement('td');
                 assignedCell.textContent = assignedCount > 0 ? assignedCount : '';
                 assignedCell.className = 'task-cell';
-                assignedCell.style.backgroundColor = assignedCount > 0 ? '#e6f7ff' : '';
-                assignedCell.style.color = '#1890ff';
-                assignedCell.style.fontWeight = 'bold';
+                
+                // 今日の日付をハイライト（最優先）
+                if (isToday(currentYear, currentMonth, day)) {
+                    assignedCell.classList.add('today-column');
+                }
                 
                 // 土日の背景色
                 const date = new Date(currentYear, currentMonth, day);
                 if (date.getDay() === 0 || date.getDay() === 6) {
                     assignedCell.classList.add('weekend');
                 }
-
-                // 今日の日付をハイライト
-                if (isToday(currentYear, currentMonth, day)) {
-                    assignedCell.classList.add('today-column');
+                
+                // セルのスタイル設定
+                if (assignedCount > 0) {
+                    if (!isToday(currentYear, currentMonth, day)) {
+                        assignedCell.style.backgroundColor = '#e6f7ff';
+                    }
+                    assignedCell.style.color = '#1890ff';
+                    assignedCell.style.fontWeight = 'bold';
                 }
                 
                 assignedRow.appendChild(assignedCell);
@@ -1476,26 +1642,32 @@
             completedHeaderCell.style.fontWeight = 'bold';
             completedRow.appendChild(completedHeaderCell);
             
-            for (let day = 1; day <= daysInMonth; day++) {
+            for (let day = startDay; day <= endDay; day++) {
                 const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 const completedCount = getTaskCountByStatus(dateStr, 'completed');
                 
                 const completedCell = document.createElement('td');
                 completedCell.textContent = completedCount > 0 ? completedCount : '';
                 completedCell.className = 'task-cell';
-                completedCell.style.backgroundColor = completedCount > 0 ? '#f6ffed' : '';
-                completedCell.style.color = '#52c41a';
-                completedCell.style.fontWeight = 'bold';
+                
+                // 今日の日付をハイライト（最優先）
+                if (isToday(currentYear, currentMonth, day)) {
+                    completedCell.classList.add('today-column');
+                }
                 
                 // 土日の背景色
                 const date = new Date(currentYear, currentMonth, day);
                 if (date.getDay() === 0 || date.getDay() === 6) {
                     completedCell.classList.add('weekend');
                 }
-
-                // 今日の日付をハイライト
-                if (isToday(currentYear, currentMonth, day)) {
-                    completedCell.classList.add('today-column');
+                
+                // セルのスタイル設定
+                if (completedCount > 0) {
+                    if (!isToday(currentYear, currentMonth, day)) {
+                        completedCell.style.backgroundColor = '#f6ffed';
+                    }
+                    completedCell.style.color = '#52c41a';
+                    completedCell.style.fontWeight = 'bold';
                 }
                 
                 completedRow.appendChild(completedCell);
@@ -1503,91 +1675,82 @@
             table.appendChild(completedRow);
 
             // 作業者行生成（拠点別ヘッダー付き）
-            let currentLocation = '';
-            workers.forEach((worker, index) => {
-                // 拠点ヘッダーの判定と追加
-                if (index === 0) {
-                    // 熊本拠点ヘッダー
-                    const kumamotoHeaderRow = document.createElement('tr');
-                    const kumamotoHeaderCell = document.createElement('td');
-                    kumamotoHeaderCell.textContent = '熊本拠点';
-                    kumamotoHeaderCell.className = 'worker-name';
-                    kumamotoHeaderCell.style.backgroundColor = '#e6fffa';
-                    kumamotoHeaderCell.style.fontWeight = 'bold';
-                    kumamotoHeaderCell.style.color = '#2c7a7b';
-                    kumamotoHeaderRow.appendChild(kumamotoHeaderCell);
-                    
-                    // 空のセルで埋める
-                    for (let day = 1; day <= daysInMonth; day++) {
-                        const emptyCell = document.createElement('td');
-                        emptyCell.style.backgroundColor = '#e6fffa';
-                        kumamotoHeaderRow.appendChild(emptyCell);
-                    }
-                    table.appendChild(kumamotoHeaderRow);
-                } else if (index === 12) {
-                    // 東京拠点ヘッダー
-                    const tokyoHeaderRow = document.createElement('tr');
-                    const tokyoHeaderCell = document.createElement('td');
-                    tokyoHeaderCell.textContent = '東京拠点';
-                    tokyoHeaderCell.className = 'worker-name';
-                    tokyoHeaderCell.style.backgroundColor = '#fef5e7';
-                    tokyoHeaderCell.style.fontWeight = 'bold';
-                    tokyoHeaderCell.style.color = '#c05621';
-                    tokyoHeaderRow.appendChild(tokyoHeaderCell);
-                    
-                    // 空のセルで埋める
-                    for (let day = 1; day <= daysInMonth; day++) {
-                        const emptyCell = document.createElement('td');
-                        emptyCell.style.backgroundColor = '#fef5e7';
-                        tokyoHeaderRow.appendChild(emptyCell);
-                    }
-                    table.appendChild(tokyoHeaderRow);
+            Object.entries(workersByLocation).forEach(([location, locationWorkers]) => {
+                const locationName = location === 'kumamoto' ? '熊本拠点' : '東京拠点';
+                const locationColor = location === 'kumamoto' ? '#e6fffa' : '#fef5e7';
+                const textColor = location === 'kumamoto' ? '#2c7a7b' : '#c05621';
+                
+                // 拠点が非表示の場合はスキップ
+                if (!locationVisibility[location]) return;
+                
+                // 拠点ヘッダー
+                const locationHeaderRow = document.createElement('tr');
+                locationHeaderRow.className = `location-section location-${location}`;
+                
+                const locationHeaderCell = document.createElement('td');
+                locationHeaderCell.textContent = locationName;
+                locationHeaderCell.className = 'worker-name';
+                locationHeaderCell.style.backgroundColor = locationColor;
+                locationHeaderCell.style.fontWeight = 'bold';
+                locationHeaderCell.style.color = textColor;
+                locationHeaderRow.appendChild(locationHeaderCell);
+                
+                // 空のセルで埋める
+                for (let day = startDay; day <= endDay; day++) {
+                    const emptyCell = document.createElement('td');
+                    emptyCell.style.backgroundColor = locationColor;
+                    locationHeaderRow.appendChild(emptyCell);
                 }
+                table.appendChild(locationHeaderRow);
                 
-                const workerRow = document.createElement('tr');
-                
-                // 作業者名セル
-                const workerCell = document.createElement('td');
-                workerCell.textContent = worker;
-                workerCell.className = 'worker-name';
-                workerRow.appendChild(workerCell);
+                // 作業者行
+                locationWorkers.forEach(worker => {
+                    const workerRow = document.createElement('tr');
+                    workerRow.className = `location-section location-${location}`;
+                    
+                    // 作業者名セル
+                    const workerCell = document.createElement('td');
+                    workerCell.textContent = worker;
+                    workerCell.className = 'worker-name';
+                    workerRow.appendChild(workerCell);
 
-                // 各日のセル
-                for (let day = 1; day <= daysInMonth; day++) {
-                    const dayCell = document.createElement('td');
-                    dayCell.className = 'task-cell';
-                    
-                    const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                    
-                    // 土日の背景色
-                    const date = new Date(currentYear, currentMonth, day);
-                    if (date.getDay() === 0 || date.getDay() === 6) {
-                        dayCell.classList.add('weekend');
-                    }
+                    // 各日のセル
+                    for (let day = startDay; day <= endDay; day++) {
+                        const dayCell = document.createElement('td');
+                        dayCell.className = 'task-cell';
+                        
+                        const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                        
+                        // 土日の背景色
+                        const date = new Date(currentYear, currentMonth, day);
+                        if (date.getDay() === 0 || date.getDay() === 6) {
+                            dayCell.classList.add('weekend');
+                        }
 
-                    // 今日の日付をハイライト（薄いオレンジ背景）
-                    if (isToday(currentYear, currentMonth, day)) {
-                        dayCell.classList.add('today-column');
+                        // 今日の日付をハイライト（薄いオレンジ背景）
+                        if (isToday(currentYear, currentMonth, day)) {
+                            dayCell.classList.add('today-column');
+                        }
+                        
+                        // タスクデータがある場合は表示
+                        const tasksForCell = getTasksForCell(worker, dateStr);
+                        
+                        if (tasksForCell.length > 0) {
+                            renderCellContent(dayCell, tasksForCell);
+                            setupCellEvents(dayCell, tasksForCell, worker, dateStr);
+                        } else {
+                            // 空のセルにもイベントを追加
+                            setupEmptyCellEvents(dayCell, worker, dateStr);
+                        }
+                        
+                        // すべてのセルをドロップ可能にする
+                        makeCellDroppable(dayCell, worker, dateStr);
+                        
+                        workerRow.appendChild(dayCell);
                     }
                     
-                    // タスクデータがある場合は表示
-                    const tasksForCell = getTasksForCell(worker, dateStr);
-                    
-                    if (tasksForCell.length > 0) {
-                        renderCellContent(dayCell, tasksForCell);
-                        setupCellEvents(dayCell, tasksForCell, worker, dateStr);
-                    } else {
-                        // 空のセルにもイベントを追加
-                        setupEmptyCellEvents(dayCell, worker, dateStr);
-                    }
-                    
-                    // すべてのセルをドロップ可能にする
-                    makeCellDroppable(dayCell, worker, dateStr);
-                    
-                    workerRow.appendChild(dayCell);
-                }
-                
-                table.appendChild(workerRow);
+                    table.appendChild(workerRow);
+                });
             });
 
             updateStats();
