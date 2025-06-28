@@ -584,8 +584,11 @@
             font-weight: bold;
         }
 
-        .planning-task-time {
-            color: #38a169;
+        .planning-task-worker {
+            background: #f0f9ff;
+            color: #0c4a6e;
+            padding: 2px 6px;
+            border-radius: 3px;
             font-weight: bold;
         }
 
@@ -1769,17 +1772,38 @@
                 ? allTasks 
                 : allTasks.filter(task => task.worker === selectedWorker);
             
-            // 統計を更新
-            document.getElementById('dailyTotalTasks').textContent = filteredTasks.length;
+            // 重複除去：同じIssue IDのタスクは1つにまとめる
+            const uniqueTasks = [];
+            const seenIssueIds = new Set();
             
-            // 本日の計画作業リストを更新
-            updatePlanningTasksList(filteredTasks);
+            filteredTasks.forEach(task => {
+                // Issue IDを抽出（RDM-12345-1 → 12345）
+                const issueIdMatch = task.id.match(/RDM-(\d+)/);
+                const issueId = issueIdMatch ? issueIdMatch[1] : task.id;
+                
+                if (!seenIssueIds.has(issueId)) {
+                    seenIssueIds.add(issueId);
+                    uniqueTasks.push(task);
+                }
+            });
+            
+            // 統計を更新（重複除去後の件数）
+            document.getElementById('dailyTotalTasks').textContent = uniqueTasks.length;
+            
+            // 本日の計画作業リストを更新（全員選択時のみ）
+            const planningSection = document.querySelector('.planning-tasks-list');
+            if (selectedWorker === 'all') {
+                planningSection.style.display = 'block';
+                updatePlanningTasksList(uniqueTasks);
+            } else {
+                planningSection.style.display = 'none';
+            }
 
             // 時間軸スケジュールを更新
             updateTimelineSchedule(filteredTasks);
         }
 
-        // 本日の計画作業リスト更新
+        // 本日の計画作業リスト更新（修正版）
         function updatePlanningTasksList(tasks) {
             const planningTasksList = document.getElementById('planningTasksList');
             planningTasksList.innerHTML = '';
@@ -1818,11 +1842,11 @@
 
                 taskItem.innerHTML = `
                     <div class="planning-task-main">
-                        <div class="planning-task-title">${task.title}</div>
+                        <div class="planning-task-title" ${task.redmineUrl ? `onclick="window.open('${task.redmineUrl}', '_blank')" style="cursor: pointer; text-decoration: underline;"` : ''}>${task.title}</div>
                         <div class="planning-task-details">
                             <span class="planning-task-customer">${customerName}</span>
                             <span class="planning-task-project">${shortProjectName}</span>
-                            <span class="planning-task-time">${task.estimatedHours}時間</span>
+                            <span class="planning-task-worker">担当: ${task.worker}</span>
                             ${task.originalTimeString ? `<span>時間帯: ${task.originalTimeString}</span>` : ''}
                         </div>
                     </div>
