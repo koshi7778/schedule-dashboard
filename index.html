@@ -1840,64 +1840,51 @@
             }
         }
 
-        // セルのイベント設定（修正版）
+        // セルのイベント設定（ワンクリック方式）
         function setupCellEvents(cell, tasks, worker, dateStr) {
-            // デバッグ用：タスク数をログ出力
             console.log(`Setting up events for cell with ${tasks.length} tasks`);
             
-            let cellHoverTimeout = null;
-            let isMouseInCell = false;
-            
-            // マウスホバーでツールチップ表示（タスク数に関係なく表示）
-            cell.addEventListener('mouseenter', (e) => {
-                console.log(`Mouse enter - tasks: ${tasks.length}`);
-                isMouseInCell = true;
-                if (tasks.length > 0) {
-                    clearTimeout(cellHoverTimeout);
-                    clearTimeout(tooltipTimeout);
-                    cellHoverTimeout = setTimeout(() => {
-                        console.log(`Showing tooltip for ${tasks.length} tasks`);
-                        if (isMouseInCell && !isTooltipFixed) {
-                            showTooltip(e, tasks);
-                        }
-                    }, 300);
-                }
-            });
-
-            cell.addEventListener('mouseleave', (e) => {
-                console.log('Mouse leave cell');
-                isMouseInCell = false;
-                clearTimeout(cellHoverTimeout);
+            // シングルクリックでツールチップ表示/非表示切り替え
+            cell.addEventListener('click', (e) => {
+                e.stopPropagation();
+                e.preventDefault();
                 
-                // ツールチップに向かう可能性があるので少し遅延
-                tooltipTimeout = setTimeout(() => {
-                    if (!isTooltipFixed && !isMouseInCell) {
-                        console.log('Hiding tooltip after cell leave');
+                if (tasks.length > 0) {
+                    const tooltip = document.getElementById('tooltip');
+                    const isCurrentlyVisible = tooltip.classList.contains('show');
+                    
+                    // 他のツールチップを閉じる
+                    if (isCurrentlyVisible) {
                         hideTooltip();
+                    } else {
+                        hideTooltip(); // 他のツールチップを閉じてから表示
+                        setTimeout(() => {
+                            showTooltip(e, tasks);
+                            isTooltipFixed = true; // クリックで表示したので固定
+                        }, 50);
                     }
-                }, 200);
-            });
-
-            cell.addEventListener('mousemove', (e) => {
-                if (document.getElementById('tooltip').classList.contains('show') && !isTooltipFixed) {
-                    updateTooltipPosition(e);
                 }
             });
 
-            // ダブルクリックでプルダウン表示（最優先）
+            // ダブルクリックでプルダウン表示
             cell.addEventListener('dblclick', (e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                isTooltipFixed = false;
                 hideTooltip(); // ツールチップを隠す
                 showCellDropdown(cell, worker, dateStr);
             });
 
-            // シングルクリックは無効化（Redmineリンクには飛ばない）
-            cell.addEventListener('click', (e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                // 何もしない - ダブルクリックでのみプルダウンを表示
+            // ホバー効果のみ（ツールチップは表示しない）
+            cell.addEventListener('mouseenter', (e) => {
+                if (tasks.length > 0) {
+                    cell.style.transform = 'scale(1.02)';
+                    cell.style.transition = 'transform 0.2s ease';
+                }
+            });
+
+            cell.addEventListener('mouseleave', (e) => {
+                cell.style.transform = '';
+                cell.style.transition = '';
             });
 
             // 手動で追加されたタスクの場合はドラッグ可能にする
