@@ -1747,6 +1747,20 @@
                 task.title && task.title.includes('暫定')
             );
             
+            // 特別プロジェクトのチェック
+            const specialProjectKeywords = [
+                'SETUP（サーバーリプレイス、環境追加）',
+                'PTF',
+                '環境同期',
+                '環境アンインストール',
+                'M/Wバージョンアップ'
+            ];
+            
+            const specialProjectTasks = ticketTasks.filter(task => {
+                const projectName = task.projectName || '';
+                return specialProjectKeywords.some(keyword => projectName.includes(keyword));
+            });
+            
             // 手動タスクがある場合は手動タスクを優先表示
             if (manualTasks.length > 0) {
                 // 最初の手動タスクの種別で色とラベルを決定
@@ -1804,9 +1818,36 @@
                 countDiv.className = 'task-count';
                 countDiv.textContent = taskCount;
                 
-                // 暫定適用のタスクがある場合の特別表示
-                if (tentativeTasks.length > 0) {
-                    // 顧客名を取得（最初の暫定タスクから）
+                // 特別プロジェクトのタスクがある場合の表示
+                if (specialProjectTasks.length > 0) {
+                    // 顧客名とプロジェクト名を取得（最初の特別プロジェクトタスクから）
+                    const customerName = specialProjectTasks[0].customerName || '顧客不明';
+                    const projectName = specialProjectTasks[0].projectName || '';
+                    
+                    // プロジェクト名を短縮表示用に変換
+                    let shortProjectName = projectName;
+                    if (projectName.includes('SETUP（サーバーリプレイス、環境追加）')) {
+                        shortProjectName = 'SETUP';
+                    } else if (projectName.includes('M/Wバージョンアップ')) {
+                        shortProjectName = 'M/W Ver-UP';
+                    } else if (projectName.includes('環境アンインストール')) {
+                        shortProjectName = '環境削除';
+                    }
+                    
+                    // セルの背景色を特別プロジェクト専用の色に変更
+                    cell.style.backgroundColor = '#e6f7ff';
+                    cell.style.color = '#1890ff';
+                    cell.style.border = '2px solid #40a9ff';
+                    cell.style.fontWeight = 'bold';
+                    
+                    // 表示内容を変更
+                    countDiv.innerHTML = `
+                        <div style="font-size: 10px; font-weight: bold;">${taskCount}</div>
+                        <div style="font-size: 8px; color: #1c4ed8; margin-top: 1px;">${customerName}</div>
+                        <div style="font-size: 7px; color: #0f62fe; font-weight: bold;">${shortProjectName}</div>
+                    `;
+                } else if (tentativeTasks.length > 0) {
+                    // 暫定適用のタスクがある場合の表示
                     const customerName = tentativeTasks[0].customerName || '顧客不明';
                     
                     // セルの背景色を暫定適用専用の色に変更
@@ -1822,7 +1863,7 @@
                         <div style="font-size: 7px; color: #e53e3e; font-weight: bold;">暫定適用</div>
                     `;
                 } else {
-                    // 総作業時間を計算して表示
+                    // 通常のタスク表示（総作業時間を計算して表示）
                     const totalHours = ticketTasks.reduce((sum, task) => sum + (task.estimatedHours || 0), 0);
                     if (totalHours > 0) {
                         const hoursDiv = document.createElement('div');
@@ -1894,8 +1935,15 @@
             }
         }
 
-        // 空のセルのイベント設定（修正版）
+        // 空のセルのイベント設定（ワンクリック方式）
         function setupEmptyCellEvents(cell, worker, dateStr) {
+            // シングルクリックは何もしない（タスクがないため）
+            cell.addEventListener('click', (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                // 空セルなので何もしない
+            });
+            
             // ダブルクリックでプルダウン表示
             cell.addEventListener('dblclick', (e) => {
                 e.stopPropagation();
@@ -2229,6 +2277,7 @@
                             redmineUrl: row['URL'] || '',
                             customerName: row['お客様名'] || '',
                             remoteFlag: row['リモート有無'] || '',
+                            projectName: row['プロジェクト'] || '', // プロジェクト項目を追加
                             tsetStatus: row['TSETステータス'] || '',
                             assignStatus: row['TSETアサイン状態'] || '',
                             createdDate: row['作成日'] || '',
@@ -2258,6 +2307,7 @@
                             redmineUrl: row['URL'] || '',
                             customerName: row['お客様名'] || '',
                             remoteFlag: row['リモート有無'] || '',
+                            projectName: row['プロジェクト'] || '', // プロジェクト項目を追加
                             tsetStatus: row['TSETステータス'] || '',
                             assignStatus: row['TSETアサイン状態'] || '',
                             createdDate: row['作成日'] || '',
@@ -2408,6 +2458,18 @@
             // 日付選択プルダウンを初期化
             initializeDateSelector();
             updateDailySchedule();
+            
+            // ツールチップ外クリックで閉じる機能
+            document.addEventListener('click', (e) => {
+                const tooltip = document.getElementById('tooltip');
+                const isClickInsideTooltip = tooltip.contains(e.target);
+                const isClickOnCell = e.target.closest('.task-cell');
+                
+                // ツールチップ外をクリックした場合（セル以外）
+                if (!isClickInsideTooltip && !isClickOnCell && tooltip.classList.contains('show')) {
+                    hideTooltip();
+                }
+            });
             
             // 1秒後にCSV自動読み込み
             setTimeout(() => {
