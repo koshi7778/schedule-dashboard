@@ -1826,19 +1826,24 @@
                         if (!isTooltipFixed) {
                             showTooltip(e, tasks);
                         }
-                    }, 300); // 300ms の遅延を追加
+                    }, 200); // 遅延を短縮
                 }
             });
 
-            cell.addEventListener('mouseleave', () => {
+            cell.addEventListener('mouseleave', (e) => {
                 clearTimeout(tooltipTimeout);
-                if (!isTooltipFixed) {
-                    hideTooltip();
-                }
+                // ツールチップに向かう場合は少し遅延を入れる
+                tooltipTimeout = setTimeout(() => {
+                    if (!isTooltipFixed) {
+                        hideTooltip();
+                    }
+                }, 100);
             });
 
             cell.addEventListener('mousemove', (e) => {
-                updateTooltipPosition(e);
+                if (document.getElementById('tooltip').classList.contains('show')) {
+                    updateTooltipPosition(e);
+                }
             });
 
             // ダブルクリックでプルダウン表示（最優先）
@@ -1881,19 +1886,16 @@
             // ヘッダー作成
             let tooltipContent = `<div class="tooltip-header">📋 作業予定 (${tasks.length}件)</div>`;
             
-            // 各タスクの情報を表示
+            // 各タスクの情報を表示（簡潔版、推定作業時間なし）
             tasks.forEach((task, index) => {
-                const hours = task.estimatedHours || 0;
                 const timeInfo = task.originalTimeString || '';
-                const customerInfo = task.customerName || 'なし';
-                const remoteInfo = task.remoteFlag || 'なし';
                 const redmineUrl = task.redmineUrl || '';
-                const assignStatus = task.assignStatus || task.tsetStatus || 'なし';
+                const assignStatus = task.assignStatus || task.tsetStatus || '';
                 
-                // タスクタイトルを短縮（長すぎる場合）
+                // タスクタイトルを短縮（さらに短く）
                 let shortTitle = task.title;
-                if (shortTitle.length > 40) {
-                    shortTitle = shortTitle.substring(0, 37) + '...';
+                if (shortTitle.length > 30) {
+                    shortTitle = shortTitle.substring(0, 27) + '...';
                 }
                 
                 tooltipContent += `
@@ -1901,29 +1903,35 @@
                         <div class="tooltip-title">${shortTitle}</div>
                         <div class="tooltip-details">
                             ${timeInfo ? `<span class="tooltip-time">${timeInfo}</span>` : ''}
-                            ${hours > 0 ? `<span class="tooltip-hours">${hours}h</span>` : ''}
-                            <br>
-                            <strong>作業者:</strong> ${task.worker}<br>
-                            <strong>顧客:</strong> ${customerInfo}<br>
-                            <strong>リモート:</strong> ${remoteInfo}<br>
-                            <strong>状態:</strong> ${assignStatus}
+                            ${assignStatus && assignStatus !== 'なし' ? assignStatus : ''}
                         </div>
                     </div>
                 `;
             });
             
-            // クリック案内を追加
+            // クリック案内を追加（簡潔版）
             const hasRedmineLinks = tasks.some(task => task.redmineUrl);
             if (hasRedmineLinks) {
-                tooltipContent += '<div class="tooltip-click-hint">🔗 リンクをクリックでRedmineチケットを開く</div>';
+                tooltipContent += '<div class="tooltip-click-hint">🔗 クリックでRedmine表示</div>';
             }
             
             tooltip.innerHTML = tooltipContent;
             tooltip.classList.add('show');
             isTooltipFixed = false;
             
-            // ツールチップの位置調整
+            // ツールチップの位置調整（改良版）
             updateTooltipPosition(event);
+            
+            // ツールチップ自体にマウスイベントを追加
+            tooltip.addEventListener('mouseenter', () => {
+                isTooltipFixed = true;
+                clearTimeout(tooltipTimeout);
+            });
+            
+            tooltip.addEventListener('mouseleave', () => {
+                isTooltipFixed = false;
+                hideTooltip();
+            });
         }
 
         // ツールチップの位置を更新
