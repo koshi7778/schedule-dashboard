@@ -1945,46 +1945,70 @@
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
             const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
             
+            // デフォルトの位置（セルの右側）
             let left = rect.right + 15;
             let top = rect.top + scrollTop;
             
-            // ツールチップのサイズを計算するために一時的に表示
+            // ツールチップのサイズを取得するために一時的に表示
             tooltip.style.left = `${left}px`;
             tooltip.style.top = `${top}px`;
+            tooltip.style.visibility = 'hidden';
+            tooltip.style.display = 'block';
             
-            // 少し待ってからサイズを取得
             setTimeout(() => {
                 const tooltipRect = tooltip.getBoundingClientRect();
                 const viewportHeight = window.innerHeight;
                 const viewportWidth = window.innerWidth;
+                const margin = 20; // 画面端からのマージン
                 
-                // 右端からはみ出る場合は左側に表示
-                if (left + tooltipRect.width > viewportWidth - 10) {
+                // 表示を元に戻す
+                tooltip.style.visibility = 'visible';
+                tooltip.style.display = '';
+                
+                // 右端チェック：ツールチップが画面右端からはみ出る場合
+                if (left + tooltipRect.width > viewportWidth - margin) {
+                    // セルの左側に表示を試す
                     left = rect.left + scrollLeft - tooltipRect.width - 15;
-                    // それでも左端からはみ出る場合は、セルの上に表示
-                    if (left < 10) {
-                        left = rect.left + scrollLeft;
-                        top = rect.top + scrollTop - tooltipRect.height - 10;
+                    
+                    // 左側に表示してもはみ出る場合
+                    if (left < margin) {
+                        // セルの上に表示
+                        left = Math.max(margin, rect.left + scrollLeft);
+                        top = rect.top + scrollTop - tooltipRect.height - 15;
                         
-                        // 上端からもはみ出る場合は、セルの下に表示
-                        if (top < scrollTop + 10) {
-                            top = rect.bottom + scrollTop + 10;
+                        // 上に表示しても画面上端からはみ出る場合
+                        if (top < scrollTop + margin) {
+                            // セルの下に表示
+                            top = rect.bottom + scrollTop + 15;
                         }
-                    }
-                } else {
-                    // 下端からはみ出る場合は上に移動
-                    if (rect.top + tooltipRect.height > viewportHeight - 10) {
-                        top = rect.top + scrollTop - tooltipRect.height - 10;
                         
-                        // 上端からもはみ出る場合は、可能な範囲で上部に配置
-                        if (top < scrollTop + 10) {
-                            top = scrollTop + 10;
+                        // 左右中央寄せで画面幅に収める
+                        if (left + tooltipRect.width > viewportWidth - margin) {
+                            left = Math.max(margin, viewportWidth - tooltipRect.width - margin);
                         }
                     }
                 }
                 
-                tooltip.style.left = `${left}px`;
-                tooltip.style.top = `${top}px`;
+                // 下端チェック：ツールチップが画面下端からはみ出る場合
+                if (top + tooltipRect.height > viewportHeight + scrollTop - margin) {
+                    // セルの上に表示
+                    top = rect.top + scrollTop - tooltipRect.height - 15;
+                    
+                    // 上に表示しても画面上端からはみ出る場合
+                    if (top < scrollTop + margin) {
+                        // 画面内に収まる最適な位置に調整
+                        top = Math.max(scrollTop + margin, Math.min(
+                            rect.top + scrollTop,
+                            viewportHeight + scrollTop - tooltipRect.height - margin
+                        ));
+                    }
+                }
+                
+                // 最終的な位置設定
+                tooltip.style.left = `${Math.max(margin, left)}px`;
+                tooltip.style.top = `${Math.max(scrollTop + margin, top)}px`;
+                
+                console.log(`Tooltip positioned at: left=${left}, top=${top}, viewport=${viewportWidth}x${viewportHeight}, tooltip=${tooltipRect.width}x${tooltipRect.height}`);
             }, 10);
         }
 
