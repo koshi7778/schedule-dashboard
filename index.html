@@ -1742,6 +1742,11 @@
             const ticketTasks = tasks.filter(task => !task.isManualEntry);
             const manualTasks = tasks.filter(task => task.isManualEntry);
             
+            // 暫定適用のチェック
+            const tentativeTasks = ticketTasks.filter(task => 
+                task.title && task.title.includes('暫定')
+            );
+            
             // 手動タスクがある場合は手動タスクを優先表示
             if (manualTasks.length > 0) {
                 // 最初の手動タスクの種別で色とラベルを決定
@@ -1799,16 +1804,35 @@
                 countDiv.className = 'task-count';
                 countDiv.textContent = taskCount;
                 
-                // 総作業時間を計算して表示
-                const totalHours = ticketTasks.reduce((sum, task) => sum + (task.estimatedHours || 0), 0);
-                if (totalHours > 0) {
-                    const hoursDiv = document.createElement('div');
-                    hoursDiv.style.fontSize = '8px';
-                    hoursDiv.style.fontWeight = 'normal';
-                    hoursDiv.style.opacity = '0.8';
-                    hoursDiv.textContent = `${totalHours}h`;
-                    countDiv.appendChild(document.createElement('br'));
-                    countDiv.appendChild(hoursDiv);
+                // 暫定適用のタスクがある場合の特別表示
+                if (tentativeTasks.length > 0) {
+                    // 顧客名を取得（最初の暫定タスクから）
+                    const customerName = tentativeTasks[0].customerName || '顧客不明';
+                    
+                    // セルの背景色を暫定適用専用の色に変更
+                    cell.style.backgroundColor = '#fff4e6';
+                    cell.style.color = '#d69e2e';
+                    cell.style.border = '2px solid #f6ad55';
+                    cell.style.fontWeight = 'bold';
+                    
+                    // 表示内容を変更
+                    countDiv.innerHTML = `
+                        <div style="font-size: 10px; font-weight: bold;">${taskCount}</div>
+                        <div style="font-size: 8px; color: #c05621; margin-top: 1px;">${customerName}</div>
+                        <div style="font-size: 7px; color: #e53e3e; font-weight: bold;">暫定適用</div>
+                    `;
+                } else {
+                    // 総作業時間を計算して表示
+                    const totalHours = ticketTasks.reduce((sum, task) => sum + (task.estimatedHours || 0), 0);
+                    if (totalHours > 0) {
+                        const hoursDiv = document.createElement('div');
+                        hoursDiv.style.fontSize = '8px';
+                        hoursDiv.style.fontWeight = 'normal';
+                        hoursDiv.style.opacity = '0.8';
+                        hoursDiv.textContent = `${totalHours}h`;
+                        countDiv.appendChild(document.createElement('br'));
+                        countDiv.appendChild(hoursDiv);
+                    }
                 }
                 
                 countDiv.title = 'ダブルクリックで手動タスクを追加 | ホバーでチケット詳細を確認';
@@ -1898,6 +1922,10 @@
             
             if (tasks.length === 0) return;
             
+            // 既存のイベントリスナーを削除
+            const newTooltip = tooltip.cloneNode(false);
+            tooltip.parentNode.replaceChild(newTooltip, tooltip);
+            
             // ヘッダー作成
             let tooltipContent = `<div class="tooltip-header">📋 作業予定 (${tasks.length}件)</div>`;
             
@@ -1911,7 +1939,7 @@
                 const fullTitle = task.title || 'タイトルなし';
                 
                 tooltipContent += `
-                    <div class="tooltip-task" data-url="${redmineUrl}" onclick="event.stopPropagation(); openRedmineTicket('${redmineUrl}')">
+                    <div class="tooltip-task" data-url="${redmineUrl}">
                         <div class="tooltip-title">${fullTitle}</div>
                         <div class="tooltip-details">
                             ${timeInfo ? `<span class="tooltip-time">${timeInfo}</span>` : ''}
@@ -1927,22 +1955,45 @@
                 tooltipContent += '<div class="tooltip-click-hint">🔗 クリックでRedmine表示</div>';
             }
             
-            tooltip.innerHTML = tooltipContent;
-            tooltip.classList.add('show');
+            const finalTooltip = document.getElementById('tooltip');
+            finalTooltip.innerHTML = tooltipContent;
+            finalTooltip.classList.add('show');
             isTooltipFixed = false;
             
-            // ツールチップの位置調整（改良版）
+            // ツールチップの位置調整
             updateTooltipPosition(event);
             
-            // ツールチップ自体にマウスイベントを追加
-            tooltip.addEventListener('mouseenter', () => {
+            // ツールチップ自体にマウスイベントを追加（改良版）
+            finalTooltip.addEventListener('mouseenter', (e) => {
+                console.log('Mouse entered tooltip');
                 isTooltipFixed = true;
                 clearTimeout(tooltipTimeout);
+                e.stopPropagation();
             });
             
-            tooltip.addEventListener('mouseleave', () => {
+            finalTooltip.addEventListener('mouseleave', (e) => {
+                console.log('Mouse left tooltip');
                 isTooltipFixed = false;
-                hideTooltip();
+                tooltipTimeout = setTimeout(() => {
+                    hideTooltip();
+                }, 100);
+                e.stopPropagation();
+            });
+            
+            // 各タスクにクリックイベントを追加
+            finalTooltip.querySelectorAll('.tooltip-task').forEach((taskElement, index) => {
+                const task = tasks[index];
+                if (task && task.redmineUrl) {
+                    taskElement.style.cursor = 'pointer';
+                    taskElement.addEventListener('click', (e) => {
+                        console.log(`Clicking task: ${task.title}, URL: ${task.redmineUrl}`);
+                        e.stopPropagation();
+                        e.preventDefault();
+                        window.open(task.redmineUrl, '_blank');
+                        isTooltipFixed = false;
+                        hideTooltip();
+                    });
+                }
             });
         }
 
@@ -2033,14 +2084,18 @@
         // ツールチップ非表示（改良版）
         function hideTooltip() {
             const tooltip = document.getElementById('tooltip');
-            tooltip.classList.remove('show');
-            isTooltipFixed = false;
-            // ツールチップ内のクリックイベントをクリア
-            setTimeout(() => {
-                if (!tooltip.classList.contains('show')) {
-                    tooltip.innerHTML = '';
-                }
-            }, 300);
+            if (tooltip) {
+                console.log('Hiding tooltip');
+                tooltip.classList.remove('show');
+                isTooltipFixed = false;
+                clearTimeout(tooltipTimeout);
+                // ツールチップ内のクリックイベントをクリア
+                setTimeout(() => {
+                    if (!tooltip.classList.contains('show')) {
+                        tooltip.innerHTML = '';
+                    }
+                }, 300);
+            }
         }
 
         // 統計更新
