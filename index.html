@@ -46,65 +46,6 @@
             display: flex;
             gap: 15px;
             align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .view-mode-selector {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 5px;
-            border-radius: 6px;
-        }
-
-        .view-mode-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 11px;
-            transition: all 0.2s ease;
-        }
-
-        .view-mode-btn.active {
-            background: rgba(255, 255, 255, 0.9);
-            color: #2c5282;
-            font-weight: bold;
-        }
-
-        .view-mode-btn:hover:not(.active) {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .location-toggle {
-            background: #4a5568;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 11px;
-            margin-right: 5px;
-            transition: all 0.2s ease;
-        }
-
-        .location-toggle:hover {
-            background: #2d3748;
-        }
-
-        .location-toggle.collapsed {
-            background: #e53e3e;
-        }
-
-        .location-section {
-            transition: all 0.3s ease;
-        }
-
-        .location-section.collapsed {
-            display: none;
         }
 
         .month-selector {
@@ -576,6 +517,92 @@
             color: #2d3748;
         }
 
+        /* 計画作業一覧 */
+        .planning-tasks-list {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+
+        .planning-tasks-header {
+            background: #f7fafc;
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+            font-weight: bold;
+            color: #2c5282;
+        }
+
+        .planning-task-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .planning-task-item:last-child {
+            border-bottom: none;
+        }
+
+        .planning-task-item:hover {
+            background: #f7fafc;
+        }
+
+        .planning-task-main {
+            flex: 1;
+        }
+
+        .planning-task-title {
+            font-weight: bold;
+            color: #2c5282;
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+
+        .planning-task-details {
+            font-size: 12px;
+            color: #4a5568;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .planning-task-customer {
+            background: #e6f7ff;
+            color: #1890ff;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .planning-task-project {
+            background: #f0f9ff;
+            color: #0369a1;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .planning-task-time {
+            color: #38a169;
+            font-weight: bold;
+        }
+
+        .planning-task-link {
+            background: #3182ce;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        .planning-task-link:hover {
+            background: #2c5282;
+        }
+
         /* 時間軸スケジュール */
         .timeline-schedule {
             background: white;
@@ -715,6 +742,13 @@
         /* 空の状態の表示 */
         .empty-timeline {
             grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            color: #4a5568;
+            font-style: italic;
+        }
+
+        .empty-planning {
             text-align: center;
             padding: 40px;
             color: #4a5568;
@@ -905,11 +939,6 @@
         <div class="header">
             <h1>作業スケジュール管理ダッシュボード</h1>
             <div class="controls">
-                <div class="view-mode-selector">
-                    <button class="view-mode-btn active" onclick="setViewMode('month')">1か月</button>
-                    <button class="view-mode-btn" onclick="setViewMode('twoWeeks')">2週間</button>
-                    <button class="view-mode-btn" onclick="setViewMode('week')">1週間</button>
-                </div>
                 <div class="month-selector">
                     <button class="month-btn" onclick="changeMonth(-1)">◀</button>
                     <span id="currentMonth">2025年6月</span>
@@ -948,7 +977,7 @@
         <div id="daily-tab" class="tab-content">
             <div class="daily-schedule">
                 <div class="daily-header">
-                    <div class="daily-date" id="dailyDate">2025年6月17日 (火)</div>
+                    <div class="daily-date" id="dailyDate">2025年6月29日 (日)</div>
                     <div class="daily-navigation">
                         <button class="month-btn" onclick="changeDailyDate(-1)">◀ 前日</button>
                         <button class="month-btn" onclick="setDailyToday()">今日</button>
@@ -978,18 +1007,18 @@
                         <div class="daily-stat-title">本日の予定作業件数</div>
                         <div class="daily-stat-value" id="dailyTotalTasks">0</div>
                     </div>
-                    <div class="daily-stat-box">
-                        <div class="daily-stat-title">直近の予定作業件数</div>
-                        <div class="daily-stat-value" id="upcomingTasks">0</div>
-                    </div>
-                    <div class="daily-stat-box">
-                        <div class="daily-stat-title">総作業時間</div>
-                        <div class="daily-stat-value" id="dailyTotalHours">0.0h</div>
+                </div>
+
+                <!-- 本日の計画作業一覧 -->
+                <div class="planning-tasks-list">
+                    <div class="planning-tasks-header">本日の計画作業</div>
+                    <div id="planningTasksList">
+                        <!-- 計画作業リストが動的に生成される -->
                     </div>
                 </div>
 
                 <!-- 時間軸スケジュール -->
-                <div class="timeline-schedule">
+                <div class="timeline-schedule" style="margin-top: 20px;">
                     <div class="timeline-header">時間別スケジュール</div>
                     <div class="timeline-content">
                         <div class="time-slots">
@@ -1013,20 +1042,13 @@
     <div id="tooltip" class="tooltip"></div>
 
     <script>
-        // 表示モード管理
-        let currentViewMode = 'month'; // 'week', 'twoWeeks', 'month'
-        let locationVisibility = {
-            kumamoto: true,
-            tokyo: true
-        };
-
-        // 現在の日付
+        // 現在の日付（実際の今日の日付を使用）
         const today = new Date();
         let currentDate = new Date();
         let currentYear = today.getFullYear();
-        let currentMonth = today.getMonth(); // 今日の月を初期値に設定
+        let currentMonth = today.getMonth();
 
-        // 日別表示用の日付
+        // 日別表示用の日付（今日に設定）
         let dailyDate = new Date(today);
 
         // データ
@@ -1050,85 +1072,15 @@
             preparation: { label: '事前準備', color: '#bee3f8', textColor: '#2b6cb0' }
         };
 
-        // 表示モード設定
-        function setViewMode(mode) {
-            currentViewMode = mode;
-            
-            // アクティブボタンの更新
-            document.querySelectorAll('.view-mode-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelector(`[onclick="setViewMode('${mode}')"]`).classList.add('active');
-            
-            generateTable();
-        }
-
-        // 拠点表示切り替え
-        function toggleLocation(location) {
-            locationVisibility[location] = !locationVisibility[location];
-            generateTable();
-        }
-
-        // 表示期間の計算
-        function getDisplayDateRange() {
-            const today = new Date();
-            const currentMonthFirst = new Date(currentYear, currentMonth, 1);
-            
-            switch (currentViewMode) {
-                case 'week':
-                    // 今週の月曜日から日曜日
-                    const todayInMonth = new Date(currentYear, currentMonth, today.getDate());
-                    const dayOfWeek = todayInMonth.getDay();
-                    const monday = new Date(todayInMonth);
-                    monday.setDate(todayInMonth.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
-                    
-                    const sunday = new Date(monday);
-                    sunday.setDate(monday.getDate() + 6);
-                    
-                    return {
-                        start: Math.max(1, monday.getDate()),
-                        end: Math.min(new Date(currentYear, currentMonth + 1, 0).getDate(), sunday.getDate())
-                    };
-                    
-                case 'twoWeeks':
-                    // 今週から翌週
-                    const todayInMonth2 = new Date(currentYear, currentMonth, today.getDate());
-                    const dayOfWeek2 = todayInMonth2.getDay();
-                    const monday2 = new Date(todayInMonth2);
-                    monday2.setDate(todayInMonth2.getDate() - (dayOfWeek2 === 0 ? 6 : dayOfWeek2 - 1));
-                    
-                    const twoWeeksEnd = new Date(monday2);
-                    twoWeeksEnd.setDate(monday2.getDate() + 13);
-                    
-                    return {
-                        start: Math.max(1, monday2.getDate()),
-                        end: Math.min(new Date(currentYear, currentMonth + 1, 0).getDate(), twoWeeksEnd.getDate())
-                    };
-                    
-                case 'month':
-                default:
-                    // 月全体
-                    return {
-                        start: 1,
-                        end: new Date(currentYear, currentMonth + 1, 0).getDate()
-                    };
-            }
-        }
         // 作業者リスト（拠点別）
-        const workersByLocation = {
-            kumamoto: [
-                '紫藤 正之', '村田 祐馬', '入江 有香', '末藤 千奈', '松岡 隼',
-                '園田 敏雄', '塚本 祐太', '宮崎 仁', '山口 広生', '竹田 愛美',
-                '有働 麻耶', '井島 響香'
-            ],
-            tokyo: [
-                '但馬 惟之', '矢野 俊介', '佐治 友里子', '李 相旼', '小泉 祐稀',
-                '小菅 祐馬', '末廣 太一', '木暮 誉貴'
-            ]
-        };
-
-        // 全作業者リスト（後方互換性のため）
         const workers = [
-            ...workersByLocation.kumamoto,
-            ...workersByLocation.tokyo
+            // 熊本拠点
+            '紫藤 正之', '村田 祐馬', '入江 有香', '末藤 千奈', '松岡 隼',
+            '園田 敏雄', '塚本 祐太', '宮崎 仁', '山口 広生', '竹田 愛美',
+            '有働 麻耶', '井島 響香',
+            // 東京拠点  
+            '但馬 惟之', '矢野 俊介', '佐治 友里子', '李 相旼', '小泉 祐稀',
+            '小菅 祐馬', '末廣 太一', '木暮 誉貴'
         ];
 
         // 時間軸の定義
@@ -1139,6 +1091,15 @@
             { label: '16-18', start: 16, end: 18 },
             { label: '18-20', start: 18, end: 20 },
             { label: '20-22', start: 20, end: 22 }
+        ];
+
+        // 特別プロジェクトのキーワード
+        const specialProjectKeywords = [
+            'SETUP（サーバーリプレイス、環境追加）',
+            'PTF',
+            '環境同期',
+            '環境アンインストール',
+            'M/Wバージョンアップ'
         ];
 
         // 作業者選択プルダウンの初期化
@@ -1194,13 +1155,10 @@
             const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()];
             
             // 現在のdailyDateと比較して特別な表記
-            const today = new Date();
-            const currentDate = new Date(dailyDate);
+            const realToday = new Date(); // 実際の今日
             
             // 今日との差を計算
-            const todayDiff = Math.floor((date - today) / (1000 * 60 * 60 * 24));
-            // 現在表示中の日付との差を計算
-            const currentDiff = Math.floor((date - currentDate) / (1000 * 60 * 60 * 24));
+            const todayDiff = Math.floor((date - realToday) / (1000 * 60 * 60 * 24));
             
             if (todayDiff === 0) {
                 return `今日 ${month}/${day} (${dayOfWeek})`;
@@ -1539,34 +1497,49 @@
             return dayOfWeek !== 0 && dayOfWeek !== 6; // 0=日曜, 6=土曜
         }
 
+        // 日付別ステータス件数取得関数
+        function getTaskCountByStatus(dateStr, statusType) {
+            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+            
+            if (!taskData[monthKey]) {
+                return 0;
+            }
+            
+            const tasksOnDate = taskData[monthKey].filter(task => task.date === dateStr);
+            
+            if (statusType === 'assigned') {
+                return tasksOnDate.filter(task => 
+                    task.tsetStatus === '03.本アサイン' || 
+                    task.assignStatus === 'アサイン完了'
+                ).length;
+            } else if (statusType === 'completed') {
+                return tasksOnDate.filter(task => 
+                    task.tsetStatus === '22.作業完全終了' || 
+                    task.assignStatus === '対応完了'
+                ).length;
+            }
+            
+            return 0;
+        }
+
         // テーブル生成（修正版）
         function generateTable() {
             const table = document.getElementById('scheduleTable');
             table.innerHTML = '';
 
-            const dateRange = getDisplayDateRange();
-            const startDay = dateRange.start;
-            const endDay = dateRange.end;
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
             // ヘッダー行生成
             const headerRow = document.createElement('tr');
             
-            // 拠点切り替えボタン付きの作業者列ヘッダー
+            // 作業者列ヘッダー
             const workerHeader = document.createElement('th');
-            workerHeader.innerHTML = `
-                <div>作業者</div>
-                <div style="margin-top: 5px;">
-                    <button class="location-toggle ${locationVisibility.kumamoto ? '' : 'collapsed'}" 
-                            onclick="toggleLocation('kumamoto')" title="熊本拠点の表示切り替え">熊</button>
-                    <button class="location-toggle ${locationVisibility.tokyo ? '' : 'collapsed'}" 
-                            onclick="toggleLocation('tokyo')" title="東京拠点の表示切り替え">東</button>
-                </div>
-            `;
+            workerHeader.textContent = '作業者';
             workerHeader.className = 'worker-name';
             headerRow.appendChild(workerHeader);
 
             // 日付列ヘッダー
-            for (let day = startDay; day <= endDay; day++) {
+            for (let day = 1; day <= daysInMonth; day++) {
                 const dayHeader = document.createElement('th');
                 const date = new Date(currentYear, currentMonth, day);
                 const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()];
@@ -1600,7 +1573,7 @@
             assignedHeaderCell.style.fontWeight = 'bold';
             assignedRow.appendChild(assignedHeaderCell);
             
-            for (let day = startDay; day <= endDay; day++) {
+            for (let day = 1; day <= daysInMonth; day++) {
                 const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 const assignedCount = getTaskCountByStatus(dateStr, 'assigned');
                 
@@ -1642,7 +1615,7 @@
             completedHeaderCell.style.fontWeight = 'bold';
             completedRow.appendChild(completedHeaderCell);
             
-            for (let day = startDay; day <= endDay; day++) {
+            for (let day = 1; day <= daysInMonth; day++) {
                 const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 const completedCount = getTaskCountByStatus(dateStr, 'completed');
                 
@@ -1675,82 +1648,91 @@
             table.appendChild(completedRow);
 
             // 作業者行生成（拠点別ヘッダー付き）
-            Object.entries(workersByLocation).forEach(([location, locationWorkers]) => {
-                const locationName = location === 'kumamoto' ? '熊本拠点' : '東京拠点';
-                const locationColor = location === 'kumamoto' ? '#e6fffa' : '#fef5e7';
-                const textColor = location === 'kumamoto' ? '#2c7a7b' : '#c05621';
-                
-                // 拠点が非表示の場合はスキップ
-                if (!locationVisibility[location]) return;
-                
-                // 拠点ヘッダー
-                const locationHeaderRow = document.createElement('tr');
-                locationHeaderRow.className = `location-section location-${location}`;
-                
-                const locationHeaderCell = document.createElement('td');
-                locationHeaderCell.textContent = locationName;
-                locationHeaderCell.className = 'worker-name';
-                locationHeaderCell.style.backgroundColor = locationColor;
-                locationHeaderCell.style.fontWeight = 'bold';
-                locationHeaderCell.style.color = textColor;
-                locationHeaderRow.appendChild(locationHeaderCell);
-                
-                // 空のセルで埋める
-                for (let day = startDay; day <= endDay; day++) {
-                    const emptyCell = document.createElement('td');
-                    emptyCell.style.backgroundColor = locationColor;
-                    locationHeaderRow.appendChild(emptyCell);
-                }
-                table.appendChild(locationHeaderRow);
-                
-                // 作業者行
-                locationWorkers.forEach(worker => {
-                    const workerRow = document.createElement('tr');
-                    workerRow.className = `location-section location-${location}`;
+            let currentLocation = '';
+            workers.forEach((worker, index) => {
+                // 拠点ヘッダーの判定と追加
+                if (index === 0) {
+                    // 熊本拠点ヘッダー
+                    const kumamotoHeaderRow = document.createElement('tr');
+                    const kumamotoHeaderCell = document.createElement('td');
+                    kumamotoHeaderCell.textContent = '熊本拠点';
+                    kumamotoHeaderCell.className = 'worker-name';
+                    kumamotoHeaderCell.style.backgroundColor = '#e6fffa';
+                    kumamotoHeaderCell.style.fontWeight = 'bold';
+                    kumamotoHeaderCell.style.color = '#2c7a7b';
+                    kumamotoHeaderRow.appendChild(kumamotoHeaderCell);
                     
-                    // 作業者名セル
-                    const workerCell = document.createElement('td');
-                    workerCell.textContent = worker;
-                    workerCell.className = 'worker-name';
-                    workerRow.appendChild(workerCell);
+                    // 空のセルで埋める
+                    for (let day = 1; day <= daysInMonth; day++) {
+                        const emptyCell = document.createElement('td');
+                        emptyCell.style.backgroundColor = '#e6fffa';
+                        kumamotoHeaderRow.appendChild(emptyCell);
+                    }
+                    table.appendChild(kumamotoHeaderRow);
+                } else if (index === 12) {
+                    // 東京拠点ヘッダー
+                    const tokyoHeaderRow = document.createElement('tr');
+                    const tokyoHeaderCell = document.createElement('td');
+                    tokyoHeaderCell.textContent = '東京拠点';
+                    tokyoHeaderCell.className = 'worker-name';
+                    tokyoHeaderCell.style.backgroundColor = '#fef5e7';
+                    tokyoHeaderCell.style.fontWeight = 'bold';
+                    tokyoHeaderCell.style.color = '#c05621';
+                    tokyoHeaderRow.appendChild(tokyoHeaderCell);
+                    
+                    // 空のセルで埋める
+                    for (let day = 1; day <= daysInMonth; day++) {
+                        const emptyCell = document.createElement('td');
+                        emptyCell.style.backgroundColor = '#fef5e7';
+                        tokyoHeaderRow.appendChild(emptyCell);
+                    }
+                    table.appendChild(tokyoHeaderRow);
+                }
+                
+                const workerRow = document.createElement('tr');
+                
+                // 作業者名セル
+                const workerCell = document.createElement('td');
+                workerCell.textContent = worker;
+                workerCell.className = 'worker-name';
+                workerRow.appendChild(workerCell);
 
-                    // 各日のセル
-                    for (let day = startDay; day <= endDay; day++) {
-                        const dayCell = document.createElement('td');
-                        dayCell.className = 'task-cell';
-                        
-                        const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                        
-                        // 土日の背景色
-                        const date = new Date(currentYear, currentMonth, day);
-                        if (date.getDay() === 0 || date.getDay() === 6) {
-                            dayCell.classList.add('weekend');
-                        }
+                // 各日のセル
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dayCell = document.createElement('td');
+                    dayCell.className = 'task-cell';
+                    
+                    const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    
+                    // 土日の背景色
+                    const date = new Date(currentYear, currentMonth, day);
+                    if (date.getDay() === 0 || date.getDay() === 6) {
+                        dayCell.classList.add('weekend');
+                    }
 
-                        // 今日の日付をハイライト（薄いオレンジ背景）
-                        if (isToday(currentYear, currentMonth, day)) {
-                            dayCell.classList.add('today-column');
-                        }
-                        
-                        // タスクデータがある場合は表示
-                        const tasksForCell = getTasksForCell(worker, dateStr);
-                        
-                        if (tasksForCell.length > 0) {
-                            renderCellContent(dayCell, tasksForCell);
-                            setupCellEvents(dayCell, tasksForCell, worker, dateStr);
-                        } else {
-                            // 空のセルにもイベントを追加
-                            setupEmptyCellEvents(dayCell, worker, dateStr);
-                        }
-                        
-                        // すべてのセルをドロップ可能にする
-                        makeCellDroppable(dayCell, worker, dateStr);
-                        
-                        workerRow.appendChild(dayCell);
+                    // 今日の日付をハイライト（薄いオレンジ背景）
+                    if (isToday(currentYear, currentMonth, day)) {
+                        dayCell.classList.add('today-column');
                     }
                     
-                    table.appendChild(workerRow);
-                });
+                    // タスクデータがある場合は表示
+                    const tasksForCell = getTasksForCell(worker, dateStr);
+                    
+                    if (tasksForCell.length > 0) {
+                        renderCellContent(dayCell, tasksForCell);
+                        setupCellEvents(dayCell, tasksForCell, worker, dateStr);
+                    } else {
+                        // 空のセルにもイベントを追加
+                        setupEmptyCellEvents(dayCell, worker, dateStr);
+                    }
+                    
+                    // すべてのセルをドロップ可能にする
+                    makeCellDroppable(dayCell, worker, dateStr);
+                    
+                    workerRow.appendChild(dayCell);
+                }
+                
+                table.appendChild(workerRow);
             });
 
             updateStats();
@@ -1785,24 +1767,66 @@
             
             // 統計を更新
             document.getElementById('dailyTotalTasks').textContent = filteredTasks.length;
-            document.getElementById('dailyTotalHours').textContent = `${filteredTasks.reduce((sum, task) => sum + (task.estimatedHours || 0), 0).toFixed(1)}h`;
             
-            // 直近の予定を計算（今後7日間）
-            let upcomingCount = 0;
-            for (let i = 0; i < 7; i++) {
-                const futureDate = new Date(dailyDate);
-                futureDate.setDate(dailyDate.getDate() + i);
-                const futureDateStr = futureDate.toISOString().split('T')[0];
-                const futureTasks = getAllTasksForDate(futureDateStr);
-                const filteredFutureTasks = selectedWorker === 'all' 
-                    ? futureTasks 
-                    : futureTasks.filter(task => task.worker === selectedWorker);
-                upcomingCount += filteredFutureTasks.length;
-            }
-            document.getElementById('upcomingTasks').textContent = upcomingCount;
+            // 本日の計画作業リストを更新
+            updatePlanningTasksList(filteredTasks);
 
             // 時間軸スケジュールを更新
             updateTimelineSchedule(filteredTasks);
+        }
+
+        // 本日の計画作業リスト更新
+        function updatePlanningTasksList(tasks) {
+            const planningTasksList = document.getElementById('planningTasksList');
+            planningTasksList.innerHTML = '';
+
+            // 特別プロジェクトのタスクを抽出
+            const planningTasks = tasks.filter(task => {
+                const projectName = task.projectName || '';
+                return specialProjectKeywords.some(keyword => projectName.includes(keyword));
+            });
+
+            if (planningTasks.length === 0) {
+                planningTasksList.innerHTML = '<div class="empty-planning">本日の計画作業はありません</div>';
+                return;
+            }
+
+            planningTasks.forEach(task => {
+                const taskItem = document.createElement('div');
+                taskItem.className = 'planning-task-item';
+
+                const customerName = task.customerName || '顧客不明';
+                const projectName = task.projectName || '';
+                
+                // プロジェクト名を短縮表示用に変換
+                let shortProjectName = projectName;
+                if (projectName.includes('SETUP（サーバーリプレイス、環境追加）')) {
+                    shortProjectName = 'SETUP';
+                } else if (projectName.includes('M/Wバージョンアップ')) {
+                    shortProjectName = 'M/W Ver-UP';
+                } else if (projectName.includes('環境アンインストール')) {
+                    shortProjectName = '環境削除';
+                } else if (projectName.includes('PTF')) {
+                    shortProjectName = 'PTF';
+                } else if (projectName.includes('環境同期')) {
+                    shortProjectName = '環境同期';
+                }
+
+                taskItem.innerHTML = `
+                    <div class="planning-task-main">
+                        <div class="planning-task-title">${task.title}</div>
+                        <div class="planning-task-details">
+                            <span class="planning-task-customer">${customerName}</span>
+                            <span class="planning-task-project">${shortProjectName}</span>
+                            <span class="planning-task-time">${task.estimatedHours}時間</span>
+                            ${task.originalTimeString ? `<span>時間帯: ${task.originalTimeString}</span>` : ''}
+                        </div>
+                    </div>
+                    ${task.redmineUrl ? `<a href="${task.redmineUrl}" target="_blank" class="planning-task-link">Redmine</a>` : ''}
+                `;
+
+                planningTasksList.appendChild(taskItem);
+            });
         }
 
         // 日付選択プルダウンを現在の日付に同期
@@ -1894,11 +1918,6 @@
                         const slotStart = timeSlot.start;
                         const slotEnd = timeSlot.end;
                         
-                        // デバッグ用：時間帯の情報をコンソールに出力
-                        if (task.originalTimeString) {
-                            console.log(`Task: ${task.title}, Original: ${task.originalTimeString}, Parsed: ${taskStart}-${taskEnd}, Slot: ${slotStart}-${slotEnd}, Match: ${taskStart < slotEnd && taskEnd > slotStart}`);
-                        }
-                        
                         // 重複判定：タスクの時間帯が表示時間帯と重複している場合
                         return (taskStart < slotEnd && taskEnd > slotStart);
                     });
@@ -1960,7 +1979,7 @@
         }
 
         function setDailyToday() {
-            dailyDate = new Date(today);
+            dailyDate = new Date(); // 実際の今日の日付に設定
             // 今日に戻ったら、スケジュール全体を更新（プルダウンも含む）
             updateDailySchedule();
         }
@@ -2040,14 +2059,6 @@
             const manualTasks = tasks.filter(task => task.isManualEntry);
             
             // 特別プロジェクトのチェック
-            const specialProjectKeywords = [
-                'SETUP（サーバーリプレイス、環境追加）',
-                'PTF',
-                '環境同期',
-                '環境アンインストール',
-                'M/Wバージョンアップ'
-            ];
-            
             const specialProjectTasks = ticketTasks.filter(task => {
                 const projectName = task.projectName || '';
                 return specialProjectKeywords.some(keyword => projectName.includes(keyword));
@@ -2431,30 +2442,7 @@
             }
         }
 
-        // 日付別ステータス件数取得関数
-        function getTaskCountByStatus(dateStr, statusType) {
-            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
-            
-            if (!taskData[monthKey]) {
-                return 0;
-            }
-            
-            const tasksOnDate = taskData[monthKey].filter(task => task.date === dateStr);
-            
-            if (statusType === 'assigned') {
-                return tasksOnDate.filter(task => 
-                    task.tsetStatus === '03.本アサイン' || 
-                    task.assignStatus === 'アサイン完了'
-                ).length;
-            } else if (statusType === 'completed') {
-                return tasksOnDate.filter(task => 
-                    task.tsetStatus === '22.作業完全終了' || 
-                    task.assignStatus === '対応完了'
-                ).length;
-            }
-            
-            return 0;
-        }
+        // 統計更新（月集計のみ）
         function updateStats() {
             const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
             const tasks = taskData[monthKey] || [];
@@ -2478,67 +2466,6 @@
             document.getElementById('assignedTasks').textContent = assignedTasks;
             document.getElementById('completedTasks').textContent = completedTasks;
             document.getElementById('cancelledTasks').textContent = cancelledTasks;
-            
-            // 週ごと集計
-            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-            const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
-            const firstDayOfWeek = firstDayOfMonth.getDay(); // 0=日曜, 1=月曜, ..., 6=土曜
-            
-            // 週の境界を計算（月曜始まり）
-            const weeks = [];
-            let currentWeekStart = 1;
-            
-            // 第1週の開始を調整（月曜始まり）
-            if (firstDayOfWeek !== 1) { // 月曜日でない場合
-                currentWeekStart = 1;
-            }
-            
-            for (let week = 1; week <= 5; week++) {
-                let weekEnd;
-                if (week === 1) {
-                    // 第1週：月初から最初の日曜日まで
-                    weekEnd = 7 - firstDayOfWeek + 1;
-                    if (firstDayOfWeek === 0) weekEnd = 7; // 月初が日曜の場合
-                } else {
-                    // 第2週以降：7日間
-                    weekEnd = currentWeekStart + 6;
-                }
-                
-                weekEnd = Math.min(weekEnd, daysInMonth);
-                
-                if (currentWeekStart <= daysInMonth) {
-                    weeks.push({
-                        week: week,
-                        start: currentWeekStart,
-                        end: weekEnd
-                    });
-                    currentWeekStart = weekEnd + 1;
-                } else {
-                    weeks.push({
-                        week: week,
-                        start: 0,
-                        end: 0
-                    });
-                }
-            }
-            
-            // 各週のタスク数を計算
-            weeks.forEach(weekInfo => {
-                let weekTaskCount = 0;
-                
-                if (weekInfo.start > 0) {
-                    for (let day = weekInfo.start; day <= weekInfo.end; day++) {
-                        const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                        const dayTasks = tasks.filter(task => task.date === dateStr);
-                        weekTaskCount += dayTasks.length;
-                    }
-                }
-                
-                const weekElement = document.getElementById(`week${weekInfo.week}Tasks`);
-                if (weekElement) {
-                    weekElement.textContent = weekTaskCount;
-                }
-            });
         }
 
         // CSV読み込み機能
