@@ -270,10 +270,11 @@
         }
 
         .date-header {
-            writing-mode: vertical-rl;
             font-size: 10px;
             height: 80px;
-            text-orientation: upright;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 1.2;
         }
 
         .weekend {
@@ -857,14 +858,6 @@
                     <div class="stat-item">作業完了: <span class="stat-number" id="completedTasks">0</span></div>
                     <div class="stat-item">キャンセル: <span class="stat-number" id="cancelledTasks">0</span></div>
                 </div>
-                <div class="stats-row">
-                    <div class="stats-label">週集計:</div>
-                    <div class="stat-item">第1週: <span class="stat-number" id="week1Tasks">0</span></div>
-                    <div class="stat-item">第2週: <span class="stat-number" id="week2Tasks">0</span></div>
-                    <div class="stat-item">第3週: <span class="stat-number" id="week3Tasks">0</span></div>
-                    <div class="stat-item">第4週: <span class="stat-number" id="week4Tasks">0</span></div>
-                    <div class="stat-item">第5週: <span class="stat-number" id="week5Tasks">0</span></div>
-                </div>
             </div>
 
             <div class="table-container">
@@ -1414,17 +1407,8 @@
                 const date = new Date(currentYear, currentMonth, day);
                 const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()];
                 
-                // 2桁の日付は横表示、1桁は縦表示
-                if (day >= 10) {
-                    dayHeader.innerHTML = `${day}<br>${dayOfWeek}`;
-                    dayHeader.style.writingMode = 'horizontal-tb';
-                    dayHeader.style.textOrientation = 'mixed';
-                } else {
-                    dayHeader.innerHTML = `${day}<br>${dayOfWeek}`;
-                    dayHeader.style.writingMode = 'vertical-rl';
-                    dayHeader.style.textOrientation = 'upright';
-                }
-                
+                // 日付と曜日を統一フォーマットで表示
+                dayHeader.innerHTML = `${day}<br>${dayOfWeek}`;
                 dayHeader.className = 'date-header';
                 
                 // 土日祝日の色分け
@@ -1441,6 +1425,68 @@
             }
             
             table.appendChild(headerRow);
+
+            // 本アサイン行を追加
+            const assignedRow = document.createElement('tr');
+            const assignedHeaderCell = document.createElement('td');
+            assignedHeaderCell.textContent = '本アサイン';
+            assignedHeaderCell.className = 'worker-name';
+            assignedHeaderCell.style.backgroundColor = '#e6f7ff';
+            assignedHeaderCell.style.color = '#1890ff';
+            assignedHeaderCell.style.fontWeight = 'bold';
+            assignedRow.appendChild(assignedHeaderCell);
+            
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const assignedCount = getTaskCountByStatus(dateStr, 'assigned');
+                
+                const assignedCell = document.createElement('td');
+                assignedCell.textContent = assignedCount > 0 ? assignedCount : '';
+                assignedCell.className = 'task-cell';
+                assignedCell.style.backgroundColor = assignedCount > 0 ? '#e6f7ff' : '';
+                assignedCell.style.color = '#1890ff';
+                assignedCell.style.fontWeight = 'bold';
+                
+                // 土日の背景色
+                const date = new Date(currentYear, currentMonth, day);
+                if (date.getDay() === 0 || date.getDay() === 6) {
+                    assignedCell.classList.add('weekend');
+                }
+                
+                assignedRow.appendChild(assignedCell);
+            }
+            table.appendChild(assignedRow);
+
+            // 作業完了行を追加
+            const completedRow = document.createElement('tr');
+            const completedHeaderCell = document.createElement('td');
+            completedHeaderCell.textContent = '作業完了';
+            completedHeaderCell.className = 'worker-name';
+            completedHeaderCell.style.backgroundColor = '#f6ffed';
+            completedHeaderCell.style.color = '#52c41a';
+            completedHeaderCell.style.fontWeight = 'bold';
+            completedRow.appendChild(completedHeaderCell);
+            
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const completedCount = getTaskCountByStatus(dateStr, 'completed');
+                
+                const completedCell = document.createElement('td');
+                completedCell.textContent = completedCount > 0 ? completedCount : '';
+                completedCell.className = 'task-cell';
+                completedCell.style.backgroundColor = completedCount > 0 ? '#f6ffed' : '';
+                completedCell.style.color = '#52c41a';
+                completedCell.style.fontWeight = 'bold';
+                
+                // 土日の背景色
+                const date = new Date(currentYear, currentMonth, day);
+                if (date.getDay() === 0 || date.getDay() === 6) {
+                    completedCell.classList.add('weekend');
+                }
+                
+                completedRow.appendChild(completedCell);
+            }
+            table.appendChild(completedRow);
 
             // 作業者行生成（拠点別ヘッダー付き）
             let currentLocation = '';
@@ -2194,7 +2240,30 @@
             }
         }
 
-        // 統計更新（週ごと集計追加）
+        // 日付別ステータス件数取得関数
+        function getTaskCountByStatus(dateStr, statusType) {
+            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+            
+            if (!taskData[monthKey]) {
+                return 0;
+            }
+            
+            const tasksOnDate = taskData[monthKey].filter(task => task.date === dateStr);
+            
+            if (statusType === 'assigned') {
+                return tasksOnDate.filter(task => 
+                    task.tsetStatus === '03.本アサイン' || 
+                    task.assignStatus === 'アサイン完了'
+                ).length;
+            } else if (statusType === 'completed') {
+                return tasksOnDate.filter(task => 
+                    task.tsetStatus === '22.作業完全終了' || 
+                    task.assignStatus === '対応完了'
+                ).length;
+            }
+            
+            return 0;
+        }
         function updateStats() {
             const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
             const tasks = taskData[monthKey] || [];
