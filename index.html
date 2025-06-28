@@ -1147,18 +1147,22 @@
             }
         }
 
-        // 日付を表示用にフォーマット（改良版）
+        // 日付を表示用にフォーマット（修正版）
         function formatDateForDisplay(date) {
             const year = date.getFullYear();
             const month = date.getMonth() + 1;
             const day = date.getDate();
             const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()];
             
-            // 現在のdailyDateと比較して特別な表記
-            const realToday = new Date(); // 実際の今日
+            // 実際の今日の日付と比較
+            const realToday = new Date();
+            realToday.setHours(0, 0, 0, 0); // 時間を0にして日付のみで比較
+            
+            const compareDate = new Date(date);
+            compareDate.setHours(0, 0, 0, 0);
             
             // 今日との差を計算
-            const todayDiff = Math.floor((date - realToday) / (1000 * 60 * 60 * 24));
+            const todayDiff = Math.floor((compareDate - realToday) / (1000 * 60 * 60 * 24));
             
             if (todayDiff === 0) {
                 return `今日 ${month}/${day} (${dayOfWeek})`;
