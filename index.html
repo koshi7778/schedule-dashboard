@@ -1,4 +1,33 @@
-<!DOCTYPE html>
+// 顧客名を省略する関数
+        function abbreviateCustomerName(customerName) {
+            if (!customerName) return '顧客不明';
+            
+            // 株式会社、有限会社などの法人格を削除
+            let abbreviated = customerName
+                .replace(/株式会社/g, '')
+                .replace(/有限会社/g, '')
+                .replace(/合同会社/g, '')
+                .replace(/合資会社/g, '')
+                .replace(/合名会社/g, '')
+                .replace(/一般財団法人/g, '')
+                .replace(/公益財団法人/g, '')
+                .replace(/一般社団法人/g, '')
+                .replace(/公益社団法人/g, '')
+                .replace(/学校法人/g, '')
+                .replace(/医療法人/g, '')
+                .replace(/社会福祉法人/g, '')
+                .replace(/宗教法人/g, '')
+                .replace(/特定非営利活動法人/g, '')
+                .replace(/NPO法人/g, '')
+                .replace(/\s+/g, ''); // 空白を削除
+            
+            // 10文字以上の場合は短縮
+            if (abbreviated.length > 8) {
+                abbreviated = abbreviated.substring(0, 8) + '...';
+            }
+            
+            return abbreviated || '顧客不明';
+        }<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -260,9 +289,9 @@
             position: sticky;
             left: 0;
             z-index: 5;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            white-space: normal;
+            overflow: visible;
+            text-overflow: clip;
         }
 
         .date-header {
@@ -1410,18 +1439,11 @@
                 const date = new Date(currentYear, currentMonth, day);
                 const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()];
                 
-                // 2桁の日付は横表示、1桁は縦表示
-                if (day >= 10) {
-                    dayHeader.innerHTML = `${day}<br>${dayOfWeek}`;
-                    dayHeader.style.writingMode = 'horizontal-tb';
-                    dayHeader.style.textOrientation = 'mixed';
-                } else {
-                    dayHeader.innerHTML = `${day}<br>${dayOfWeek}`;
-                    dayHeader.style.writingMode = 'vertical-rl';
-                    dayHeader.style.textOrientation = 'upright';
-                }
-                
+                // 日付と曜日の表示（曜日を下に）
+                dayHeader.innerHTML = `${day}<br>${dayOfWeek}`;
                 dayHeader.className = 'date-header';
+                dayHeader.style.writingMode = 'horizontal-tb';
+                dayHeader.style.textOrientation = 'mixed';
                 
                 // 土日祝日の色分け
                 if (date.getDay() === 0 || date.getDay() === 6) {
@@ -1763,37 +1785,6 @@
             return matchingTasks;
         }
 
-        // 顧客名を省略する関数
-        function abbreviateCustomerName(customerName) {
-            if (!customerName) return '顧客不明';
-            
-            // 株式会社、有限会社などの法人格を削除
-            let abbreviated = customerName
-                .replace(/株式会社/g, '')
-                .replace(/有限会社/g, '')
-                .replace(/合同会社/g, '')
-                .replace(/合資会社/g, '')
-                .replace(/合名会社/g, '')
-                .replace(/一般財団法人/g, '')
-                .replace(/公益財団法人/g, '')
-                .replace(/一般社団法人/g, '')
-                .replace(/公益社団法人/g, '')
-                .replace(/学校法人/g, '')
-                .replace(/医療法人/g, '')
-                .replace(/社会福祉法人/g, '')
-                .replace(/宗教法人/g, '')
-                .replace(/特定非営利活動法人/g, '')
-                .replace(/NPO法人/g, '')
-                .replace(/\s+/g, ''); // 空白を削除
-            
-            // 10文字以上の場合は短縮
-            if (abbreviated.length > 8) {
-                abbreviated = abbreviated.substring(0, 8) + '...';
-            }
-            
-            return abbreviated || '顧客不明';
-        }
-
         // セル内容をレンダリング（色分け改良版）
         function renderCellContent(cell, tasks) {
             // セルをクリア
@@ -1811,6 +1802,12 @@
             // チケット系タスク（CSV読み込み）と手動タスクを分離
             const ticketTasks = tasks.filter(task => !task.isManualEntry);
             const manualTasks = tasks.filter(task => task.isManualEntry);
+            
+            // 作業完了チケットのチェック
+            const completedTasks = ticketTasks.filter(task => 
+                task.tsetStatus === '22.作業完全終了' || 
+                task.assignStatus === '対応完了'
+            );
             
             // 特別プロジェクトのチェック
             const specialProjectKeywords = [
@@ -1863,6 +1860,9 @@
                     cell.appendChild(manualCountDiv);
                 }
             } else if (ticketTasks.length > 0) {
+                // 全てのチケットが作業完了の場合は薄いグレー表示
+                const allCompleted = completedTasks.length === ticketTasks.length && completedTasks.length > 0;
+                
                 // セル上部にタスク名を表示（特別プロジェクトと通常タスクのみ）
                 let showTaskName = false;
                 let taskName = '';
@@ -1870,17 +1870,17 @@
                 // プロジェクト系タスクがある場合のみタスク名表示
                 if (specialProjectTasks.length > 0) {
                     showTaskName = true;
-                    taskName = '計画'; // '計画枠' → '計画'
+                    taskName = '計画';
                 } else {
                     // 通常タスクの場合
                     showTaskName = true;
-                    taskName = '随時'; // '随時枠' → '随時'
+                    taskName = '随時';
                 }
                 
                 if (showTaskName) {
                     const taskNameDiv = document.createElement('div');
                     taskNameDiv.style.fontSize = '9px';
-                    taskNameDiv.style.color = '#444';
+                    taskNameDiv.style.color = allCompleted ? '#999' : '#444';
                     taskNameDiv.style.fontWeight = '500';
                     taskNameDiv.style.lineHeight = '1.1';
                     taskNameDiv.style.marginBottom = '2px';
@@ -1896,9 +1896,26 @@
                 countDiv.className = 'task-count';
                 countDiv.textContent = taskCount;
                 
-                // 特別プロジェクトのタスクがある場合の表示
-                if (specialProjectTasks.length > 0) {
-                    // 顧客名とプロジェクト名を取得（最初の特別プロジェクトタスクから）
+                // 作業完了の場合は薄いグレー表示
+                if (allCompleted) {
+                    cell.style.backgroundColor = '#f5f5f5';
+                    cell.style.color = '#999';
+                    cell.style.border = '1px solid #ddd';
+                    
+                    countDiv.style.fontSize = '12px';
+                    countDiv.style.fontWeight = 'bold';
+                    countDiv.style.color = '#999';
+                    
+                    // 完了マークを追加
+                    const completedMark = document.createElement('div');
+                    completedMark.style.fontSize = '8px';
+                    completedMark.style.color = '#999';
+                    completedMark.style.marginTop = '2px';
+                    completedMark.textContent = '完了';
+                    countDiv.appendChild(completedMark);
+                    
+                } else if (specialProjectTasks.length > 0) {
+                    // 特別プロジェクトのタスクがある場合の表示
                     const customerName = abbreviateCustomerName(specialProjectTasks[0].customerName);
                     const projectName = specialProjectTasks[0].projectName || '';
                     
@@ -1918,11 +1935,11 @@
                     cell.style.border = '2px solid #40a9ff';
                     cell.style.fontWeight = 'bold';
                     
-                    // 表示内容を変更（プロジェクト名を見やすく）
+                    // 表示内容を変更（プロジェクト名を赤色に）
                     countDiv.innerHTML = `
                         <div style="font-size: 10px; font-weight: bold;">${taskCount}</div>
                         <div style="font-size: 8px; color: #1c4ed8; margin-top: 1px;">${customerName}</div>
-                        <div style="font-size: 8px; color: #000; font-weight: bold; background: rgba(255,255,255,0.8); padding: 1px 2px; border-radius: 2px; margin-top: 1px;">${shortProjectName}</div>
+                        <div style="font-size: 8px; color: #dc2626; font-weight: bold; margin-top: 1px;">${shortProjectName}</div>
                     `;
                 } else {
                     // 通常のタスク表示（白背景）
@@ -2190,11 +2207,12 @@
             }
         }
 
-        // 統計更新
+        // 統計更新（週ごと集計追加）
         function updateStats() {
             const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
             const tasks = taskData[monthKey] || [];
             
+            // 月集計
             const totalTasks = tasks.length;
             const assignedTasks = tasks.filter(t => 
                 t.tsetStatus === '03.本アサイン' || 
@@ -2213,6 +2231,67 @@
             document.getElementById('assignedTasks').textContent = assignedTasks;
             document.getElementById('completedTasks').textContent = completedTasks;
             document.getElementById('cancelledTasks').textContent = cancelledTasks;
+            
+            // 週ごと集計
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
+            const firstDayOfWeek = firstDayOfMonth.getDay(); // 0=日曜, 1=月曜, ..., 6=土曜
+            
+            // 週の境界を計算（月曜始まり）
+            const weeks = [];
+            let currentWeekStart = 1;
+            
+            // 第1週の開始を調整（月曜始まり）
+            if (firstDayOfWeek !== 1) { // 月曜日でない場合
+                currentWeekStart = 1;
+            }
+            
+            for (let week = 1; week <= 5; week++) {
+                let weekEnd;
+                if (week === 1) {
+                    // 第1週：月初から最初の日曜日まで
+                    weekEnd = 7 - firstDayOfWeek + 1;
+                    if (firstDayOfWeek === 0) weekEnd = 7; // 月初が日曜の場合
+                } else {
+                    // 第2週以降：7日間
+                    weekEnd = currentWeekStart + 6;
+                }
+                
+                weekEnd = Math.min(weekEnd, daysInMonth);
+                
+                if (currentWeekStart <= daysInMonth) {
+                    weeks.push({
+                        week: week,
+                        start: currentWeekStart,
+                        end: weekEnd
+                    });
+                    currentWeekStart = weekEnd + 1;
+                } else {
+                    weeks.push({
+                        week: week,
+                        start: 0,
+                        end: 0
+                    });
+                }
+            }
+            
+            // 各週のタスク数を計算
+            weeks.forEach(weekInfo => {
+                let weekTaskCount = 0;
+                
+                if (weekInfo.start > 0) {
+                    for (let day = weekInfo.start; day <= weekInfo.end; day++) {
+                        const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                        const dayTasks = tasks.filter(task => task.date === dateStr);
+                        weekTaskCount += dayTasks.length;
+                    }
+                }
+                
+                const weekElement = document.getElementById(`week${weekInfo.week}Tasks`);
+                if (weekElement) {
+                    weekElement.textContent = weekTaskCount;
+                }
+            });
         }
 
         // CSV読み込み機能
