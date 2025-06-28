@@ -1798,21 +1798,25 @@
                     cell.appendChild(manualCountDiv);
                 }
             } else if (ticketTasks.length > 0) {
-                // 手動タスクがない場合のみチケット件数を表示
-                const taskCount = ticketTasks.length;
+                // セル上部にタスク名を表示
+                const taskNameDiv = document.createElement('div');
+                taskNameDiv.style.fontSize = '7px';
+                taskNameDiv.style.color = '#666';
+                taskNameDiv.style.fontWeight = '300';
+                taskNameDiv.style.lineHeight = '1.1';
+                taskNameDiv.style.marginBottom = '2px';
+                taskNameDiv.style.textAlign = 'center';
                 
-                // 作業量に応じた色分け
-                if (taskCount === 1) {
-                    cell.classList.add('workload-1');
-                } else if (taskCount === 2) {
-                    cell.classList.add('workload-2');
-                } else if (taskCount === 3) {
-                    cell.classList.add('workload-3');
-                } else if (taskCount === 4) {
-                    cell.classList.add('workload-4');
+                // プロジェクト系タスクがあるかチェック
+                if (specialProjectTasks.length > 0) {
+                    taskNameDiv.textContent = '計画枠';
                 } else {
-                    cell.classList.add('workload-5-plus');
+                    taskNameDiv.textContent = '随時枠';
                 }
+                cell.appendChild(taskNameDiv);
+                
+                // 手動タスクがない場合のチケット件数表示（作業量による色分けなし）
+                const taskCount = ticketTasks.length;
                 
                 const countDiv = document.createElement('div');
                 countDiv.className = 'task-count';
@@ -1863,20 +1867,15 @@
                         <div style="font-size: 7px; color: #e53e3e; font-weight: bold;">暫定適用</div>
                     `;
                 } else {
-                    // 通常のタスク表示（総作業時間を計算して表示）
-                    const totalHours = ticketTasks.reduce((sum, task) => sum + (task.estimatedHours || 0), 0);
-                    if (totalHours > 0) {
-                        const hoursDiv = document.createElement('div');
-                        hoursDiv.style.fontSize = '8px';
-                        hoursDiv.style.fontWeight = 'normal';
-                        hoursDiv.style.opacity = '0.8';
-                        hoursDiv.textContent = `${totalHours}h`;
-                        countDiv.appendChild(document.createElement('br'));
-                        countDiv.appendChild(hoursDiv);
-                    }
+                    // 通常のタスク表示（白背景、作業量による色分けなし）
+                    cell.style.backgroundColor = 'white';
+                    cell.style.color = '#2d3748';
+                    
+                    countDiv.style.fontSize = '12px';
+                    countDiv.style.fontWeight = 'bold';
                 }
                 
-                countDiv.title = 'ダブルクリックで手動タスクを追加 | ホバーでチケット詳細を確認';
+                countDiv.title = 'クリックでチケット詳細を確認 | ダブルクリックで手動タスクを追加';
                 cell.appendChild(countDiv);
             }
         }
