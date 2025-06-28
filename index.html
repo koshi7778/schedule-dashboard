@@ -629,19 +629,19 @@
         /* ツールチップの改良 */
         .tooltip {
             position: fixed;
-            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
-            color: white;
-            padding: 16px 20px;
-            border-radius: 12px;
+            background: linear-gradient(135deg, #e6f3ff 0%, #cce7ff 100%);
+            color: #1a365d;
+            padding: 10px 14px;
+            border-radius: 8px;
             font-size: 12px;
-            max-width: 400px;
-            min-width: 280px;
+            max-width: 320px;
+            min-width: 220px;
             z-index: 10000;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
             opacity: 0;
-            pointer-events: none;
+            pointer-events: auto;
             transition: opacity 0.3s ease, transform 0.3s ease;
-            border: 1px solid #4a5568;
+            border: 1px solid #bee3f8;
             transform: translateY(-10px);
         }
 
@@ -652,28 +652,29 @@
         }
 
         .tooltip-header {
-            border-bottom: 2px solid #4a5568;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
+            border-bottom: 1px solid #90cdf4;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
             font-weight: bold;
-            color: #68d391;
-            font-size: 13px;
+            color: #2c5282;
+            font-size: 12px;
         }
 
         .tooltip-task {
-            background: rgba(255, 255, 255, 0.05);
-            margin-bottom: 12px;
-            padding: 12px;
-            border-radius: 8px;
-            border-left: 4px solid #3182ce;
+            background: rgba(255, 255, 255, 0.6);
+            margin-bottom: 8px;
+            padding: 8px 10px;
+            border-radius: 6px;
+            border-left: 3px solid #3182ce;
             cursor: pointer;
             transition: all 0.2s ease;
         }
 
         .tooltip-task:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-left-color: #68d391;
-            transform: translateX(3px);
+            background: rgba(255, 255, 255, 0.9);
+            border-left-color: #2c5282;
+            transform: translateX(2px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         .tooltip-task:last-child {
@@ -682,47 +683,47 @@
 
         .tooltip-title {
             font-weight: 600;
-            color: #68d391;
-            margin-bottom: 8px;
-            font-size: 13px;
-            line-height: 1.4;
+            color: #2c5282;
+            margin-bottom: 4px;
+            font-size: 12px;
+            line-height: 1.3;
         }
 
         .tooltip-details {
             font-size: 11px;
-            color: #cbd5e0;
-            line-height: 1.5;
+            color: #4a5568;
+            line-height: 1.4;
         }
 
         .tooltip-time {
             display: inline-block;
             background: #3182ce;
             color: white;
-            padding: 2px 6px;
-            border-radius: 4px;
+            padding: 1px 5px;
+            border-radius: 3px;
             font-size: 10px;
             font-weight: bold;
-            margin-right: 8px;
+            margin-right: 6px;
         }
 
         .tooltip-hours {
             display: inline-block;
             background: #38a169;
             color: white;
-            padding: 2px 6px;
-            border-radius: 4px;
+            padding: 1px 5px;
+            border-radius: 3px;
             font-size: 10px;
             font-weight: bold;
-            margin-right: 8px;
+            margin-right: 6px;
         }
 
         .tooltip-click-hint {
             text-align: center;
-            margin-top: 12px;
-            padding-top: 8px;
-            border-top: 1px solid #4a5568;
-            font-size: 10px;
-            color: #a0aec0;
+            margin-top: 8px;
+            padding-top: 6px;
+            border-top: 1px solid #90cdf4;
+            font-size: 9px;
+            color: #4a5568;
             font-style: italic;
         }
 
