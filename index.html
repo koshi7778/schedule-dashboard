@@ -2080,8 +2080,15 @@
                 // タスクタイトルは短縮せずに全量表示
                 const fullTitle = task.title || 'タイトルなし';
                 
+                // 作業完了チケットかどうかを判定
+                const isCompleted = task.tsetStatus === '22.作業完全終了' || 
+                                  task.assignStatus === '対応完了';
+                
+                // 作業完了の場合は背景を薄いグレーに変更
+                const taskBackgroundColor = isCompleted ? 'rgba(128, 128, 128, 0.2)' : 'rgba(255, 255, 255, 0.6)';
+                
                 tooltipContent += `
-                    <div class="tooltip-task" data-url="${redmineUrl}">
+                    <div class="tooltip-task" data-url="${redmineUrl}" style="background: ${taskBackgroundColor};">
                         <div class="tooltip-title">${fullTitle}</div>
                         <div class="tooltip-details">
                             ${timeInfo ? `<span class="tooltip-time">${timeInfo}</span>` : ''}
@@ -2458,13 +2465,15 @@
                     const workTimeStr = row[timeField] || '';
                     const workHours = parseFloat(workTimeStr.replace(/[^\d.]/g, '')) || 0;
                     
-                    if (workDate && workHours > 0) {
+                    console.log(`チケット ${row['Issue ID']}: 作業日${i} = ${workDate}, 時間 = ${workHours}, 作業者 = ${assignedWorker}`);
+                    
+                    if (workDate && assignedWorker) {
                         const ticket = {
                             id: `RDM-${row['Issue ID']}-${i}`,
                             title: row['Subject'] || 'タイトルなし',
                             worker: assignedWorker,
                             date: workDate,
-                            estimatedHours: workHours,
+                            estimatedHours: workHours > 0 ? workHours : 4, // 時間が0の場合はデフォルト4時間
                             description: `顧客: ${row['お客様名'] || 'なし'}\nリモート: ${row['リモート有無'] || 'なし'}`,
                             redmineUrl: row['URL'] || '',
                             customerName: row['お客様名'] || '',
@@ -2482,6 +2491,7 @@
                         };
                         
                         allTickets.push(ticket);
+                        console.log(`追加されたチケット:`, ticket);
                     }
                 }
                 
@@ -2514,6 +2524,7 @@
                 }
             });
             
+            console.log(`変換完了: 総チケット数 = ${allTickets.length}`);
             return allTickets.filter(ticket => 
                 ticket.id !== 'RDM-' && 
                 ticket.title !== 'タイトルなし' && 
