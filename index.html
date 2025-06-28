@@ -251,7 +251,8 @@
         .date-header {
             writing-mode: vertical-rl;
             font-size: 10px;
-            height: 60px;
+            height: 80px;
+            text-orientation: upright;
         }
 
         .weekend {
@@ -1798,24 +1799,33 @@
                     cell.appendChild(manualCountDiv);
                 }
             } else if (ticketTasks.length > 0) {
-                // セル上部にタスク名を表示
-                const taskNameDiv = document.createElement('div');
-                taskNameDiv.style.fontSize = '7px';
-                taskNameDiv.style.color = '#666';
-                taskNameDiv.style.fontWeight = '300';
-                taskNameDiv.style.lineHeight = '1.1';
-                taskNameDiv.style.marginBottom = '2px';
-                taskNameDiv.style.textAlign = 'center';
+                // セル上部にタスク名を表示（特別なケースのみ）
+                let showTaskName = false;
+                let taskName = '';
                 
-                // プロジェクト系タスクがあるかチェック
+                // プロジェクト系タスクがある場合のみタスク名表示
                 if (specialProjectTasks.length > 0) {
-                    taskNameDiv.textContent = '計画枠';
-                } else {
-                    taskNameDiv.textContent = '随時枠';
+                    showTaskName = true;
+                    taskName = '計画枠';
+                } else if (!tentativeTasks.length > 0) {
+                    // 暫定適用でも特別プロジェクトでもない通常タスクの場合
+                    showTaskName = true;
+                    taskName = '随時枠';
                 }
-                cell.appendChild(taskNameDiv);
                 
-                // 手動タスクがない場合のチケット件数表示（作業量による色分けなし）
+                if (showTaskName) {
+                    const taskNameDiv = document.createElement('div');
+                    taskNameDiv.style.fontSize = '7px';
+                    taskNameDiv.style.color = '#666';
+                    taskNameDiv.style.fontWeight = '300';
+                    taskNameDiv.style.lineHeight = '1.1';
+                    taskNameDiv.style.marginBottom = '2px';
+                    taskNameDiv.style.textAlign = 'center';
+                    taskNameDiv.textContent = taskName;
+                    cell.appendChild(taskNameDiv);
+                }
+                
+                // チケット件数表示
                 const taskCount = ticketTasks.length;
                 
                 const countDiv = document.createElement('div');
@@ -1851,7 +1861,7 @@
                         <div style="font-size: 7px; color: #0f62fe; font-weight: bold;">${shortProjectName}</div>
                     `;
                 } else if (tentativeTasks.length > 0) {
-                    // 暫定適用のタスクがある場合の表示
+                    // 暫定適用のタスクがある場合の表示（上部タスク名なし）
                     const customerName = tentativeTasks[0].customerName || '顧客不明';
                     
                     // セルの背景色を暫定適用専用の色に変更
@@ -1867,7 +1877,7 @@
                         <div style="font-size: 7px; color: #e53e3e; font-weight: bold;">暫定適用</div>
                     `;
                 } else {
-                    // 通常のタスク表示（白背景、作業量による色分けなし）
+                    // 通常のタスク表示（白背景、作業時間表示なし）
                     cell.style.backgroundColor = 'white';
                     cell.style.color = '#2d3748';
                     
