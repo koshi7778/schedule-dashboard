@@ -1123,31 +1123,28 @@
             });
         }
 
-        // 日付選択プルダウンの初期化（改良版）
+        // 日付選択プルダウンの初期化（本日のみ表示版）
         function initializeDateSelector() {
             const dateSelect = document.getElementById('dateSelect');
             dateSelect.innerHTML = ''; // 全てのオプションをクリア
             
-            // dailyDate を中心に前後7日間の日付を生成
-            const centerDate = new Date(dailyDate);
-            for (let i = -7; i <= 7; i++) {
-                const date = new Date(centerDate);
-                date.setDate(centerDate.getDate() + i);
-                
-                const option = document.createElement('option');
-                const dateStr = date.toISOString().split('T')[0];
-                const displayStr = formatDateForDisplay(date);
-                
-                option.value = dateStr;
-                option.textContent = displayStr;
-                
-                // 現在のdailyDateと同じ日付を選択状態にする
-                if (dateStr === dailyDate.toISOString().split('T')[0]) {
-                    option.selected = true;
-                }
-                
-                dateSelect.appendChild(option);
-            }
+            // 今日の日付のみを追加
+            const today = new Date();
+            const option = document.createElement('option');
+            const dateStr = today.toISOString().split('T')[0];
+            const year = today.getFullYear();
+            const month = today.getMonth() + 1;
+            const day = today.getDate();
+            const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][today.getDay()];
+            
+            option.value = dateStr;
+            option.textContent = `今日 ${month}/${day} (${dayOfWeek})`;
+            option.selected = true;
+            
+            dateSelect.appendChild(option);
+            
+            // dailyDateを今日に設定
+            dailyDate = new Date(today);
         }
 
         // 日付を表示用にフォーマット（修正版）
