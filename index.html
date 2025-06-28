@@ -1382,7 +1382,17 @@
                 const date = new Date(currentYear, currentMonth, day);
                 const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()];
                 
-                dayHeader.innerHTML = `${day}<br>${dayOfWeek}`;
+                // 2桁の日付は横表示、1桁は縦表示
+                if (day >= 10) {
+                    dayHeader.innerHTML = `${day}<br>${dayOfWeek}`;
+                    dayHeader.style.writingMode = 'horizontal-tb';
+                    dayHeader.style.textOrientation = 'mixed';
+                } else {
+                    dayHeader.innerHTML = `${day}<br>${dayOfWeek}`;
+                    dayHeader.style.writingMode = 'vertical-rl';
+                    dayHeader.style.textOrientation = 'upright';
+                }
+                
                 dayHeader.className = 'date-header';
                 
                 // 土日祝日の色分け
@@ -1743,11 +1753,6 @@
             const ticketTasks = tasks.filter(task => !task.isManualEntry);
             const manualTasks = tasks.filter(task => task.isManualEntry);
             
-            // 暫定適用のチェック
-            const tentativeTasks = ticketTasks.filter(task => 
-                task.title && task.title.includes('暫定')
-            );
-            
             // 特別プロジェクトのチェック
             const specialProjectKeywords = [
                 'SETUP（サーバーリプレイス、環境追加）',
@@ -1799,7 +1804,7 @@
                     cell.appendChild(manualCountDiv);
                 }
             } else if (ticketTasks.length > 0) {
-                // セル上部にタスク名を表示（特別なケースのみ）
+                // セル上部にタスク名を表示（特別プロジェクトと通常タスクのみ）
                 let showTaskName = false;
                 let taskName = '';
                 
@@ -1807,17 +1812,17 @@
                 if (specialProjectTasks.length > 0) {
                     showTaskName = true;
                     taskName = '計画枠';
-                } else if (!tentativeTasks.length > 0) {
-                    // 暫定適用でも特別プロジェクトでもない通常タスクの場合
+                } else {
+                    // 通常タスクの場合
                     showTaskName = true;
                     taskName = '随時枠';
                 }
                 
                 if (showTaskName) {
                     const taskNameDiv = document.createElement('div');
-                    taskNameDiv.style.fontSize = '7px';
-                    taskNameDiv.style.color = '#666';
-                    taskNameDiv.style.fontWeight = '300';
+                    taskNameDiv.style.fontSize = '9px'; // 7px → 9px に拡大
+                    taskNameDiv.style.color = '#444';   // #666 → #444 に濃く
+                    taskNameDiv.style.fontWeight = '500'; // 300 → 500 に太く
                     taskNameDiv.style.lineHeight = '1.1';
                     taskNameDiv.style.marginBottom = '2px';
                     taskNameDiv.style.textAlign = 'center';
@@ -1860,24 +1865,8 @@
                         <div style="font-size: 8px; color: #1c4ed8; margin-top: 1px;">${customerName}</div>
                         <div style="font-size: 7px; color: #0f62fe; font-weight: bold;">${shortProjectName}</div>
                     `;
-                } else if (tentativeTasks.length > 0) {
-                    // 暫定適用のタスクがある場合の表示（上部タスク名なし）
-                    const customerName = tentativeTasks[0].customerName || '顧客不明';
-                    
-                    // セルの背景色を暫定適用専用の色に変更
-                    cell.style.backgroundColor = '#fff4e6';
-                    cell.style.color = '#d69e2e';
-                    cell.style.border = '2px solid #f6ad55';
-                    cell.style.fontWeight = 'bold';
-                    
-                    // 表示内容を変更
-                    countDiv.innerHTML = `
-                        <div style="font-size: 10px; font-weight: bold;">${taskCount}</div>
-                        <div style="font-size: 8px; color: #c05621; margin-top: 1px;">${customerName}</div>
-                        <div style="font-size: 7px; color: #e53e3e; font-weight: bold;">暫定適用</div>
-                    `;
                 } else {
-                    // 通常のタスク表示（白背景、作業時間表示なし）
+                    // 通常のタスク表示（白背景）
                     cell.style.backgroundColor = 'white';
                     cell.style.color = '#2d3748';
                     
