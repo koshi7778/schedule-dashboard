@@ -1818,15 +1818,20 @@
 
         // セルのイベント設定（修正版）
         function setupCellEvents(cell, tasks, worker, dateStr) {
-            // マウスホバーでツールチップ表示
+            // デバッグ用：タスク数をログ出力
+            console.log(`Setting up events for cell with ${tasks.length} tasks`);
+            
+            // マウスホバーでツールチップ表示（タスク数に関係なく表示）
             cell.addEventListener('mouseenter', (e) => {
+                console.log(`Mouse enter - tasks: ${tasks.length}`);
                 if (tasks.length > 0) {
                     clearTimeout(tooltipTimeout);
                     tooltipTimeout = setTimeout(() => {
+                        console.log(`Showing tooltip for ${tasks.length} tasks`);
                         if (!isTooltipFixed) {
                             showTooltip(e, tasks);
                         }
-                    }, 200); // 遅延を短縮
+                    }, 200);
                 }
             });
 
@@ -1934,7 +1939,7 @@
             });
         }
 
-        // ツールチップの位置を更新
+        // ツールチップの位置を更新（改良版）
         function updateTooltipPosition(event) {
             const tooltip = document.getElementById('tooltip');
             if (!tooltip.classList.contains('show')) return;
@@ -1946,23 +1951,39 @@
             let left = rect.right + 15;
             let top = rect.top + scrollTop;
             
-            // 画面外に出る場合の調整
+            // ツールチップのサイズを計算するために一時的に表示
+            tooltip.style.left = `${left}px`;
+            tooltip.style.top = `${top}px`;
+            
+            // 少し待ってからサイズを取得
             setTimeout(() => {
                 const tooltipRect = tooltip.getBoundingClientRect();
+                const viewportHeight = window.innerHeight;
+                const viewportWidth = window.innerWidth;
                 
                 // 右端からはみ出る場合は左側に表示
-                if (left + tooltipRect.width > window.innerWidth) {
+                if (left + tooltipRect.width > viewportWidth - 10) {
                     left = rect.left + scrollLeft - tooltipRect.width - 15;
-                }
-                
-                // 下端からはみ出る場合は上に移動
-                if (top + tooltipRect.height > window.innerHeight + scrollTop) {
-                    top = rect.bottom + scrollTop - tooltipRect.height;
-                }
-                
-                // 上端からはみ出る場合は下に移動
-                if (top < scrollTop) {
-                    top = rect.bottom + scrollTop + 10;
+                    // それでも左端からはみ出る場合は、セルの上に表示
+                    if (left < 10) {
+                        left = rect.left + scrollLeft;
+                        top = rect.top + scrollTop - tooltipRect.height - 10;
+                        
+                        // 上端からもはみ出る場合は、セルの下に表示
+                        if (top < scrollTop + 10) {
+                            top = rect.bottom + scrollTop + 10;
+                        }
+                    }
+                } else {
+                    // 下端からはみ出る場合は上に移動
+                    if (rect.top + tooltipRect.height > viewportHeight - 10) {
+                        top = rect.top + scrollTop - tooltipRect.height - 10;
+                        
+                        // 上端からもはみ出る場合は、可能な範囲で上部に配置
+                        if (top < scrollTop + 10) {
+                            top = scrollTop + 10;
+                        }
+                    }
                 }
                 
                 tooltip.style.left = `${left}px`;
