@@ -687,6 +687,12 @@
             border-bottom: none;
         }
 
+        .allday-task {
+            background: #ff6b6b !important;
+            opacity: 0.8;
+            font-weight: bold;
+        }
+
         .worker-timeline-cell {
             padding: 8px;
             border-right: 1px solid #e2e8f0;
@@ -1125,28 +1131,57 @@
             });
         }
 
-        // 日付選択プルダウンの初期化（本日のみ表示版）
+        // 日付選択プルダウンの初期化（当日から1週間分表示版）
         function initializeDateSelector() {
             const dateSelect = document.getElementById('dateSelect');
             dateSelect.innerHTML = ''; // 全てのオプションをクリア
             
-            // 今日の日付のみを追加
+            // 今日から7日間の日付を生成
             const today = new Date();
-            const option = document.createElement('option');
-            const dateStr = today.toISOString().split('T')[0];
-            const year = today.getFullYear();
-            const month = today.getMonth() + 1;
-            const day = today.getDate();
-            const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][today.getDay()];
+            for (let i = 0; i <= 6; i++) {
+                const date = new Date(today);
+                date.setDate(today.getDate() + i);
+                
+                const option = document.createElement('option');
+                const dateStr = date.toISOString().split('T')[0];
+                const year = date.getFullYear();
+                const month = date.getMonth() + 1;
+                const day = date.getDate();
+                const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()];
+                
+                // 表示用ラベルの作成
+                let displayLabel;
+                if (i === 0) {
+                    displayLabel = `今日 ${month}/${day} (${dayOfWeek})`;
+                } else if (i === 1) {
+                    displayLabel = `明日 ${month}/${day} (${dayOfWeek})`;
+                } else {
+                    displayLabel = `${month}/${day} (${dayOfWeek})`;
+                }
+                
+                option.value = dateStr;
+                option.textContent = displayLabel;
+                
+                // 現在のdailyDateと同じ日付を選択状態にする
+                if (dateStr === dailyDate.toISOString().split('T')[0]) {
+                    option.selected = true;
+                }
+                
+                dateSelect.appendChild(option);
+            }
             
-            option.value = dateStr;
-            option.textContent = `今日 ${month}/${day} (${dayOfWeek})`;
-            option.selected = true;
+            // dailyDateが範囲外の場合は今日に設定
+            const dailyDateStr = dailyDate.toISOString().split('T')[0];
+            const todayStr = today.toISOString().split('T')[0];
+            const oneWeekLater = new Date(today);
+            oneWeekLater.setDate(today.getDate() + 6);
+            const oneWeekLaterStr = oneWeekLater.toISOString().split('T')[0];
             
-            dateSelect.appendChild(option);
-            
-            // dailyDateを今日に設定
-            dailyDate = new Date(today);
+            if (dailyDateStr < todayStr || dailyDateStr > oneWeekLaterStr) {
+                dailyDate = new Date(today);
+                // 選択状態を更新
+                dateSelect.value = todayStr;
+            }
         }
 
         // 日付を表示用にフォーマット（修正版）
@@ -1863,7 +1898,7 @@
             }
         }
 
-        // 時間軸スケジュールの更新（改良版）
+        // 時間軸スケジュールの更新（修正版）
         function updateTimelineSchedule(allTasks) {
             const workersTimeline = document.getElementById('workersTimeline');
             workersTimeline.innerHTML = '';
@@ -1892,6 +1927,20 @@
             workersWithTasks.forEach(worker => {
                 const workerTasks = allTasks.filter(task => task.worker === worker);
                 
+                // 同じIssue IDのタスクは1つにまとめる（重複除去）
+                const uniqueTasks = [];
+                const seenIssueIds = new Set();
+                
+                workerTasks.forEach(task => {
+                    const issueIdMatch = task.id.match(/RDM-(\d+)/);
+                    const issueId = issueIdMatch ? issueIdMatch[1] : task.id;
+                    
+                    if (!seenIssueIds.has(issueId)) {
+                        seenIssueIds.add(issueId);
+                        uniqueTasks.push(task);
+                    }
+                });
+                
                 // 作業者セクション
                 const workerSection = document.createElement('div');
                 workerSection.className = 'worker-section';
@@ -1915,9 +1964,23 @@
                     const timeCell = document.createElement('div');
                     timeCell.className = 'worker-timeline-cell';
                     
-                    const tasksInTimeSlot = workerTasks.filter(task => {
+                    // 時間帯に該当するタスクを抽出
+                    const tasksInTimeSlot = uniqueTasks.filter(task => {
                         const taskTime = getTaskTimeSlot(task);
                         if (!taskTime) return false;
+                        
+                        // 時間選択なしの場合
+                        if (timeSlot.start === null && timeSlot.end === null) {
+                            return taskTime.start === null && taskTime.end === null;
+                        }
+                        
+                        // 終日の場合は全ての時間帯に表示
+                        if (taskTime.start === 'allday' && taskTime.end === 'allday') {
+                            return timeSlot.start !== null; // 時間選択なし以外の全時間帯
+                        }
+                        
+                        // 通常の時間帯判定
+                        if (taskTime.start === null || taskTime.end === null) return false;
                         
                         const taskStart = taskTime.start;
                         const taskEnd = taskTime.end;
@@ -1928,7 +1991,49 @@
                         return (taskStart < slotEnd && taskEnd > slotStart);
                     });
                     
+                    // 終日タスクの場合は特別な表示
+                    if (timeSlot.start !== null) { // 時間選択なし以外
+                        const alldayTasks = uniqueTasks.filter(task => {
+                            const taskTime = getTaskTimeSlot(task);
+                            return taskTime && taskTime.start === 'allday' && taskTime.end === 'allday';
+                        });
+                        
+                        if (alldayTasks.length > 0 && timeSlot.start === 10) { // 最初の時間帯でのみ終日タスクを表示
+                            alldayTasks.forEach(task => {
+                                const taskItem = document.createElement('div');
+                                taskItem.className = `task-timeline-item ${task.taskType} allday-task`;
+                                taskItem.style.background = '#ff6b6b';
+                                taskItem.style.position = 'absolute';
+                                taskItem.style.top = '0';
+                                taskItem.style.left = '0';
+                                taskItem.style.right = '0';
+                                taskItem.style.height = '100%';
+                                taskItem.style.zIndex = '1';
+                                
+                                taskItem.innerHTML = `
+                                    <div>${task.title} (終日)</div>
+                                    <div class="task-timeline-hours">${task.estimatedHours}h</div>
+                                `;
+                                
+                                // クリックでRedmineリンクに遷移
+                                if (task.redmineUrl) {
+                                    taskItem.style.cursor = 'pointer';
+                                    taskItem.addEventListener('click', () => {
+                                        window.open(task.redmineUrl, '_blank');
+                                    });
+                                }
+                                
+                                timeCell.appendChild(taskItem);
+                            });
+                        }
+                    }
+                    
+                    // 通常のタスク表示
                     tasksInTimeSlot.forEach(task => {
+                        const taskTime = getTaskTimeSlot(task);
+                        // 終日タスクは既に上で処理したのでスキップ
+                        if (taskTime && taskTime.start === 'allday') return;
+                        
                         const taskItem = document.createElement('div');
                         taskItem.className = `task-timeline-item ${task.taskType}`;
                         
@@ -1959,11 +2064,24 @@
             });
         }
 
-        // タスクの時間帯を取得（作業時間から推定）
+        // タスクの時間帯を取得（修正版）
         function getTaskTimeSlot(task) {
             // 作業時間が設定されている場合は、その時間から推定
             if (task.workTimeSlot) {
                 return task.workTimeSlot;
+            }
+            
+            // 元の時間文字列をチェック
+            const timeStr = task.originalTimeString || '';
+            
+            // 終日の場合
+            if (timeStr.includes('終日') || timeStr.includes('全日')) {
+                return { start: 'allday', end: 'allday' };
+            }
+            
+            // 時間が未設定またはnullの場合
+            if (!timeStr || timeStr.trim() === '' || timeStr === 'null') {
+                return { start: null, end: null };
             }
             
             // 作業時間に基づいて時間帯を推定
