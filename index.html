@@ -606,7 +606,7 @@
             background: #2c5282;
         }
 
-        /* 時間軸スケジュール */
+        /* 時間軸スケジュール（クロス表形式） */
         .timeline-schedule {
             background: white;
             border-radius: 8px;
@@ -622,130 +622,103 @@
             color: #2c5282;
         }
 
-        .timeline-content {
-            display: flex;
-        }
-
-        .time-slots {
-            background: #f7fafc;
-            border-right: 1px solid #e2e8f0;
-            width: 80px;
-            flex-shrink: 0;
-        }
-
-        .time-slot {
-            padding: 15px 10px;
-            border-bottom: 1px solid #e2e8f0;
-            font-size: 12px;
-            font-weight: 500;
-            text-align: center;
-            color: #4a5568;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .workers-timeline {
-            flex: 1;
+        .timeline-crosstab {
             overflow-x: auto;
+            max-height: 70vh;
+            overflow-y: auto;
         }
 
-        .worker-section {
-            border-bottom: 2px solid #e2e8f0;
+        .timeline-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
         }
 
-        .worker-section:last-child {
-            border-bottom: none;
-        }
-
-        .worker-name-header {
-            background: #f7fafc;
-            font-weight: bold;
-            padding: 12px 15px;
-            border-bottom: 1px solid #e2e8f0;
-            font-size: 14px;
-            color: #2c5282;
-            border-left: 4px solid #3182ce;
-            height: 50px;
-            display: flex;
-            align-items: center;
-        }
-
-        .worker-timeline-row {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .worker-time-row {
-            display: flex;
-            height: 80px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .worker-time-row:last-child {
-            border-bottom: none;
-        }
-
-        .allday-task {
-            background: #ff6b6b !important;
-            opacity: 0.8;
-            font-weight: bold;
-        }
-
-        .worker-timeline-cell {
+        .timeline-table th,
+        .timeline-table td {
+            border: 1px solid #e2e8f0;
             padding: 8px;
-            border-right: 1px solid #e2e8f0;
+            text-align: center;
+            vertical-align: middle;
+            min-width: 120px;
+        }
+
+        .timeline-table th {
+            background: #f7fafc;
+            font-weight: 600;
+            color: #2d3748;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .timeline-worker-name {
+            background: #f7fafc !important;
+            font-weight: 600 !important;
+            color: #2d3748 !important;
+            text-align: left !important;
+            padding-left: 12px !important;
+            width: 120px !important;
+            min-width: 120px !important;
+            max-width: 120px !important;
+            position: sticky;
+            left: 0;
+            z-index: 5;
+            white-space: nowrap;
+            border-right: 2px solid #cbd5e0 !important;
+        }
+
+        .timeline-time-cell {
             position: relative;
-            min-width: 200px;
-            height: 80px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
+            height: 60px;
+            background: white;
+            vertical-align: top;
+            padding: 4px;
         }
 
-        .worker-timeline-cell:last-child {
-            border-right: none;
-        }
-
-        .task-timeline-item {
+        .timeline-task-item {
             background: #3182ce;
             color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 10px;
-            margin-bottom: 4px;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-size: 9px;
+            margin-bottom: 2px;
             cursor: pointer;
             transition: all 0.2s ease;
             word-wrap: break-word;
+            line-height: 1.2;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
-        .task-timeline-item:hover {
+        .timeline-task-item:hover {
             background: #2c5282;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transform: scale(1.02);
+            white-space: normal;
+            z-index: 100;
+            position: relative;
         }
 
-        .task-timeline-item.vacation {
+        .timeline-task-item.vacation {
             background: #702459;
         }
 
-        .task-timeline-item.meeting {
+        .timeline-task-item.meeting {
             background: #2a4365;
         }
 
-        .task-timeline-item.training {
+        .timeline-task-item.training {
             background: #22543d;
         }
 
-        .task-timeline-item.other {
+        .timeline-task-item.other {
             background: #4a5568;
         }
 
-        .task-timeline-hours {
-            font-size: 9px;
-            opacity: 0.8;
-            margin-top: 2px;
+        .timeline-task-item.allday {
+            background: #ff6b6b;
+            font-weight: bold;
         }
 
         /* 空の状態の表示 */
@@ -1026,22 +999,13 @@
                     </div>
                 </div>
 
-                <!-- 時間軸スケジュール -->
+                <!-- 時間軸スケジュール（クロス表形式） -->
                 <div class="timeline-schedule" style="margin-top: 20px;">
                     <div class="timeline-header">時間別スケジュール</div>
-                    <div class="timeline-content">
-                        <div class="time-slots">
-                            <div class="time-slot">時間選択なし</div>
-                            <div class="time-slot">10-12</div>
-                            <div class="time-slot">12-14</div>
-                            <div class="time-slot">14-16</div>
-                            <div class="time-slot">16-18</div>
-                            <div class="time-slot">18-20</div>
-                            <div class="time-slot">20-22</div>
-                        </div>
-                        <div class="workers-timeline" id="workersTimeline">
-                            <!-- 時間軸スケジュールが動的に生成される -->
-                        </div>
+                    <div class="timeline-crosstab">
+                        <table class="timeline-table" id="timelineTable">
+                            <!-- テーブルはJavaScriptで動的生成 -->
+                        </table>
                     </div>
                 </div>
             </div>
@@ -1898,33 +1862,44 @@
             }
         }
 
-        // 時間軸スケジュールの更新（修正版）
+        // 時間軸スケジュールの更新（クロス表形式）
         function updateTimelineSchedule(allTasks) {
-            const workersTimeline = document.getElementById('workersTimeline');
-            workersTimeline.innerHTML = '';
+            const timelineTable = document.getElementById('timelineTable');
+            timelineTable.innerHTML = '';
 
             // 選択された作業者を取得
             const selectedWorker = document.getElementById('workerSelect').value;
             
-            // 作業者でフィルタリング
-            let workersWithTasks;
+            // 表示する作業者を決定
+            let displayWorkers;
             if (selectedWorker === 'all') {
-                // 全員表示の場合は、その日にタスクがある作業者のみ表示
-                workersWithTasks = workers.filter(worker => 
-                    allTasks.some(task => task.worker === worker)
-                );
+                // 全員表示の場合は全作業者を表示
+                displayWorkers = workers;
             } else {
                 // 特定の作業者が選択されている場合
-                workersWithTasks = allTasks.length > 0 ? [selectedWorker] : [];
+                displayWorkers = [selectedWorker];
             }
 
-            if (workersWithTasks.length === 0) {
-                workersTimeline.innerHTML = '<div class="empty-timeline">この日に予定されている作業はありません</div>';
-                return;
-            }
+            // ヘッダー行を作成
+            const headerRow = document.createElement('tr');
+            
+            // 作業者名列のヘッダー
+            const workerHeaderCell = document.createElement('th');
+            workerHeaderCell.textContent = '作業者';
+            workerHeaderCell.className = 'timeline-worker-name';
+            headerRow.appendChild(workerHeaderCell);
+            
+            // 時間軸のヘッダー
+            timeSlots.forEach(timeSlot => {
+                const timeHeaderCell = document.createElement('th');
+                timeHeaderCell.textContent = timeSlot.label;
+                headerRow.appendChild(timeHeaderCell);
+            });
+            
+            timelineTable.appendChild(headerRow);
 
-            // 作業者ごとにセクションを作成
-            workersWithTasks.forEach(worker => {
+            // 各作業者の行を作成
+            displayWorkers.forEach(worker => {
                 const workerTasks = allTasks.filter(task => task.worker === worker);
                 
                 // 同じIssue IDのタスクは1つにまとめる（重複除去）
@@ -1940,29 +1915,20 @@
                         uniqueTasks.push(task);
                     }
                 });
+
+                // 作業者行を作成
+                const workerRow = document.createElement('tr');
                 
-                // 作業者セクション
-                const workerSection = document.createElement('div');
-                workerSection.className = 'worker-section';
+                // 作業者名セル
+                const workerNameCell = document.createElement('td');
+                workerNameCell.textContent = worker;
+                workerNameCell.className = 'timeline-worker-name';
+                workerRow.appendChild(workerNameCell);
                 
-                // 作業者名ヘッダー
-                const workerNameHeader = document.createElement('div');
-                workerNameHeader.className = 'worker-name-header';
-                workerNameHeader.textContent = worker;
-                workerSection.appendChild(workerNameHeader);
-                
-                // 時間軸行のコンテナ
-                const timelineRowContainer = document.createElement('div');
-                timelineRowContainer.className = 'worker-timeline-row';
-                
-                // 各時間帯の行を作成
+                // 各時間帯のセルを作成
                 timeSlots.forEach(timeSlot => {
-                    const timeRow = document.createElement('div');
-                    timeRow.className = 'worker-time-row';
-                    
-                    // タスクセル
-                    const timeCell = document.createElement('div');
-                    timeCell.className = 'worker-timeline-cell';
+                    const timeCell = document.createElement('td');
+                    timeCell.className = 'timeline-time-cell';
                     
                     // 時間帯に該当するタスクを抽出
                     const tasksInTimeSlot = uniqueTasks.filter(task => {
@@ -1991,58 +1957,22 @@
                         return (taskStart < slotEnd && taskEnd > slotStart);
                     });
                     
-                    // 終日タスクの場合は特別な表示
-                    if (timeSlot.start !== null) { // 時間選択なし以外
-                        const alldayTasks = uniqueTasks.filter(task => {
-                            const taskTime = getTaskTimeSlot(task);
-                            return taskTime && taskTime.start === 'allday' && taskTime.end === 'allday';
-                        });
-                        
-                        if (alldayTasks.length > 0 && timeSlot.start === 10) { // 最初の時間帯でのみ終日タスクを表示
-                            alldayTasks.forEach(task => {
-                                const taskItem = document.createElement('div');
-                                taskItem.className = `task-timeline-item ${task.taskType} allday-task`;
-                                taskItem.style.background = '#ff6b6b';
-                                taskItem.style.position = 'absolute';
-                                taskItem.style.top = '0';
-                                taskItem.style.left = '0';
-                                taskItem.style.right = '0';
-                                taskItem.style.height = '100%';
-                                taskItem.style.zIndex = '1';
-                                
-                                taskItem.innerHTML = `
-                                    <div>${task.title} (終日)</div>
-                                    <div class="task-timeline-hours">${task.estimatedHours}h</div>
-                                `;
-                                
-                                // クリックでRedmineリンクに遷移
-                                if (task.redmineUrl) {
-                                    taskItem.style.cursor = 'pointer';
-                                    taskItem.addEventListener('click', () => {
-                                        window.open(task.redmineUrl, '_blank');
-                                    });
-                                }
-                                
-                                timeCell.appendChild(taskItem);
-                            });
-                        }
-                    }
-                    
-                    // 通常のタスク表示
+                    // タスクを表示
                     tasksInTimeSlot.forEach(task => {
                         const taskTime = getTaskTimeSlot(task);
-                        // 終日タスクは既に上で処理したのでスキップ
-                        if (taskTime && taskTime.start === 'allday') return;
-                        
                         const taskItem = document.createElement('div');
-                        taskItem.className = `task-timeline-item ${task.taskType}`;
                         
-                        // タスク情報の表示（時間情報も含める）
-                        const timeInfo = task.originalTimeString ? ` (${task.originalTimeString})` : '';
-                        taskItem.innerHTML = `
-                            <div>${task.title}${timeInfo}</div>
-                            <div class="task-timeline-hours">${task.estimatedHours}h</div>
-                        `;
+                        // 終日タスクの場合
+                        if (taskTime && taskTime.start === 'allday' && taskTime.end === 'allday') {
+                            taskItem.className = `timeline-task-item ${task.taskType} allday`;
+                            taskItem.textContent = `${task.title} (終日)`;
+                        } else {
+                            taskItem.className = `timeline-task-item ${task.taskType}`;
+                            // タスク名を短縮表示
+                            const shortTitle = task.title.length > 15 ? task.title.substring(0, 15) + '...' : task.title;
+                            taskItem.textContent = shortTitle;
+                            taskItem.title = task.title; // フルタイトルをツールチップで表示
+                        }
                         
                         // クリックでRedmineリンクに遷移
                         if (task.redmineUrl) {
@@ -2055,13 +1985,25 @@
                         timeCell.appendChild(taskItem);
                     });
                     
-                    timeRow.appendChild(timeCell);
-                    timelineRowContainer.appendChild(timeRow);
+                    workerRow.appendChild(timeCell);
                 });
                 
-                workerSection.appendChild(timelineRowContainer);
-                workersTimeline.appendChild(workerSection);
+                timelineTable.appendChild(workerRow);
             });
+
+            // タスクがない場合の表示
+            if (displayWorkers.length === 0 || allTasks.length === 0) {
+                const emptyRow = document.createElement('tr');
+                const emptyCell = document.createElement('td');
+                emptyCell.colSpan = timeSlots.length + 1;
+                emptyCell.textContent = 'この日に予定されている作業はありません';
+                emptyCell.style.textAlign = 'center';
+                emptyCell.style.padding = '40px';
+                emptyCell.style.color = '#4a5568';
+                emptyCell.style.fontStyle = 'italic';
+                emptyRow.appendChild(emptyCell);
+                timelineTable.appendChild(emptyRow);
+            }
         }
 
         // タスクの時間帯を取得（修正版）
