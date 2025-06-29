@@ -1025,6 +1025,7 @@
                     <div class="timeline-header">時間別スケジュール</div>
                     <div class="timeline-content">
                         <div class="time-slots">
+                            <div class="time-slot">時間選択なし</div>
                             <div class="time-slot">10-12</div>
                             <div class="time-slot">12-14</div>
                             <div class="time-slot">14-16</div>
@@ -1086,8 +1087,9 @@
             '小菅 祐馬', '末廣 太一', '木暮 誉貴'
         ];
 
-        // 時間軸の定義
+        // 時間軸の定義（時間選択なしを追加）
         const timeSlots = [
+            { label: '時間選択なし', start: null, end: null },
             { label: '10-12', start: 10, end: 12 },
             { label: '12-14', start: 12, end: 14 },
             { label: '14-16', start: 14, end: 16 },
