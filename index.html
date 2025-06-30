@@ -135,21 +135,6 @@
             border-top: 1px solid #e2e8f0;
         }
 
-        .add-planning-btn {
-            background: #805ad5;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-            margin-left: 10px;
-        }
-
-        .add-planning-btn:hover {
-            background: #6b46c1;
-        }
-
         /* タブナビゲーション */
         .tab-navigation {
             background: #e2e8f0;
@@ -333,84 +318,6 @@
             border: 2px dashed #38b2ac;
         }
 
-        /* 作業量別の色分け改良 */
-        .workload-1 { 
-            background: #f0fff4 !important; 
-            color: #22543d !important;
-            border: 1px solid #c6f6d5;
-        }
-
-        .workload-2 { 
-            background: #fef5e7 !important; 
-            color: #744210 !important;
-            border: 1px solid #fed7aa;
-        }
-
-        .workload-3 { 
-            background: #fff5f5 !important; 
-            color: #742a2a !important;
-            border: 1px solid #fed7d7;
-        }
-
-        .workload-4 { 
-            background: #ffebee !important; 
-            color: #7f1d1d !important;
-            border: 1px solid #fca5a5;
-            font-weight: bold;
-        }
-
-        .workload-5-plus { 
-            background: #fce4ec !important; 
-            color: #881337 !important;
-            border: 2px solid #f687b3;
-            font-weight: bold;
-            box-shadow: 0 0 8px rgba(236, 72, 153, 0.3);
-        }
-
-        .planning-task {
-            background: #e53e3e !important;
-            color: white !important;
-            cursor: move;
-            position: relative;
-        }
-
-        .planning-task:hover {
-            background: #c53030 !important;
-            transform: scale(1.05);
-        }
-
-        .planning-task.dragging {
-            opacity: 0.5;
-            transform: rotate(5deg);
-        }
-
-        .planning-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #f56565;
-            color: white;
-            border-radius: 50%;
-            width: 15px;
-            height: 15px;
-            font-size: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-
-        .direct-input {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: transparent;
-            font-size: 10px;
-            text-align: center;
-            outline: none;
-            padding: 2px;
-        }
-
         .task-count {
             font-weight: bold;
             font-size: 12px;
@@ -568,42 +475,12 @@
             align-items: center;
         }
 
-        .planning-task-customer {
-            background: #e6f7ff;
-            color: #1890ff;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-weight: bold;
-        }
-
-        .planning-task-project {
-            background: #f0f9ff;
-            color: #0369a1;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-weight: bold;
-        }
-
         .planning-task-worker {
             background: #f0f9ff;
             color: #0c4a6e;
             padding: 2px 6px;
             border-radius: 3px;
             font-weight: bold;
-        }
-
-        .planning-task-link {
-            background: #3182ce;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-size: 11px;
-            cursor: pointer;
-        }
-
-        .planning-task-link:hover {
-            background: #2c5282;
         }
 
         /* 時間軸スケジュール（修正版） */
@@ -729,14 +606,6 @@
         }
 
         /* 空の状態の表示 */
-        .empty-timeline {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 40px;
-            color: #4a5568;
-            font-style: italic;
-        }
-
         .empty-planning {
             text-align: center;
             padding: 40px;
@@ -816,17 +685,6 @@
         .tooltip-time {
             display: inline-block;
             background: #3182ce;
-            color: white;
-            padding: 1px 5px;
-            border-radius: 3px;
-            font-size: 10px;
-            font-weight: bold;
-            margin-right: 6px;
-        }
-
-        .tooltip-hours {
-            display: inline-block;
-            background: #38a169;
             color: white;
             padding: 1px 5px;
             border-radius: 3px;
@@ -971,7 +829,7 @@
         <div id="daily-tab" class="tab-content">
             <div class="daily-schedule">
                 <div class="daily-header">
-                    <div class="daily-date" id="dailyDate">2025年6月29日 (日)</div>
+                    <div class="daily-date" id="dailyDate">2025年6月30日 (月)</div>
                     <div class="daily-navigation">
                         <button class="month-btn" onclick="changeDailyDate(-1)">◀ 前日</button>
                         <button class="month-btn" onclick="setDailyToday()">今日</button>
@@ -985,13 +843,11 @@
                         <label for="workerSelect">表示する作業者:</label>
                         <select id="workerSelect" class="worker-select" onchange="updateDailySchedule()">
                             <option value="all">全員</option>
-                            <!-- 作業者オプションは JavaScript で動的に追加される -->
                         </select>
                     </div>
                     <div class="selector-group">
                         <label for="dateSelect">作業日:</label>
                         <select id="dateSelect" class="date-select" onchange="onDateSelectChange()">
-                            <!-- 日付オプションは JavaScript で動的に追加される -->
                         </select>
                     </div>
                 </div>
@@ -1007,7 +863,6 @@
                 <div class="planning-tasks-list">
                     <div class="planning-tasks-header">本日の計画作業</div>
                     <div id="planningTasksList">
-                        <!-- 計画作業リストが動的に生成される -->
                     </div>
                 </div>
 
@@ -1016,7 +871,6 @@
                     <div class="timeline-header">時間別スケジュール</div>
                     <div class="timeline-crosstab">
                         <table class="timeline-table" id="timelineTable">
-                            <!-- テーブルはJavaScriptで動的生成 -->
                         </table>
                     </div>
                 </div>
@@ -1145,70 +999,25 @@
                 
                 dateSelect.appendChild(option);
             }
-            
-            // dailyDateが範囲外の場合は今日に設定
-            const dailyDateStr = dailyDate.toISOString().split('T')[0];
-            const todayStr = today.toISOString().split('T')[0];
-            const oneWeekLater = new Date(today);
-            oneWeekLater.setDate(today.getDate() + 6);
-            const oneWeekLaterStr = oneWeekLater.toISOString().split('T')[0];
-            
-            if (dailyDateStr < todayStr || dailyDateStr > oneWeekLaterStr) {
-                dailyDate = new Date(today);
-                // 選択状態を更新
-                dateSelect.value = todayStr;
-            }
         }
 
-        // 日付を表示用にフォーマット（修正版）
-        function formatDateForDisplay(date) {
-            const year = date.getFullYear();
-            const month = date.getMonth() + 1;
-            const day = date.getDate();
-            const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()];
-            
-            // 実際の今日の日付と比較
-            const realToday = new Date();
-            realToday.setHours(0, 0, 0, 0); // 時間を0にして日付のみで比較
-            
-            const compareDate = new Date(date);
-            compareDate.setHours(0, 0, 0, 0);
-            
-            // 今日との差を計算
-            const todayDiff = Math.floor((compareDate - realToday) / (1000 * 60 * 60 * 24));
-            
-            if (todayDiff === 0) {
-                return `今日 ${month}/${day} (${dayOfWeek})`;
-            } else if (todayDiff === -1) {
-                return `昨日 ${month}/${day} (${dayOfWeek})`;
-            } else if (todayDiff === 1) {
-                return `明日 ${month}/${day} (${dayOfWeek})`;
-            } else {
-                return `${month}/${day} (${dayOfWeek})`;
-            }
-        }
-
-        // 日付選択変更時の処理（修正版）
+        // 日付選択変更時の処理
         function onDateSelectChange() {
             const selectedDate = document.getElementById('dateSelect').value;
             if (selectedDate) {
-                // dailyDateを選択された日付に更新
                 dailyDate = new Date(selectedDate);
-                // スケジュール表示を更新（左上の日付表示も含む）
                 updateDailySchedule();
             }
         }
 
-        // セルクリック時のプルダウン表示（修正版）
+        // セルクリック時のプルダウン表示
         function showCellDropdown(cell, worker, dateStr) {
-            // 既存のドロップダウンを削除
             hideCellDropdown();
             
             const dropdown = document.createElement('div');
             dropdown.className = 'cell-dropdown';
             dropdown.id = 'cell-dropdown';
             
-            // オプションの定義
             const options = [
                 { type: 'planning', label: '計画作業', icon: '#e53e3e' },
                 { type: 'work', label: '随時作業', icon: '#744210' },
@@ -1247,7 +1056,6 @@
             dropdown.style.left = `${rect.left}px`;
             dropdown.style.top = `${rect.bottom + 5}px`;
             
-            // 画面外に出る場合の調整
             document.body.appendChild(dropdown);
             const dropdownRect = dropdown.getBoundingClientRect();
             
@@ -1258,7 +1066,6 @@
                 dropdown.style.top = `${rect.top - dropdownRect.height - 5}px`;
             }
             
-            // クリック外しで閉じる
             setTimeout(() => {
                 document.addEventListener('click', hideCellDropdown);
             }, 100);
@@ -1272,7 +1079,7 @@
             }
         }
 
-        // タスク追加機能（修正版）
+        // タスク追加機能
         function addTaskToCell(worker, dateStr, taskType, taskLabel) {
             const taskId = `${taskType.toUpperCase()}-${Date.now()}`;
             const newTask = {
@@ -1295,169 +1102,26 @@
                 isWorkTask: taskType === 'work'
             };
             
-            // 現在表示中の月のキーを使用
             const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
             
-            // taskDataの初期化
             if (!taskData[monthKey]) {
                 taskData[monthKey] = [];
             }
             
-            // タスクを追加
             taskData[monthKey].push(newTask);
-            
-            // テーブルを再生成
             generateTable();
-            
             showNotification(`${worker}の${dateStr}に${taskLabel}を追加しました`, 'success');
         }
 
-        // ドラッグ&ドロップ機能（改良版）
-        function makeCellDraggable(cell, task) {
-            cell.draggable = true;
-            cell.style.cursor = 'move';
-            
-            cell.addEventListener('dragstart', (e) => {
-                draggedTask = task;
-                cell.classList.add('dragging');
-                e.dataTransfer.effectAllowed = 'move';
-                e.dataTransfer.setData('text/plain', task.id);
-            });
-
-            cell.addEventListener('dragend', (e) => {
-                cell.classList.remove('dragging');
-                draggedTask = null;
-            });
-
-            // 右クリックで削除オプション
-            cell.addEventListener('contextmenu', (e) => {
-                e.preventDefault();
-                if (task.isManualEntry) {
-                    showTaskContextMenu(e, task);
-                }
-            });
-        }
-
-        function makeCellDroppable(cell, worker, dateStr) {
-            cell.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                cell.classList.add('drag-over');
-                e.dataTransfer.dropEffect = 'move';
-            });
-
-            cell.addEventListener('dragleave', (e) => {
-                cell.classList.remove('drag-over');
-            });
-
-            cell.addEventListener('drop', (e) => {
-                e.preventDefault();
-                cell.classList.remove('drag-over');
-                
-                if (draggedTask && draggedTask.isManualEntry) {
-                    moveTaskToCell(draggedTask, worker, dateStr);
-                }
-            });
-        }
-
-        function moveTaskToCell(task, newWorker, newDate) {
-            const oldMonthKey = task.date.substring(0, 7);
-            const newMonthKey = newDate.substring(0, 7);
-            
-            // 既存の位置から削除
-            if (taskData[oldMonthKey]) {
-                const taskIndex = taskData[oldMonthKey].findIndex(t => t.id === task.id);
-                if (taskIndex !== -1) {
-                    taskData[oldMonthKey].splice(taskIndex, 1);
-                }
-            }
-            
-            // 新しい位置に追加
-            if (!taskData[newMonthKey]) {
-                taskData[newMonthKey] = [];
-            }
-            
-            // タスクの情報を更新
-            task.worker = newWorker;
-            task.date = newDate;
-            
-            taskData[newMonthKey].push(task);
-            
-            generateTable();
-            showNotification(`${task.title}を${newWorker}の${newDate}に移動しました`, 'success');
-        }
-
-        function showTaskContextMenu(event, task) {
-            hideCellDropdown(); // 既存のメニューを閉じる
-            
-            const contextMenu = document.createElement('div');
-            contextMenu.className = 'cell-dropdown';
-            contextMenu.id = 'task-context-menu';
-            
-            const deleteOption = document.createElement('div');
-            deleteOption.className = 'dropdown-option';
-            deleteOption.innerHTML = '<span style="color: #e53e3e;">🗑️ 削除</span>';
-            deleteOption.addEventListener('click', (e) => {
-                e.stopPropagation();
-                deleteTask(task);
-                hideTaskContextMenu();
-            });
-            
-            const cancelOption = document.createElement('div');
-            cancelOption.className = 'dropdown-option cancel';
-            cancelOption.innerHTML = '<span>キャンセル</span>';
-            cancelOption.addEventListener('click', (e) => {
-                e.stopPropagation();
-                hideTaskContextMenu();
-            });
-            
-            contextMenu.appendChild(deleteOption);
-            contextMenu.appendChild(cancelOption);
-            
-            // 位置調整
-            contextMenu.style.position = 'fixed';
-            contextMenu.style.left = `${event.clientX}px`;
-            contextMenu.style.top = `${event.clientY}px`;
-            
-            document.body.appendChild(contextMenu);
-            
-            // クリック外しで閉じる
-            setTimeout(() => {
-                document.addEventListener('click', hideTaskContextMenu);
-            }, 100);
-        }
-
-        function hideTaskContextMenu() {
-            const existingMenu = document.getElementById('task-context-menu');
-            if (existingMenu) {
-                existingMenu.remove();
-                document.removeEventListener('click', hideTaskContextMenu);
-            }
-        }
-
-        function deleteTask(task) {
-            if (confirm(`${task.title}を削除しますか？`)) {
-                const monthKey = task.date.substring(0, 7);
-                if (taskData[monthKey]) {
-                    taskData[monthKey] = taskData[monthKey].filter(t => t.id !== task.id);
-                }
-                generateTable();
-                showNotification(`${task.title}を削除しました`, 'info');
-            }
-        }
-
         function switchTab(tabName) {
-            // すべてのタブボタンとコンテンツから active クラスを削除
             document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
 
-            // 選択されたタブを有効にする
             document.querySelector(`[onclick="switchTab('${tabName}')"]`).classList.add('active');
             document.getElementById(`${tabName}-tab`).classList.add('active');
 
             if (tabName === 'daily') {
-                // 作業者選択プルダウンを初期化
                 initializeWorkerSelector();
-                // 日付選択プルダウンを初期化
                 initializeDateSelector();
                 updateDailySchedule();
             }
@@ -1507,13 +1171,6 @@
                    day === today.getDate();
         }
 
-        // 平日かどうかを判定
-        function isWeekday(year, month, day) {
-            const date = new Date(year, month, day);
-            const dayOfWeek = date.getDay();
-            return dayOfWeek !== 0 && dayOfWeek !== 6; // 0=日曜, 6=土曜
-        }
-
         // 日付別ステータス件数取得関数
         function getTaskCountByStatus(dateStr, statusType) {
             const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
@@ -1539,7 +1196,7 @@
             return 0;
         }
 
-        // テーブル生成（修正版）
+        // テーブル生成
         function generateTable() {
             const table = document.getElementById('scheduleTable');
             table.innerHTML = '';
@@ -1549,7 +1206,6 @@
             // ヘッダー行生成
             const headerRow = document.createElement('tr');
             
-            // 作業者列ヘッダー
             const workerHeader = document.createElement('th');
             workerHeader.textContent = '作業者';
             workerHeader.className = 'worker-name';
@@ -1561,16 +1217,13 @@
                 const date = new Date(currentYear, currentMonth, day);
                 const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()];
                 
-                // 日付と曜日を統一フォーマットで表示
                 dayHeader.innerHTML = `${day}<br>${dayOfWeek}`;
                 dayHeader.className = 'date-header';
                 
-                // 土日祝日の色分け
                 if (date.getDay() === 0 || date.getDay() === 6) {
                     dayHeader.classList.add('weekend');
                 }
 
-                // 今日の日付をハイライト（全体的に薄いオレンジ）
                 if (isToday(currentYear, currentMonth, day)) {
                     dayHeader.classList.add('today-column');
                 }
@@ -1598,18 +1251,15 @@
                 assignedCell.textContent = assignedCount > 0 ? assignedCount : '';
                 assignedCell.className = 'task-cell';
                 
-                // 今日の日付をハイライト（最優先）
                 if (isToday(currentYear, currentMonth, day)) {
                     assignedCell.classList.add('today-column');
                 }
                 
-                // 土日の背景色
                 const date = new Date(currentYear, currentMonth, day);
                 if (date.getDay() === 0 || date.getDay() === 6) {
                     assignedCell.classList.add('weekend');
                 }
                 
-                // セルのスタイル設定
                 if (assignedCount > 0) {
                     if (!isToday(currentYear, currentMonth, day)) {
                         assignedCell.style.backgroundColor = '#e6f7ff';
@@ -1640,18 +1290,15 @@
                 completedCell.textContent = completedCount > 0 ? completedCount : '';
                 completedCell.className = 'task-cell';
                 
-                // 今日の日付をハイライト（最優先）
                 if (isToday(currentYear, currentMonth, day)) {
                     completedCell.classList.add('today-column');
                 }
                 
-                // 土日の背景色
                 const date = new Date(currentYear, currentMonth, day);
                 if (date.getDay() === 0 || date.getDay() === 6) {
                     completedCell.classList.add('weekend');
                 }
                 
-                // セルのスタイル設定
                 if (completedCount > 0) {
                     if (!isToday(currentYear, currentMonth, day)) {
                         completedCell.style.backgroundColor = '#f6ffed';
@@ -1664,12 +1311,9 @@
             }
             table.appendChild(completedRow);
 
-            // 作業者行生成（拠点別ヘッダー付き）
-            let currentLocation = '';
+            // 作業者行生成
             workers.forEach((worker, index) => {
-                // 拠点ヘッダーの判定と追加
                 if (index === 0) {
-                    // 熊本拠点ヘッダー
                     const kumamotoHeaderRow = document.createElement('tr');
                     const kumamotoHeaderCell = document.createElement('td');
                     kumamotoHeaderCell.textContent = '熊本拠点';
@@ -1679,7 +1323,6 @@
                     kumamotoHeaderCell.style.color = '#2c7a7b';
                     kumamotoHeaderRow.appendChild(kumamotoHeaderCell);
                     
-                    // 空のセルで埋める
                     for (let day = 1; day <= daysInMonth; day++) {
                         const emptyCell = document.createElement('td');
                         emptyCell.style.backgroundColor = '#e6fffa';
@@ -1687,7 +1330,6 @@
                     }
                     table.appendChild(kumamotoHeaderRow);
                 } else if (index === 12) {
-                    // 東京拠点ヘッダー
                     const tokyoHeaderRow = document.createElement('tr');
                     const tokyoHeaderCell = document.createElement('td');
                     tokyoHeaderCell.textContent = '東京拠点';
@@ -1697,7 +1339,6 @@
                     tokyoHeaderCell.style.color = '#c05621';
                     tokyoHeaderRow.appendChild(tokyoHeaderCell);
                     
-                    // 空のセルで埋める
                     for (let day = 1; day <= daysInMonth; day++) {
                         const emptyCell = document.createElement('td');
                         emptyCell.style.backgroundColor = '#fef5e7';
@@ -1708,8 +1349,890 @@
                 
                 const workerRow = document.createElement('tr');
                 
-                // 作業者名セル
                 const workerCell = document.createElement('td');
                 workerCell.textContent = worker;
                 workerCell.className = 'worker-name';
-                wor
+                workerRow.appendChild(workerCell);
+
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dayCell = document.createElement('td');
+                    dayCell.className = 'task-cell';
+                    
+                    const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    
+                    const date = new Date(currentYear, currentMonth, day);
+                    if (date.getDay() === 0 || date.getDay() === 6) {
+                        dayCell.classList.add('weekend');
+                    }
+
+                    if (isToday(currentYear, currentMonth, day)) {
+                        dayCell.classList.add('today-column');
+                    }
+                    
+                    const tasksForCell = getTasksForCell(worker, dateStr);
+                    
+                    if (tasksForCell.length > 0) {
+                        renderCellContent(dayCell, tasksForCell);
+                        setupCellEvents(dayCell, tasksForCell, worker, dateStr);
+                    } else {
+                        setupEmptyCellEvents(dayCell, worker, dateStr);
+                    }
+                    
+                    workerRow.appendChild(dayCell);
+                }
+                
+                table.appendChild(workerRow);
+            });
+
+            updateStats();
+        }
+
+        // 日別スケジュール更新
+        function updateDailySchedule() {
+            const dateStr = dailyDate.toISOString().split('T')[0];
+            const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][dailyDate.getDay()];
+            
+            document.getElementById('dailyDate').textContent = 
+                `${dailyDate.getFullYear()}年${dailyDate.getMonth() + 1}月${dailyDate.getDate()}日 (${dayOfWeek})`;
+
+            const selectedWorker = document.getElementById('workerSelect').value;
+            const allTasks = getAllTasksForDate(dateStr);
+            
+            const filteredTasks = selectedWorker === 'all' 
+                ? allTasks 
+                : allTasks.filter(task => task.worker === selectedWorker);
+            
+            const uniqueTasks = [];
+            const seenIssueIds = new Set();
+            
+            filteredTasks.forEach(task => {
+                const issueIdMatch = task.id.match(/RDM-(\d+)/);
+                const issueId = issueIdMatch ? issueIdMatch[1] : task.id;
+                
+                if (!seenIssueIds.has(issueId)) {
+                    seenIssueIds.add(issueId);
+                    uniqueTasks.push(task);
+                }
+            });
+            
+            document.getElementById('dailyTotalTasks').textContent = uniqueTasks.length;
+            
+            const planningSection = document.querySelector('.planning-tasks-list');
+            if (selectedWorker === 'all') {
+                planningSection.style.display = 'block';
+                updatePlanningTasksList(uniqueTasks);
+            } else {
+                planningSection.style.display = 'none';
+            }
+
+            updateTimelineSchedule(filteredTasks);
+        }
+
+        // 本日の計画作業リスト更新
+        function updatePlanningTasksList(tasks) {
+            const planningTasksList = document.getElementById('planningTasksList');
+            planningTasksList.innerHTML = '';
+
+            const planningTasks = tasks.filter(task => {
+                const projectName = task.projectName || '';
+                return specialProjectKeywords.some(keyword => projectName.includes(keyword));
+            });
+
+            if (planningTasks.length === 0) {
+                planningTasksList.innerHTML = '<div class="empty-planning">本日の計画作業はありません</div>';
+                return;
+            }
+
+            planningTasks.forEach(task => {
+                const taskItem = document.createElement('div');
+                taskItem.className = 'planning-task-item';
+
+                taskItem.innerHTML = `
+                    <div class="planning-task-main">
+                        <div class="planning-task-title" ${task.redmineUrl ? `onclick="window.open('${task.redmineUrl}', '_blank')" style="cursor: pointer; text-decoration: underline;"` : ''}>${task.title}</div>
+                        <div class="planning-task-details">
+                            <span class="planning-task-worker">担当: ${task.worker}</span>
+                        </div>
+                    </div>
+                `;
+
+                planningTasksList.appendChild(taskItem);
+            });
+        }
+
+        // 時間軸スケジュールの更新（修正版 - 横軸が時間、縦軸が作業者）
+        function updateTimelineSchedule(allTasks) {
+            const timelineTable = document.getElementById('timelineTable');
+            timelineTable.innerHTML = '';
+
+            const selectedWorker = document.getElementById('workerSelect').value;
+            
+            let displayWorkers;
+            if (selectedWorker === 'all') {
+                const workersWithTasks = [...new Set(allTasks.map(task => task.worker))];
+                displayWorkers = workers.filter(worker => workersWithTasks.includes(worker));
+            } else {
+                displayWorkers = [selectedWorker];
+            }
+
+            // ヘッダー行を作成
+            const headerRow = document.createElement('tr');
+            
+            const workerHeaderCell = document.createElement('th');
+            workerHeaderCell.textContent = '作業者';
+            workerHeaderCell.className = 'timeline-worker-name';
+            headerRow.appendChild(workerHeaderCell);
+            
+            timeSlots.forEach(timeSlot => {
+                const timeHeaderCell = document.createElement('th');
+                timeHeaderCell.textContent = timeSlot.label;
+                timeHeaderCell.style.minWidth = '80px';
+                timeHeaderCell.style.maxWidth = '80px';
+                headerRow.appendChild(timeHeaderCell);
+            });
+            
+            timelineTable.appendChild(headerRow);
+
+            // 各作業者の行を作成
+            displayWorkers.forEach(worker => {
+                const workerTasks = allTasks.filter(task => task.worker === worker);
+                
+                const uniqueTasks = [];
+                const seenIssueIds = new Set();
+                
+                workerTasks.forEach(task => {
+                    const issueIdMatch = task.id.match(/RDM-(\d+)/);
+                    const issueId = issueIdMatch ? issueIdMatch[1] : task.id;
+                    
+                    if (!seenIssueIds.has(issueId)) {
+                        seenIssueIds.add(issueId);
+                        uniqueTasks.push(task);
+                    }
+                });
+
+                const workerRow = document.createElement('tr');
+                
+                const workerNameCell = document.createElement('td');
+                workerNameCell.textContent = worker;
+                workerNameCell.className = 'timeline-worker-name';
+                workerRow.appendChild(workerNameCell);
+                
+                timeSlots.forEach(timeSlot => {
+                    const timeCell = document.createElement('td');
+                    timeCell.className = 'timeline-time-cell';
+                    
+                    const tasksInTimeSlot = uniqueTasks.filter(task => {
+                        const taskTime = getTaskTimeSlot(task);
+                        if (!taskTime) return false;
+                        
+                        if (timeSlot.start === null && timeSlot.end === null) {
+                            return taskTime.start === null && taskTime.end === null;
+                        }
+                        
+                        if (taskTime.start === 'allday' && taskTime.end === 'allday') {
+                            return timeSlot.start !== null;
+                        }
+                        
+                        if (taskTime.start === null || taskTime.end === null) return false;
+                        
+                        const taskStart = taskTime.start;
+                        const taskEnd = taskTime.end;
+                        const slotStart = timeSlot.start;
+                        const slotEnd = timeSlot.end;
+                        
+                        return (taskStart < slotEnd && taskEnd > slotStart);
+                    });
+                    
+                    tasksInTimeSlot.forEach(task => {
+                        const taskTime = getTaskTimeSlot(task);
+                        const taskItem = document.createElement('div');
+                        
+                        if (taskTime && taskTime.start === 'allday' && taskTime.end === 'allday') {
+                            taskItem.className = `timeline-task-item ${task.taskType} allday`;
+                            const shortTitle = task.title.length > 10 ? task.title.substring(0, 10) + '...' : task.title;
+                            taskItem.textContent = `${shortTitle}(終日)`;
+                        } else {
+                            taskItem.className = `timeline-task-item ${task.taskType}`;
+                            const shortTitle = task.title.length > 12 ? task.title.substring(0, 12) + '...' : task.title;
+                            taskItem.textContent = shortTitle;
+                        }
+                        
+                        taskItem.title = task.title;
+                        
+                        if (task.redmineUrl) {
+                            taskItem.style.cursor = 'pointer';
+                            taskItem.addEventListener('click', () => {
+                                window.open(task.redmineUrl, '_blank');
+                            });
+                        }
+                        
+                        timeCell.appendChild(taskItem);
+                    });
+                    
+                    workerRow.appendChild(timeCell);
+                });
+                
+                timelineTable.appendChild(workerRow);
+            });
+
+            if (displayWorkers.length === 0 || allTasks.length === 0) {
+                const emptyRow = document.createElement('tr');
+                const emptyCell = document.createElement('td');
+                emptyCell.colSpan = timeSlots.length + 1;
+                emptyCell.textContent = 'この日に予定されている作業はありません';
+                emptyCell.style.textAlign = 'center';
+                emptyCell.style.padding = '40px';
+                emptyCell.style.color = '#4a5568';
+                emptyCell.style.fontStyle = 'italic';
+                emptyRow.appendChild(emptyCell);
+                timelineTable.appendChild(emptyRow);
+            }
+        }
+
+        // タスクの時間帯を取得
+        function getTaskTimeSlot(task) {
+            if (task.workTimeSlot) {
+                return task.workTimeSlot;
+            }
+            
+            const timeStr = task.originalTimeString || '';
+            
+            if (timeStr.includes('終日') || timeStr.includes('全日')) {
+                return { start: 'allday', end: 'allday' };
+            }
+            
+            if (!timeStr || timeStr.trim() === '' || timeStr === 'null') {
+                return { start: null, end: null };
+            }
+            
+            const hours = task.estimatedHours || 0;
+            if (hours <= 2) {
+                return { start: 14, end: 16 };
+            } else if (hours <= 4) {
+                return { start: 10, end: 14 };
+            } else {
+                return { start: 10, end: 18 };
+            }
+        }
+
+        // 日別表示の日付変更
+        function changeDailyDate(direction) {
+            dailyDate.setDate(dailyDate.getDate() + direction);
+            updateDailySchedule();
+        }
+
+        function setDailyToday() {
+            dailyDate = new Date();
+            updateDailySchedule();
+        }
+
+        // 指定日のすべてのタスクを取得
+        function getAllTasksForDate(dateStr) {
+            const monthKey = dateStr.substring(0, 7);
+            if (!taskData[monthKey]) return [];
+            
+            return taskData[monthKey].filter(task => task.date === dateStr);
+        }
+
+        // セル内のタスクを取得
+        function getTasksForCell(worker, date) {
+            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+            
+            if (!taskData[monthKey]) {
+                return [];
+            }
+            
+            const matchingTasks = taskData[monthKey].filter(task => {
+                const workerMatch = task.worker === worker;
+                const dateMatch = task.date === date;
+                return workerMatch && dateMatch;
+            });
+            
+            return matchingTasks;
+        }
+
+        // 顧客名を省略する関数
+        function abbreviateCustomerName(customerName) {
+            if (!customerName) return '顧客不明';
+            
+            let abbreviated = customerName
+                .replace(/株式会社/g, '')
+                .replace(/有限会社/g, '')
+                .replace(/合同会社/g, '')
+                .replace(/\s+/g, '');
+            
+            if (abbreviated.length > 8) {
+                abbreviated = abbreviated.substring(0, 8) + '...';
+            }
+            
+            return abbreviated || '顧客不明';
+        }
+
+        // セル内容をレンダリング
+        function renderCellContent(cell, tasks) {
+            cell.innerHTML = '';
+            cell.style.backgroundColor = '';
+            cell.style.color = '';
+            
+            if (tasks.length === 0) {
+                return;
+            }
+            
+            const ticketTasks = tasks.filter(task => !task.isManualEntry);
+            const manualTasks = tasks.filter(task => task.isManualEntry);
+            
+            const specialProjectTasks = ticketTasks.filter(task => {
+                const projectName = task.projectName || '';
+                return specialProjectKeywords.some(keyword => projectName.includes(keyword));
+            });
+            
+            if (manualTasks.length > 0) {
+                const primaryTask = manualTasks[0];
+                const typeConfig = taskTypeConfig[primaryTask.taskType] || taskTypeConfig.other;
+                
+                cell.style.backgroundColor = typeConfig.color;
+                cell.style.color = typeConfig.textColor;
+                
+                const labelDiv = document.createElement('div');
+                labelDiv.className = 'task-type-label';
+                labelDiv.textContent = typeConfig.label;
+                labelDiv.style.fontWeight = 'bold';
+                labelDiv.style.fontSize = '9px';
+                cell.appendChild(labelDiv);
+                
+                if (ticketTasks.length > 0) {
+                    const ticketCountDiv = document.createElement('div');
+                    ticketCountDiv.className = 'ticket-count';
+                    ticketCountDiv.textContent = `(${ticketTasks.length})`;
+                    ticketCountDiv.style.fontSize = '8px';
+                    ticketCountDiv.style.opacity = '0.7';
+                    cell.appendChild(ticketCountDiv);
+                }
+                
+                if (manualTasks.length > 1) {
+                    const manualCountDiv = document.createElement('div');
+                    manualCountDiv.className = 'task-count';
+                    manualCountDiv.textContent = `+${manualTasks.length - 1}`;
+                    manualCountDiv.style.fontSize = '8px';
+                    cell.appendChild(manualCountDiv);
+                }
+            } else if (ticketTasks.length > 0) {
+                let showTaskName = false;
+                let taskName = '';
+                
+                if (specialProjectTasks.length > 0) {
+                    showTaskName = true;
+                    taskName = '計画';
+                } else {
+                    showTaskName = true;
+                    taskName = '随時';
+                }
+                
+                if (showTaskName) {
+                    const taskNameDiv = document.createElement('div');
+                    taskNameDiv.style.fontSize = '9px';
+                    taskNameDiv.style.color = '#444';
+                    taskNameDiv.style.fontWeight = '500';
+                    taskNameDiv.style.lineHeight = '1.1';
+                    taskNameDiv.style.marginBottom = '2px';
+                    taskNameDiv.style.textAlign = 'center';
+                    taskNameDiv.textContent = taskName;
+                    cell.appendChild(taskNameDiv);
+                }
+                
+                const taskCount = ticketTasks.length;
+                
+                const countDiv = document.createElement('div');
+                countDiv.className = 'task-count';
+                countDiv.textContent = taskCount;
+                
+                if (specialProjectTasks.length > 0) {
+                    const customerName = abbreviateCustomerName(specialProjectTasks[0].customerName);
+                    const projectName = specialProjectTasks[0].projectName || '';
+                    
+                    let shortProjectName = projectName;
+                    if (projectName.includes('SETUP（サーバーリプレイス、環境追加）')) {
+                        shortProjectName = 'SETUP';
+                    } else if (projectName.includes('M/Wバージョンアップ')) {
+                        shortProjectName = 'M/W Ver-UP';
+                    } else if (projectName.includes('環境アンインストール')) {
+                        shortProjectName = '環境削除';
+                    }
+                    
+                    cell.style.backgroundColor = '#e6f7ff';
+                    cell.style.color = '#1890ff';
+                    cell.style.border = '2px solid #40a9ff';
+                    cell.style.fontWeight = 'bold';
+                    
+                    countDiv.innerHTML = `
+                        <div style="font-size: 10px; font-weight: bold;">${taskCount}</div>
+                        <div style="font-size: 8px; color: #1c4ed8; margin-top: 1px;">${customerName}</div>
+                        <div style="font-size: 10px; color: #000; font-weight: bold; margin-top: 1px;">${shortProjectName}</div>
+                    `;
+                } else {
+                    cell.style.backgroundColor = 'white';
+                    cell.style.color = '#2d3748';
+                    
+                    countDiv.style.fontSize = '12px';
+                    countDiv.style.fontWeight = 'bold';
+                }
+                
+                countDiv.title = 'クリックでチケット詳細を確認 | ダブルクリックで手動タスクを追加';
+                cell.appendChild(countDiv);
+            }
+        }
+
+        // セルのイベント設定
+        function setupCellEvents(cell, tasks, worker, dateStr) {
+            cell.addEventListener('click', (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                
+                if (tasks.length > 0) {
+                    const tooltip = document.getElementById('tooltip');
+                    const isCurrentlyVisible = tooltip.classList.contains('show');
+                    
+                    if (isCurrentlyVisible) {
+                        hideTooltip();
+                    } else {
+                        hideTooltip();
+                        setTimeout(() => {
+                            showTooltip(e, tasks);
+                            isTooltipFixed = true;
+                        }, 50);
+                    }
+                }
+            });
+
+            cell.addEventListener('dblclick', (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                hideTooltip();
+                showCellDropdown(cell, worker, dateStr);
+            });
+
+            cell.addEventListener('mouseenter', (e) => {
+                if (tasks.length > 0) {
+                    cell.style.transform = 'scale(1.02)';
+                    cell.style.transition = 'transform 0.2s ease';
+                }
+            });
+
+            cell.addEventListener('mouseleave', (e) => {
+                cell.style.transform = '';
+                cell.style.transition = '';
+            });
+        }
+
+        // 空のセルのイベント設定
+        function setupEmptyCellEvents(cell, worker, dateStr) {
+            cell.addEventListener('click', (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+            });
+            
+            cell.addEventListener('dblclick', (e) => {
+                e.stopPropagation();
+                showCellDropdown(cell, worker, dateStr);
+            });
+        }
+
+        // ツールチップ表示
+        function showTooltip(event, tasks) {
+            const tooltip = document.getElementById('tooltip');
+            
+            if (tasks.length === 0) return;
+            
+            const newTooltip = tooltip.cloneNode(false);
+            tooltip.parentNode.replaceChild(newTooltip, tooltip);
+            
+            let tooltipContent = `<div class="tooltip-header">📋 作業予定 (${tasks.length}件)</div>`;
+            
+            tasks.forEach((task, index) => {
+                const timeInfo = task.originalTimeString || '';
+                const redmineUrl = task.redmineUrl || '';
+                const assignStatus = task.assignStatus || task.tsetStatus || '';
+                
+                const fullTitle = task.title || 'タイトルなし';
+                
+                const isCompletedOrCancelled = 
+                    task.tsetStatus === '22.作業完全終了' || 
+                    task.assignStatus === '対応完了' ||
+                    task.tsetStatus.includes('80.キャンセル') ||
+                    task.tsetStatus.includes('キャンセル') ||
+                    task.assignStatus === '中止' ||
+                    task.assignStatus.includes('キャンセル');
+                
+                const taskBackgroundColor = isCompletedOrCancelled ? 'rgba(128, 128, 128, 0.3)' : 'rgba(255, 255, 255, 0.6)';
+                
+                tooltipContent += `
+                    <div class="tooltip-task" data-url="${redmineUrl}" style="background: ${taskBackgroundColor};">
+                        <div class="tooltip-title">${fullTitle}</div>
+                        <div class="tooltip-details">
+                            ${timeInfo ? `<span class="tooltip-time">${timeInfo}</span>` : ''}
+                            ${assignStatus && assignStatus !== 'なし' ? assignStatus : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            const hasRedmineLinks = tasks.some(task => task.redmineUrl);
+            if (hasRedmineLinks) {
+                tooltipContent += '<div class="tooltip-click-hint">🔗 クリックでRedmine表示</div>';
+            }
+            
+            const finalTooltip = document.getElementById('tooltip');
+            finalTooltip.innerHTML = tooltipContent;
+            finalTooltip.classList.add('show');
+            isTooltipFixed = false;
+            
+            updateTooltipPosition(event);
+            
+            finalTooltip.addEventListener('mouseenter', (e) => {
+                isTooltipFixed = true;
+                clearTimeout(tooltipTimeout);
+                e.stopPropagation();
+            });
+            
+            finalTooltip.addEventListener('mouseleave', (e) => {
+                isTooltipFixed = false;
+                tooltipTimeout = setTimeout(() => {
+                    hideTooltip();
+                }, 100);
+                e.stopPropagation();
+            });
+            
+            finalTooltip.querySelectorAll('.tooltip-task').forEach((taskElement, index) => {
+                const task = tasks[index];
+                if (task && task.redmineUrl) {
+                    taskElement.style.cursor = 'pointer';
+                    taskElement.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        window.open(task.redmineUrl, '_blank');
+                        isTooltipFixed = false;
+                        hideTooltip();
+                    });
+                }
+            });
+        }
+
+        // ツールチップの位置を更新
+        function updateTooltipPosition(event) {
+            const tooltip = document.getElementById('tooltip');
+            if (!tooltip.classList.contains('show')) return;
+            
+            const rect = event.target.getBoundingClientRect();
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+            
+            let left = rect.right + 15;
+            let top = rect.top + scrollTop;
+            
+            tooltip.style.left = `${left}px`;
+            tooltip.style.top = `${top}px`;
+            tooltip.style.visibility = 'hidden';
+            tooltip.style.display = 'block';
+            
+            setTimeout(() => {
+                const tooltipRect = tooltip.getBoundingClientRect();
+                const viewportHeight = window.innerHeight;
+                const viewportWidth = window.innerWidth;
+                const margin = 20;
+                
+                tooltip.style.visibility = 'visible';
+                tooltip.style.display = '';
+                
+                if (left + tooltipRect.width > viewportWidth - margin) {
+                    left = rect.left + scrollLeft - tooltipRect.width - 15;
+                    
+                    if (left < margin) {
+                        left = Math.max(margin, rect.left + scrollLeft);
+                        top = rect.top + scrollTop - tooltipRect.height - 15;
+                        
+                        if (top < scrollTop + margin) {
+                            top = rect.bottom + scrollTop + 15;
+                        }
+                        
+                        if (left + tooltipRect.width > viewportWidth - margin) {
+                            left = Math.max(margin, viewportWidth - tooltipRect.width - margin);
+                        }
+                    }
+                }
+                
+                if (top + tooltipRect.height > viewportHeight + scrollTop - margin) {
+                    top = rect.top + scrollTop - tooltipRect.height - 15;
+                    
+                    if (top < scrollTop + margin) {
+                        top = Math.max(scrollTop + margin, Math.min(
+                            rect.top + scrollTop,
+                            viewportHeight + scrollTop - tooltipRect.height - margin
+                        ));
+                    }
+                }
+                
+                tooltip.style.left = `${Math.max(margin, left)}px`;
+                tooltip.style.top = `${Math.max(scrollTop + margin, top)}px`;
+            }, 10);
+        }
+
+        // ツールチップ非表示
+        function hideTooltip() {
+            const tooltip = document.getElementById('tooltip');
+            if (tooltip) {
+                tooltip.classList.remove('show');
+                isTooltipFixed = false;
+                clearTimeout(tooltipTimeout);
+                setTimeout(() => {
+                    if (!tooltip.classList.contains('show')) {
+                        tooltip.innerHTML = '';
+                    }
+                }, 300);
+            }
+        }
+
+        // 統計更新
+        function updateStats() {
+            const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+            const tasks = taskData[monthKey] || [];
+            
+            const totalTasks = tasks.length;
+            const assignedTasks = tasks.filter(t => 
+                t.tsetStatus === '03.本アサイン' || 
+                t.assignStatus === 'アサイン完了'
+            ).length;
+            const completedTasks = tasks.filter(t => 
+                t.tsetStatus === '22.作業完全終了' || 
+                t.assignStatus === '対応完了'
+            ).length;
+            const cancelledTasks = tasks.filter(t => 
+                t.tsetStatus === '80.キャンセル（依頼者都合）' || 
+                t.assignStatus === '中止'
+            ).length;
+
+            document.getElementById('totalTasks').textContent = totalTasks;
+            document.getElementById('assignedTasks').textContent = assignedTasks;
+            document.getElementById('completedTasks').textContent = completedTasks;
+            document.getElementById('cancelledTasks').textContent = cancelledTasks;
+        }
+
+        // CSV読み込み機能
+        function getCSVFileNames() {
+            const today = new Date();
+            const possibleFileNames = [];
+            
+            for (let i = 0; i <= 7; i++) {
+                const targetDate = new Date(today);
+                targetDate.setDate(today.getDate() - i);
+                
+                const year = targetDate.getFullYear();
+                const month = String(targetDate.getMonth() + 1).padStart(2, '0');
+                const day = String(targetDate.getDate()).padStart(2, '0');
+                
+                possibleFileNames.push(`redmine_issues_${year}_${month}_${day}.csv`);
+            }
+            
+            possibleFileNames.push('redmine_issues.csv');
+            
+            return possibleFileNames;
+        }
+
+        async function loadDataFromCSV() {
+            const possibleFileNames = getCSVFileNames();
+            
+            showNotification('CSVファイルを検索中...', 'info');
+            
+            for (const fileName of possibleFileNames) {
+                try {
+                    const csvUrl = `https://raw.githubusercontent.com/koshi7778/schedule-dashboard/main/${fileName}`;
+                    
+                    const response = await fetch(csvUrl);
+                    
+                    if (response.ok) {
+                        const csvText = await response.text();
+                        
+                        const result = Papa.parse(csvText, {
+                            header: true,
+                            skipEmptyLines: true,
+                            encoding: 'UTF-8'
+                        });
+                        
+                        const tickets = transformCSVToTickets(result.data);
+                        const monthlyData = groupTicketsByMonth(tickets);
+                        
+                        taskData = monthlyData;
+                        
+                        generateTable();
+                        updateDailySchedule();
+                        
+                        showNotification(`${fileName} から ${tickets.length}件のチケットを読み込みました`, 'success');
+                        return;
+                    }
+                    
+                } catch (error) {
+                    console.log(`${fileName} の読み込みエラー:`, error);
+                }
+            }
+            
+            showNotification('CSVファイルが見つかりません。', 'error');
+        }
+
+        // CSV変換関数
+        function transformCSVToTickets(csvData) {
+            const filteredData = csvData.filter(row => {
+                const assignStatus = row['TSETアサイン状態'] || '';
+                const tsetStatus = row['TSETステータス'] || '';
+                
+                const validAssignStatus = [
+                    'アサイン完了', '対応完了', '中止'
+                ].some(status => assignStatus.includes(status));
+                
+                const validTsetStatus = [
+                    '03.本アサイン', '22.作業完全終了', '80.キャンセル', 'キャンセル（依頼者都合）'
+                ].some(status => tsetStatus.includes(status));
+                
+                return validAssignStatus || validTsetStatus;
+            });
+            
+            const allTickets = [];
+            
+            filteredData.forEach(row => {
+                const assignedWorker = mapWorkerName(row['TSET作業者']);
+                
+                for (let i = 1; i <= 5; i++) {
+                    const dateField = `作業日${['①', '②', '③', '④', '⑤'][i-1]}`;
+                    const timeField = `作業日${['①', '②', '③', '④', '⑤'][i-1]}_時間`;
+                    
+                    const workDate = formatDate(row[dateField]);
+                    const workTimeStr = row[timeField] || '';
+                    const workHours = parseFloat(workTimeStr.replace(/[^\d.]/g, '')) || 0;
+                    
+                    if (workDate && assignedWorker) {
+                        const ticket = {
+                            id: `RDM-${row['Issue ID']}-${i}`,
+                            title: row['Subject'] || 'タイトルなし',
+                            worker: assignedWorker,
+                            date: workDate,
+                            estimatedHours: workHours > 0 ? workHours : 4,
+                            description: `顧客: ${row['お客様名'] || 'なし'}\nリモート: ${row['リモート有無'] || 'なし'}`,
+                            redmineUrl: row['URL'] || '',
+                            customerName: row['お客様名'] || '',
+                            remoteFlag: row['リモート有無'] || '',
+                            projectName: row['プロジェクト'] || '',
+                            tsetStatus: row['TSETステータス'] || '',
+                            assignStatus: row['TSETアサイン状態'] || '',
+                            createdDate: row['作成日'] || '',
+                            assignHopeDate: row['アサイン希望日'] || '',
+                            startDate: row['作業開始可能日'] || '',
+                            dueDate: row['作業完了期限日'] || '',
+                            taskType: determineTaskType(row['TSETアサイン状態'], row['Subject']),
+                            workTimeSlot: parseWorkTimeSlot(workTimeStr),
+                            originalTimeString: workTimeStr
+                        };
+                        
+                        allTickets.push(ticket);
+                    }
+                }
+            });
+            
+            return allTickets.filter(ticket => 
+                ticket.id !== 'RDM-' && 
+                ticket.title !== 'タイトルなし' && 
+                ticket.date && 
+                ticket.worker
+            );
+        }
+
+        function parseWorkTimeSlot(timeStr) {
+            if (!timeStr) return null;
+            
+            const timeMatch = timeStr.match(/(\d+)-(\d+)/);
+            if (timeMatch) {
+                return {
+                    start: parseInt(timeMatch[1]),
+                    end: parseInt(timeMatch[2])
+                };
+            }
+            
+            return null;
+        }
+
+        function determineTaskType(assignStatus, subject) {
+            return 'work';
+        }
+
+        function mapWorkerName(csvWorkerName) {
+            if (!csvWorkerName || csvWorkerName === 'null' || csvWorkerName.trim() === '') {
+                return '';
+            }
+            
+            let cleanName = csvWorkerName.replace(/^TSET_[A-Z]_/, '');
+            
+            const matchedWorker = workers.find(worker => 
+                worker.includes(cleanName) || 
+                cleanName.includes(worker.replace(' ', '')) ||
+                worker.replace(' ', '').includes(cleanName.replace(' ', '')) ||
+                worker === cleanName
+            );
+            
+            return matchedWorker || cleanName;
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr || dateStr.trim() === '' || dateStr === 'null') {
+                return '';
+            }
+            
+            try {
+                const date = new Date(dateStr);
+                if (isNaN(date.getTime())) {
+                    return '';
+                }
+                return date.toISOString().split('T')[0];
+            } catch (error) {
+                return '';
+            }
+        }
+
+        function groupTicketsByMonth(tickets) {
+            const monthlyData = {};
+            
+            tickets.forEach(ticket => {
+                if (ticket.date) {
+                    const monthKey = ticket.date.substring(0, 7);
+                    if (!monthlyData[monthKey]) {
+                        monthlyData[monthKey] = [];
+                    }
+                    monthlyData[monthKey].push(ticket);
+                }
+            });
+            
+            return monthlyData;
+        }
+
+        // 初期化
+        document.addEventListener('DOMContentLoaded', function() {
+            updateMonthDisplay();
+            generateTable();
+            
+            initializeWorkerSelector();
+            initializeDateSelector();
+            updateDailySchedule();
+            
+            document.addEventListener('click', (e) => {
+                const tooltip = document.getElementById('tooltip');
+                const isClickInsideTooltip = tooltip.contains(e.target);
+                const isClickOnCell = e.target.closest('.task-cell');
+                
+                if (!isClickInsideTooltip && !isClickOnCell && tooltip.classList.contains('show')) {
+                    hideTooltip();
+                }
+            });
+            
+            setTimeout(() => {
+                loadDataFromCSV();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
