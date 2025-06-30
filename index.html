@@ -135,6 +135,21 @@
             border-top: 1px solid #e2e8f0;
         }
 
+        .add-planning-btn {
+            background: #805ad5;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+
+        .add-planning-btn:hover {
+            background: #6b46c1;
+        }
+
         /* タブナビゲーション */
         .tab-navigation {
             background: #e2e8f0;
@@ -318,6 +333,84 @@
             border: 2px dashed #38b2ac;
         }
 
+        /* 作業量別の色分け改良 */
+        .workload-1 { 
+            background: #f0fff4 !important; 
+            color: #22543d !important;
+            border: 1px solid #c6f6d5;
+        }
+
+        .workload-2 { 
+            background: #fef5e7 !important; 
+            color: #744210 !important;
+            border: 1px solid #fed7aa;
+        }
+
+        .workload-3 { 
+            background: #fff5f5 !important; 
+            color: #742a2a !important;
+            border: 1px solid #fed7d7;
+        }
+
+        .workload-4 { 
+            background: #ffebee !important; 
+            color: #7f1d1d !important;
+            border: 1px solid #fca5a5;
+            font-weight: bold;
+        }
+
+        .workload-5-plus { 
+            background: #fce4ec !important; 
+            color: #881337 !important;
+            border: 2px solid #f687b3;
+            font-weight: bold;
+            box-shadow: 0 0 8px rgba(236, 72, 153, 0.3);
+        }
+
+        .planning-task {
+            background: #e53e3e !important;
+            color: white !important;
+            cursor: move;
+            position: relative;
+        }
+
+        .planning-task:hover {
+            background: #c53030 !important;
+            transform: scale(1.05);
+        }
+
+        .planning-task.dragging {
+            opacity: 0.5;
+            transform: rotate(5deg);
+        }
+
+        .planning-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #f56565;
+            color: white;
+            border-radius: 50%;
+            width: 15px;
+            height: 15px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .direct-input {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: transparent;
+            font-size: 10px;
+            text-align: center;
+            outline: none;
+            padding: 2px;
+        }
+
         .task-count {
             font-weight: bold;
             font-size: 12px;
@@ -475,6 +568,22 @@
             align-items: center;
         }
 
+        .planning-task-customer {
+            background: #e6f7ff;
+            color: #1890ff;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .planning-task-project {
+            background: #f0f9ff;
+            color: #0369a1;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
         .planning-task-worker {
             background: #f0f9ff;
             color: #0c4a6e;
@@ -483,7 +592,21 @@
             font-weight: bold;
         }
 
-        /* 時間軸スケジュール（修正版） */
+        .planning-task-link {
+            background: #3182ce;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        .planning-task-link:hover {
+            background: #2c5282;
+        }
+
+        /* 時間軸スケジュール（クロス表形式） */
         .timeline-schedule {
             background: white;
             border-radius: 8px;
@@ -516,8 +639,8 @@
             border: 1px solid #e2e8f0;
             padding: 8px;
             text-align: center;
-            vertical-align: top;
-            min-width: 80px; /* 幅を狭く調整 */
+            vertical-align: middle;
+            min-width: 120px;
         }
 
         .timeline-table th {
@@ -527,8 +650,6 @@
             position: sticky;
             top: 0;
             z-index: 10;
-            height: 40px;
-            vertical-align: middle;
         }
 
         .timeline-worker-name {
@@ -545,7 +666,6 @@
             z-index: 5;
             white-space: nowrap;
             border-right: 2px solid #cbd5e0 !important;
-            vertical-align: middle;
         }
 
         .timeline-time-cell {
@@ -554,34 +674,30 @@
             background: white;
             vertical-align: top;
             padding: 4px;
-            max-width: 80px; /* 最大幅を制限 */
-            overflow: hidden;
         }
 
         .timeline-task-item {
             background: #3182ce;
             color: white;
-            padding: 3px 6px; /* パディングを調整 */
+            padding: 2px 4px;
             border-radius: 3px;
-            font-size: 10px; /* フォントサイズを少し大きく */
+            font-size: 9px;
             margin-bottom: 2px;
             cursor: pointer;
             transition: all 0.2s ease;
             word-wrap: break-word;
-            line-height: 1.3;
+            line-height: 1.2;
             overflow: hidden;
             text-overflow: ellipsis;
-            display: block; /* ブロック要素にして改行を許可 */
-            white-space: normal; /* 改行を許可 */
-            max-height: 48px; /* 最大高さを制限 */
+            white-space: nowrap;
         }
 
         .timeline-task-item:hover {
             background: #2c5282;
             transform: scale(1.02);
+            white-space: normal;
             z-index: 100;
             position: relative;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
 
         .timeline-task-item.vacation {
@@ -606,6 +722,14 @@
         }
 
         /* 空の状態の表示 */
+        .empty-timeline {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            color: #4a5568;
+            font-style: italic;
+        }
+
         .empty-planning {
             text-align: center;
             padding: 40px;
@@ -693,6 +817,17 @@
             margin-right: 6px;
         }
 
+        .tooltip-hours {
+            display: inline-block;
+            background: #38a169;
+            color: white;
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: bold;
+            margin-right: 6px;
+        }
+
         .tooltip-click-hint {
             text-align: center;
             margin-top: 8px;
@@ -770,18 +905,13 @@
                 gap: 10px;
             }
 
-            .timeline-table th,
-            .timeline-table td {
-                min-width: 60px;
+            .timeline-content {
+                grid-template-columns: 60px 1fr;
             }
 
-            .timeline-worker-name {
-                min-width: 100px !important;
-                max-width: 100px !important;
-            }
-
-            .timeline-time-cell {
-                max-width: 60px;
+            .time-slot {
+                padding: 10px 5px;
+                font-size: 10px;
             }
         }
     </style>
@@ -829,7 +959,7 @@
         <div id="daily-tab" class="tab-content">
             <div class="daily-schedule">
                 <div class="daily-header">
-                    <div class="daily-date" id="dailyDate">2025年6月30日 (月)</div>
+                    <div class="daily-date" id="dailyDate">2025年6月29日 (日)</div>
                     <div class="daily-navigation">
                         <button class="month-btn" onclick="changeDailyDate(-1)">◀ 前日</button>
                         <button class="month-btn" onclick="setDailyToday()">今日</button>
@@ -843,11 +973,13 @@
                         <label for="workerSelect">表示する作業者:</label>
                         <select id="workerSelect" class="worker-select" onchange="updateDailySchedule()">
                             <option value="all">全員</option>
+                            <!-- 作業者オプションは JavaScript で動的に追加される -->
                         </select>
                     </div>
                     <div class="selector-group">
                         <label for="dateSelect">作業日:</label>
                         <select id="dateSelect" class="date-select" onchange="onDateSelectChange()">
+                            <!-- 日付オプションは JavaScript で動的に追加される -->
                         </select>
                     </div>
                 </div>
@@ -863,6 +995,7 @@
                 <div class="planning-tasks-list">
                     <div class="planning-tasks-header">本日の計画作業</div>
                     <div id="planningTasksList">
+                        <!-- 計画作業リストが動的に生成される -->
                     </div>
                 </div>
 
@@ -871,6 +1004,7 @@
                     <div class="timeline-header">時間別スケジュール</div>
                     <div class="timeline-crosstab">
                         <table class="timeline-table" id="timelineTable">
+                            <!-- テーブルはJavaScriptで動的生成 -->
                         </table>
                     </div>
                 </div>
@@ -999,25 +1133,70 @@
                 
                 dateSelect.appendChild(option);
             }
+            
+            // dailyDateが範囲外の場合は今日に設定
+            const dailyDateStr = dailyDate.toISOString().split('T')[0];
+            const todayStr = today.toISOString().split('T')[0];
+            const oneWeekLater = new Date(today);
+            oneWeekLater.setDate(today.getDate() + 6);
+            const oneWeekLaterStr = oneWeekLater.toISOString().split('T')[0];
+            
+            if (dailyDateStr < todayStr || dailyDateStr > oneWeekLaterStr) {
+                dailyDate = new Date(today);
+                // 選択状態を更新
+                dateSelect.value = todayStr;
+            }
         }
 
-        // 日付選択変更時の処理
+        // 日付を表示用にフォーマット（修正版）
+        function formatDateForDisplay(date) {
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()];
+            
+            // 実際の今日の日付と比較
+            const realToday = new Date();
+            realToday.setHours(0, 0, 0, 0); // 時間を0にして日付のみで比較
+            
+            const compareDate = new Date(date);
+            compareDate.setHours(0, 0, 0, 0);
+            
+            // 今日との差を計算
+            const todayDiff = Math.floor((compareDate - realToday) / (1000 * 60 * 60 * 24));
+            
+            if (todayDiff === 0) {
+                return `今日 ${month}/${day} (${dayOfWeek})`;
+            } else if (todayDiff === -1) {
+                return `昨日 ${month}/${day} (${dayOfWeek})`;
+            } else if (todayDiff === 1) {
+                return `明日 ${month}/${day} (${dayOfWeek})`;
+            } else {
+                return `${month}/${day} (${dayOfWeek})`;
+            }
+        }
+
+        // 日付選択変更時の処理（修正版）
         function onDateSelectChange() {
             const selectedDate = document.getElementById('dateSelect').value;
             if (selectedDate) {
+                // dailyDateを選択された日付に更新
                 dailyDate = new Date(selectedDate);
+                // スケジュール表示を更新（左上の日付表示も含む）
                 updateDailySchedule();
             }
         }
 
-        // セルクリック時のプルダウン表示
+        // セルクリック時のプルダウン表示（修正版）
         function showCellDropdown(cell, worker, dateStr) {
+            // 既存のドロップダウンを削除
             hideCellDropdown();
             
             const dropdown = document.createElement('div');
             dropdown.className = 'cell-dropdown';
             dropdown.id = 'cell-dropdown';
             
+            // オプションの定義
             const options = [
                 { type: 'planning', label: '計画作業', icon: '#e53e3e' },
                 { type: 'work', label: '随時作業', icon: '#744210' },
@@ -1056,6 +1235,7 @@
             dropdown.style.left = `${rect.left}px`;
             dropdown.style.top = `${rect.bottom + 5}px`;
             
+            // 画面外に出る場合の調整
             document.body.appendChild(dropdown);
             const dropdownRect = dropdown.getBoundingClientRect();
             
@@ -1066,6 +1246,7 @@
                 dropdown.style.top = `${rect.top - dropdownRect.height - 5}px`;
             }
             
+            // クリック外しで閉じる
             setTimeout(() => {
                 document.addEventListener('click', hideCellDropdown);
             }, 100);
@@ -1079,7 +1260,7 @@
             }
         }
 
-        // タスク追加機能
+        // タスク追加機能（修正版）
         function addTaskToCell(worker, dateStr, taskType, taskLabel) {
             const taskId = `${taskType.toUpperCase()}-${Date.now()}`;
             const newTask = {
@@ -1102,26 +1283,169 @@
                 isWorkTask: taskType === 'work'
             };
             
+            // 現在表示中の月のキーを使用
             const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
             
+            // taskDataの初期化
             if (!taskData[monthKey]) {
                 taskData[monthKey] = [];
             }
             
+            // タスクを追加
             taskData[monthKey].push(newTask);
+            
+            // テーブルを再生成
             generateTable();
+            
             showNotification(`${worker}の${dateStr}に${taskLabel}を追加しました`, 'success');
         }
 
+        // ドラッグ&ドロップ機能（改良版）
+        function makeCellDraggable(cell, task) {
+            cell.draggable = true;
+            cell.style.cursor = 'move';
+            
+            cell.addEventListener('dragstart', (e) => {
+                draggedTask = task;
+                cell.classList.add('dragging');
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/plain', task.id);
+            });
+
+            cell.addEventListener('dragend', (e) => {
+                cell.classList.remove('dragging');
+                draggedTask = null;
+            });
+
+            // 右クリックで削除オプション
+            cell.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                if (task.isManualEntry) {
+                    showTaskContextMenu(e, task);
+                }
+            });
+        }
+
+        function makeCellDroppable(cell, worker, dateStr) {
+            cell.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                cell.classList.add('drag-over');
+                e.dataTransfer.dropEffect = 'move';
+            });
+
+            cell.addEventListener('dragleave', (e) => {
+                cell.classList.remove('drag-over');
+            });
+
+            cell.addEventListener('drop', (e) => {
+                e.preventDefault();
+                cell.classList.remove('drag-over');
+                
+                if (draggedTask && draggedTask.isManualEntry) {
+                    moveTaskToCell(draggedTask, worker, dateStr);
+                }
+            });
+        }
+
+        function moveTaskToCell(task, newWorker, newDate) {
+            const oldMonthKey = task.date.substring(0, 7);
+            const newMonthKey = newDate.substring(0, 7);
+            
+            // 既存の位置から削除
+            if (taskData[oldMonthKey]) {
+                const taskIndex = taskData[oldMonthKey].findIndex(t => t.id === task.id);
+                if (taskIndex !== -1) {
+                    taskData[oldMonthKey].splice(taskIndex, 1);
+                }
+            }
+            
+            // 新しい位置に追加
+            if (!taskData[newMonthKey]) {
+                taskData[newMonthKey] = [];
+            }
+            
+            // タスクの情報を更新
+            task.worker = newWorker;
+            task.date = newDate;
+            
+            taskData[newMonthKey].push(task);
+            
+            generateTable();
+            showNotification(`${task.title}を${newWorker}の${newDate}に移動しました`, 'success');
+        }
+
+        function showTaskContextMenu(event, task) {
+            hideCellDropdown(); // 既存のメニューを閉じる
+            
+            const contextMenu = document.createElement('div');
+            contextMenu.className = 'cell-dropdown';
+            contextMenu.id = 'task-context-menu';
+            
+            const deleteOption = document.createElement('div');
+            deleteOption.className = 'dropdown-option';
+            deleteOption.innerHTML = '<span style="color: #e53e3e;">🗑️ 削除</span>';
+            deleteOption.addEventListener('click', (e) => {
+                e.stopPropagation();
+                deleteTask(task);
+                hideTaskContextMenu();
+            });
+            
+            const cancelOption = document.createElement('div');
+            cancelOption.className = 'dropdown-option cancel';
+            cancelOption.innerHTML = '<span>キャンセル</span>';
+            cancelOption.addEventListener('click', (e) => {
+                e.stopPropagation();
+                hideTaskContextMenu();
+            });
+            
+            contextMenu.appendChild(deleteOption);
+            contextMenu.appendChild(cancelOption);
+            
+            // 位置調整
+            contextMenu.style.position = 'fixed';
+            contextMenu.style.left = `${event.clientX}px`;
+            contextMenu.style.top = `${event.clientY}px`;
+            
+            document.body.appendChild(contextMenu);
+            
+            // クリック外しで閉じる
+            setTimeout(() => {
+                document.addEventListener('click', hideTaskContextMenu);
+            }, 100);
+        }
+
+        function hideTaskContextMenu() {
+            const existingMenu = document.getElementById('task-context-menu');
+            if (existingMenu) {
+                existingMenu.remove();
+                document.removeEventListener('click', hideTaskContextMenu);
+            }
+        }
+
+        function deleteTask(task) {
+            if (confirm(`${task.title}を削除しますか？`)) {
+                const monthKey = task.date.substring(0, 7);
+                if (taskData[monthKey]) {
+                    taskData[monthKey] = taskData[monthKey].filter(t => t.id !== task.id);
+                }
+                generateTable();
+                showNotification(`${task.title}を削除しました`, 'info');
+            }
+        }
+
         function switchTab(tabName) {
+            // すべてのタブボタンとコンテンツから active クラスを削除
             document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
 
+            // 選択されたタブを有効にする
             document.querySelector(`[onclick="switchTab('${tabName}')"]`).classList.add('active');
             document.getElementById(`${tabName}-tab`).classList.add('active');
 
             if (tabName === 'daily') {
+                // 作業者選択プルダウンを初期化
                 initializeWorkerSelector();
+                // 日付選択プルダウンを初期化
                 initializeDateSelector();
                 updateDailySchedule();
             }
@@ -1171,6 +1495,13 @@
                    day === today.getDate();
         }
 
+        // 平日かどうかを判定
+        function isWeekday(year, month, day) {
+            const date = new Date(year, month, day);
+            const dayOfWeek = date.getDay();
+            return dayOfWeek !== 0 && dayOfWeek !== 6; // 0=日曜, 6=土曜
+        }
+
         // 日付別ステータス件数取得関数
         function getTaskCountByStatus(dateStr, statusType) {
             const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
@@ -1196,7 +1527,7 @@
             return 0;
         }
 
-        // テーブル生成
+        // テーブル生成（修正版）
         function generateTable() {
             const table = document.getElementById('scheduleTable');
             table.innerHTML = '';
@@ -1206,6 +1537,7 @@
             // ヘッダー行生成
             const headerRow = document.createElement('tr');
             
+            // 作業者列ヘッダー
             const workerHeader = document.createElement('th');
             workerHeader.textContent = '作業者';
             workerHeader.className = 'worker-name';
@@ -1217,13 +1549,16 @@
                 const date = new Date(currentYear, currentMonth, day);
                 const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()];
                 
+                // 日付と曜日を統一フォーマットで表示
                 dayHeader.innerHTML = `${day}<br>${dayOfWeek}`;
                 dayHeader.className = 'date-header';
                 
+                // 土日祝日の色分け
                 if (date.getDay() === 0 || date.getDay() === 6) {
                     dayHeader.classList.add('weekend');
                 }
 
+                // 今日の日付をハイライト（全体的に薄いオレンジ）
                 if (isToday(currentYear, currentMonth, day)) {
                     dayHeader.classList.add('today-column');
                 }
@@ -1251,15 +1586,18 @@
                 assignedCell.textContent = assignedCount > 0 ? assignedCount : '';
                 assignedCell.className = 'task-cell';
                 
+                // 今日の日付をハイライト（最優先）
                 if (isToday(currentYear, currentMonth, day)) {
                     assignedCell.classList.add('today-column');
                 }
                 
+                // 土日の背景色
                 const date = new Date(currentYear, currentMonth, day);
                 if (date.getDay() === 0 || date.getDay() === 6) {
                     assignedCell.classList.add('weekend');
                 }
                 
+                // セルのスタイル設定
                 if (assignedCount > 0) {
                     if (!isToday(currentYear, currentMonth, day)) {
                         assignedCell.style.backgroundColor = '#e6f7ff';
@@ -1290,15 +1628,18 @@
                 completedCell.textContent = completedCount > 0 ? completedCount : '';
                 completedCell.className = 'task-cell';
                 
+                // 今日の日付をハイライト（最優先）
                 if (isToday(currentYear, currentMonth, day)) {
                     completedCell.classList.add('today-column');
                 }
                 
+                // 土日の背景色
                 const date = new Date(currentYear, currentMonth, day);
                 if (date.getDay() === 0 || date.getDay() === 6) {
                     completedCell.classList.add('weekend');
                 }
                 
+                // セルのスタイル設定
                 if (completedCount > 0) {
                     if (!isToday(currentYear, currentMonth, day)) {
                         completedCell.style.backgroundColor = '#f6ffed';
@@ -1311,9 +1652,12 @@
             }
             table.appendChild(completedRow);
 
-            // 作業者行生成
+            // 作業者行生成（拠点別ヘッダー付き）
+            let currentLocation = '';
             workers.forEach((worker, index) => {
+                // 拠点ヘッダーの判定と追加
                 if (index === 0) {
+                    // 熊本拠点ヘッダー
                     const kumamotoHeaderRow = document.createElement('tr');
                     const kumamotoHeaderCell = document.createElement('td');
                     kumamotoHeaderCell.textContent = '熊本拠点';
@@ -1323,6 +1667,7 @@
                     kumamotoHeaderCell.style.color = '#2c7a7b';
                     kumamotoHeaderRow.appendChild(kumamotoHeaderCell);
                     
+                    // 空のセルで埋める
                     for (let day = 1; day <= daysInMonth; day++) {
                         const emptyCell = document.createElement('td');
                         emptyCell.style.backgroundColor = '#e6fffa';
@@ -1330,6 +1675,7 @@
                     }
                     table.appendChild(kumamotoHeaderRow);
                 } else if (index === 12) {
+                    // 東京拠点ヘッダー
                     const tokyoHeaderRow = document.createElement('tr');
                     const tokyoHeaderCell = document.createElement('td');
                     tokyoHeaderCell.textContent = '東京拠点';
@@ -1339,6 +1685,7 @@
                     tokyoHeaderCell.style.color = '#c05621';
                     tokyoHeaderRow.appendChild(tokyoHeaderCell);
                     
+                    // 空のセルで埋める
                     for (let day = 1; day <= daysInMonth; day++) {
                         const emptyCell = document.createElement('td');
                         emptyCell.style.backgroundColor = '#fef5e7';
@@ -1349,34 +1696,43 @@
                 
                 const workerRow = document.createElement('tr');
                 
+                // 作業者名セル
                 const workerCell = document.createElement('td');
                 workerCell.textContent = worker;
                 workerCell.className = 'worker-name';
                 workerRow.appendChild(workerCell);
 
+                // 各日のセル
                 for (let day = 1; day <= daysInMonth; day++) {
                     const dayCell = document.createElement('td');
                     dayCell.className = 'task-cell';
                     
                     const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                     
+                    // 土日の背景色
                     const date = new Date(currentYear, currentMonth, day);
                     if (date.getDay() === 0 || date.getDay() === 6) {
                         dayCell.classList.add('weekend');
                     }
 
+                    // 今日の日付をハイライト（薄いオレンジ背景）
                     if (isToday(currentYear, currentMonth, day)) {
                         dayCell.classList.add('today-column');
                     }
                     
+                    // タスクデータがある場合は表示
                     const tasksForCell = getTasksForCell(worker, dateStr);
                     
                     if (tasksForCell.length > 0) {
                         renderCellContent(dayCell, tasksForCell);
                         setupCellEvents(dayCell, tasksForCell, worker, dateStr);
                     } else {
+                        // 空のセルにもイベントを追加
                         setupEmptyCellEvents(dayCell, worker, dateStr);
                     }
+                    
+                    // すべてのセルをドロップ可能にする
+                    makeCellDroppable(dayCell, worker, dateStr);
                     
                     workerRow.appendChild(dayCell);
                 }
@@ -1387,25 +1743,39 @@
             updateStats();
         }
 
-        // 日別スケジュール更新
+        // 日別スケジュール更新（修正版）
         function updateDailySchedule() {
             const dateStr = dailyDate.toISOString().split('T')[0];
             const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][dailyDate.getDay()];
             
+            // 左上の日付表示を更新（選択された作業日に合わせる）
             document.getElementById('dailyDate').textContent = 
                 `${dailyDate.getFullYear()}年${dailyDate.getMonth() + 1}月${dailyDate.getDate()}日 (${dayOfWeek})`;
 
+            // 日付選択プルダウンを現在の日付に同期（無限ループを防ぐため条件付き）
+            const dateSelect = document.getElementById('dateSelect');
+            const currentSelection = dateSelect.value;
+            if (currentSelection !== dateStr) {
+                syncDateSelector();
+            }
+
+            // 選択された作業者を取得
             const selectedWorker = document.getElementById('workerSelect').value;
+            
+            // その日のタスクを取得
             const allTasks = getAllTasksForDate(dateStr);
             
+            // 作業者でフィルタリング
             const filteredTasks = selectedWorker === 'all' 
                 ? allTasks 
                 : allTasks.filter(task => task.worker === selectedWorker);
             
+            // 重複除去：同じIssue IDのタスクは1つにまとめる
             const uniqueTasks = [];
             const seenIssueIds = new Set();
             
             filteredTasks.forEach(task => {
+                // Issue IDを抽出（RDM-12345-1 → 12345）
                 const issueIdMatch = task.id.match(/RDM-(\d+)/);
                 const issueId = issueIdMatch ? issueIdMatch[1] : task.id;
                 
@@ -1415,8 +1785,10 @@
                 }
             });
             
+            // 統計を更新（重複除去後の件数）
             document.getElementById('dailyTotalTasks').textContent = uniqueTasks.length;
             
+            // 本日の計画作業リストを更新（全員選択時のみ）
             const planningSection = document.querySelector('.planning-tasks-list');
             if (selectedWorker === 'all') {
                 planningSection.style.display = 'block';
@@ -1425,14 +1797,16 @@
                 planningSection.style.display = 'none';
             }
 
+            // 時間軸スケジュールを更新
             updateTimelineSchedule(filteredTasks);
         }
 
-        // 本日の計画作業リスト更新
+        // 本日の計画作業リスト更新（簡略版）
         function updatePlanningTasksList(tasks) {
             const planningTasksList = document.getElementById('planningTasksList');
             planningTasksList.innerHTML = '';
 
+            // 特別プロジェクトのタスクを抽出
             const planningTasks = tasks.filter(task => {
                 const projectName = task.projectName || '';
                 return specialProjectKeywords.some(keyword => projectName.includes(keyword));
@@ -1460,34 +1834,65 @@
             });
         }
 
-        // 時間軸スケジュールの更新（修正版 - 横軸が時間、縦軸が作業者）
+        // 日付選択プルダウンを現在の日付に同期
+        function syncDateSelector() {
+            const dateSelect = document.getElementById('dateSelect');
+            const currentDateStr = dailyDate.toISOString().split('T')[0];
+            
+            // プルダウンで該当する日付を探して選択
+            let optionFound = false;
+            for (let option of dateSelect.options) {
+                if (option.value === currentDateStr) {
+                    option.selected = true;
+                    optionFound = true;
+                    break;
+                }
+            }
+            
+            // プルダウンに該当する日付がない場合は、プルダウンを再生成
+            if (!optionFound) {
+                initializeDateSelector();
+                // 再生成後に正しい日付を選択
+                for (let option of dateSelect.options) {
+                    if (option.value === currentDateStr) {
+                        option.selected = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // 時間軸スケジュールの更新（クロス表形式）
         function updateTimelineSchedule(allTasks) {
             const timelineTable = document.getElementById('timelineTable');
             timelineTable.innerHTML = '';
 
+            // 選択された作業者を取得
             const selectedWorker = document.getElementById('workerSelect').value;
             
+            // 表示する作業者を決定
             let displayWorkers;
             if (selectedWorker === 'all') {
-                const workersWithTasks = [...new Set(allTasks.map(task => task.worker))];
-                displayWorkers = workers.filter(worker => workersWithTasks.includes(worker));
+                // 全員表示の場合は全作業者を表示
+                displayWorkers = workers;
             } else {
+                // 特定の作業者が選択されている場合
                 displayWorkers = [selectedWorker];
             }
 
             // ヘッダー行を作成
             const headerRow = document.createElement('tr');
             
+            // 作業者名列のヘッダー
             const workerHeaderCell = document.createElement('th');
             workerHeaderCell.textContent = '作業者';
             workerHeaderCell.className = 'timeline-worker-name';
             headerRow.appendChild(workerHeaderCell);
             
+            // 時間軸のヘッダー
             timeSlots.forEach(timeSlot => {
                 const timeHeaderCell = document.createElement('th');
                 timeHeaderCell.textContent = timeSlot.label;
-                timeHeaderCell.style.minWidth = '80px';
-                timeHeaderCell.style.maxWidth = '80px';
                 headerRow.appendChild(timeHeaderCell);
             });
             
@@ -1497,6 +1902,7 @@
             displayWorkers.forEach(worker => {
                 const workerTasks = allTasks.filter(task => task.worker === worker);
                 
+                // 同じIssue IDのタスクは1つにまとめる（重複除去）
                 const uniqueTasks = [];
                 const seenIssueIds = new Set();
                 
@@ -1510,29 +1916,36 @@
                     }
                 });
 
+                // 作業者行を作成
                 const workerRow = document.createElement('tr');
                 
+                // 作業者名セル
                 const workerNameCell = document.createElement('td');
                 workerNameCell.textContent = worker;
                 workerNameCell.className = 'timeline-worker-name';
                 workerRow.appendChild(workerNameCell);
                 
+                // 各時間帯のセルを作成
                 timeSlots.forEach(timeSlot => {
                     const timeCell = document.createElement('td');
                     timeCell.className = 'timeline-time-cell';
                     
+                    // 時間帯に該当するタスクを抽出
                     const tasksInTimeSlot = uniqueTasks.filter(task => {
                         const taskTime = getTaskTimeSlot(task);
                         if (!taskTime) return false;
                         
+                        // 時間選択なしの場合
                         if (timeSlot.start === null && timeSlot.end === null) {
                             return taskTime.start === null && taskTime.end === null;
                         }
                         
+                        // 終日の場合は全ての時間帯に表示
                         if (taskTime.start === 'allday' && taskTime.end === 'allday') {
-                            return timeSlot.start !== null;
+                            return timeSlot.start !== null; // 時間選択なし以外の全時間帯
                         }
                         
+                        // 通常の時間帯判定
                         if (taskTime.start === null || taskTime.end === null) return false;
                         
                         const taskStart = taskTime.start;
@@ -1540,25 +1953,28 @@
                         const slotStart = timeSlot.start;
                         const slotEnd = timeSlot.end;
                         
+                        // 重複判定：タスクの時間帯が表示時間帯と重複している場合
                         return (taskStart < slotEnd && taskEnd > slotStart);
                     });
                     
+                    // タスクを表示
                     tasksInTimeSlot.forEach(task => {
                         const taskTime = getTaskTimeSlot(task);
                         const taskItem = document.createElement('div');
                         
+                        // 終日タスクの場合
                         if (taskTime && taskTime.start === 'allday' && taskTime.end === 'allday') {
                             taskItem.className = `timeline-task-item ${task.taskType} allday`;
-                            const shortTitle = task.title.length > 10 ? task.title.substring(0, 10) + '...' : task.title;
-                            taskItem.textContent = `${shortTitle}(終日)`;
+                            taskItem.textContent = `${task.title} (終日)`;
                         } else {
                             taskItem.className = `timeline-task-item ${task.taskType}`;
-                            const shortTitle = task.title.length > 12 ? task.title.substring(0, 12) + '...' : task.title;
+                            // タスク名を短縮表示
+                            const shortTitle = task.title.length > 15 ? task.title.substring(0, 15) + '...' : task.title;
                             taskItem.textContent = shortTitle;
+                            taskItem.title = task.title; // フルタイトルをツールチップで表示
                         }
                         
-                        taskItem.title = task.title;
-                        
+                        // クリックでRedmineリンクに遷移
                         if (task.redmineUrl) {
                             taskItem.style.cursor = 'pointer';
                             taskItem.addEventListener('click', () => {
@@ -1575,6 +1991,7 @@
                 timelineTable.appendChild(workerRow);
             });
 
+            // タスクがない場合の表示
             if (displayWorkers.length === 0 || allTasks.length === 0) {
                 const emptyRow = document.createElement('tr');
                 const emptyCell = document.createElement('td');
@@ -1589,40 +2006,47 @@
             }
         }
 
-        // タスクの時間帯を取得
+        // タスクの時間帯を取得（修正版）
         function getTaskTimeSlot(task) {
+            // 作業時間が設定されている場合は、その時間から推定
             if (task.workTimeSlot) {
                 return task.workTimeSlot;
             }
             
+            // 元の時間文字列をチェック
             const timeStr = task.originalTimeString || '';
             
+            // 終日の場合
             if (timeStr.includes('終日') || timeStr.includes('全日')) {
                 return { start: 'allday', end: 'allday' };
             }
             
+            // 時間が未設定またはnullの場合
             if (!timeStr || timeStr.trim() === '' || timeStr === 'null') {
                 return { start: null, end: null };
             }
             
+            // 作業時間に基づいて時間帯を推定
             const hours = task.estimatedHours || 0;
             if (hours <= 2) {
-                return { start: 14, end: 16 };
+                return { start: 14, end: 16 }; // 短時間作業は14-16
             } else if (hours <= 4) {
-                return { start: 10, end: 14 };
+                return { start: 10, end: 14 }; // 半日作業は10-14
             } else {
-                return { start: 10, end: 18 };
+                return { start: 10, end: 18 }; // 一日作業は10-18
             }
         }
 
-        // 日別表示の日付変更
+        // 日別表示の日付変更（修正版）
         function changeDailyDate(direction) {
             dailyDate.setDate(dailyDate.getDate() + direction);
+            // 日付が変更されたら、スケジュール全体を更新（プルダウンも含む）
             updateDailySchedule();
         }
 
         function setDailyToday() {
-            dailyDate = new Date();
+            dailyDate = new Date(); // 実際の今日の日付に設定
+            // 今日に戻ったら、スケジュール全体を更新（プルダウンも含む）
             updateDailySchedule();
         }
 
@@ -1634,7 +2058,7 @@
             return taskData[monthKey].filter(task => task.date === dateStr);
         }
 
-        // セル内のタスクを取得
+        // セル内のタスクを取得（修正版）
         function getTasksForCell(worker, date) {
             const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
             
@@ -1655,12 +2079,26 @@
         function abbreviateCustomerName(customerName) {
             if (!customerName) return '顧客不明';
             
+            // 株式会社、有限会社などの法人格を削除
             let abbreviated = customerName
                 .replace(/株式会社/g, '')
                 .replace(/有限会社/g, '')
                 .replace(/合同会社/g, '')
-                .replace(/\s+/g, '');
+                .replace(/合資会社/g, '')
+                .replace(/合名会社/g, '')
+                .replace(/一般財団法人/g, '')
+                .replace(/公益財団法人/g, '')
+                .replace(/一般社団法人/g, '')
+                .replace(/公益社団法人/g, '')
+                .replace(/学校法人/g, '')
+                .replace(/医療法人/g, '')
+                .replace(/社会福祉法人/g, '')
+                .replace(/宗教法人/g, '')
+                .replace(/特定非営利活動法人/g, '')
+                .replace(/NPO法人/g, '')
+                .replace(/\s+/g, ''); // 空白を削除
             
+            // 10文字以上の場合は短縮
             if (abbreviated.length > 8) {
                 abbreviated = abbreviated.substring(0, 8) + '...';
             }
@@ -1668,31 +2106,41 @@
             return abbreviated || '顧客不明';
         }
 
-        // セル内容をレンダリング
+        // セル内容をレンダリング（色分け改良版）
         function renderCellContent(cell, tasks) {
+            // セルをクリア
             cell.innerHTML = '';
             cell.style.backgroundColor = '';
             cell.style.color = '';
+            
+            // 既存のworkloadクラスを削除
+            cell.classList.remove('workload-1', 'workload-2', 'workload-3', 'workload-4', 'workload-5-plus');
             
             if (tasks.length === 0) {
                 return;
             }
             
+            // チケット系タスク（CSV読み込み）と手動タスクを分離
             const ticketTasks = tasks.filter(task => !task.isManualEntry);
             const manualTasks = tasks.filter(task => task.isManualEntry);
             
+            // 特別プロジェクトのチェック
             const specialProjectTasks = ticketTasks.filter(task => {
                 const projectName = task.projectName || '';
                 return specialProjectKeywords.some(keyword => projectName.includes(keyword));
             });
             
+            // 手動タスクがある場合は手動タスクを優先表示
             if (manualTasks.length > 0) {
+                // 最初の手動タスクの種別で色とラベルを決定
                 const primaryTask = manualTasks[0];
                 const typeConfig = taskTypeConfig[primaryTask.taskType] || taskTypeConfig.other;
                 
+                // セルの背景色と文字色を設定
                 cell.style.backgroundColor = typeConfig.color;
                 cell.style.color = typeConfig.textColor;
                 
+                // ラベルを表示
                 const labelDiv = document.createElement('div');
                 labelDiv.className = 'task-type-label';
                 labelDiv.textContent = typeConfig.label;
@@ -1700,6 +2148,7 @@
                 labelDiv.style.fontSize = '9px';
                 cell.appendChild(labelDiv);
                 
+                // チケット件数がある場合は小さく表示
                 if (ticketTasks.length > 0) {
                     const ticketCountDiv = document.createElement('div');
                     ticketCountDiv.className = 'ticket-count';
@@ -1709,6 +2158,7 @@
                     cell.appendChild(ticketCountDiv);
                 }
                 
+                // 複数の手動タスクがある場合は件数も表示
                 if (manualTasks.length > 1) {
                     const manualCountDiv = document.createElement('div');
                     manualCountDiv.className = 'task-count';
@@ -1717,15 +2167,18 @@
                     cell.appendChild(manualCountDiv);
                 }
             } else if (ticketTasks.length > 0) {
+                // セル上部にタスク名を表示（特別プロジェクトと通常タスクのみ）
                 let showTaskName = false;
                 let taskName = '';
                 
+                // プロジェクト系タスクがある場合のみタスク名表示
                 if (specialProjectTasks.length > 0) {
                     showTaskName = true;
-                    taskName = '計画';
+                    taskName = '計画'; // '計画枠' → '計画'
                 } else {
+                    // 通常タスクの場合
                     showTaskName = true;
-                    taskName = '随時';
+                    taskName = '随時'; // '随時枠' → '随時'
                 }
                 
                 if (showTaskName) {
@@ -1740,16 +2193,20 @@
                     cell.appendChild(taskNameDiv);
                 }
                 
+                // チケット件数表示
                 const taskCount = ticketTasks.length;
                 
                 const countDiv = document.createElement('div');
                 countDiv.className = 'task-count';
                 countDiv.textContent = taskCount;
                 
+                // 特別プロジェクトのタスクがある場合の表示
                 if (specialProjectTasks.length > 0) {
+                    // 顧客名とプロジェクト名を取得（最初の特別プロジェクトタスクから）
                     const customerName = abbreviateCustomerName(specialProjectTasks[0].customerName);
                     const projectName = specialProjectTasks[0].projectName || '';
                     
+                    // プロジェクト名を短縮表示用に変換
                     let shortProjectName = projectName;
                     if (projectName.includes('SETUP（サーバーリプレイス、環境追加）')) {
                         shortProjectName = 'SETUP';
@@ -1759,17 +2216,20 @@
                         shortProjectName = '環境削除';
                     }
                     
+                    // セルの背景色を特別プロジェクト専用の色に変更
                     cell.style.backgroundColor = '#e6f7ff';
                     cell.style.color = '#1890ff';
                     cell.style.border = '2px solid #40a9ff';
                     cell.style.fontWeight = 'bold';
                     
+                    // 表示内容を変更（プロジェクト名を見やすく）
                     countDiv.innerHTML = `
                         <div style="font-size: 10px; font-weight: bold;">${taskCount}</div>
                         <div style="font-size: 8px; color: #1c4ed8; margin-top: 1px;">${customerName}</div>
                         <div style="font-size: 10px; color: #000; font-weight: bold; margin-top: 1px;">${shortProjectName}</div>
                     `;
                 } else {
+                    // 通常のタスク表示（白背景）
                     cell.style.backgroundColor = 'white';
                     cell.style.color = '#2d3748';
                     
@@ -1782,8 +2242,11 @@
             }
         }
 
-        // セルのイベント設定
+        // セルのイベント設定（ワンクリック方式）
         function setupCellEvents(cell, tasks, worker, dateStr) {
+            console.log(`Setting up events for cell with ${tasks.length} tasks`);
+            
+            // シングルクリックでツールチップ表示/非表示切り替え
             cell.addEventListener('click', (e) => {
                 e.stopPropagation();
                 e.preventDefault();
@@ -1792,25 +2255,28 @@
                     const tooltip = document.getElementById('tooltip');
                     const isCurrentlyVisible = tooltip.classList.contains('show');
                     
+                    // 他のツールチップを閉じる
                     if (isCurrentlyVisible) {
                         hideTooltip();
                     } else {
-                        hideTooltip();
+                        hideTooltip(); // 他のツールチップを閉じてから表示
                         setTimeout(() => {
                             showTooltip(e, tasks);
-                            isTooltipFixed = true;
+                            isTooltipFixed = true; // クリックで表示したので固定
                         }, 50);
                     }
                 }
             });
 
+            // ダブルクリックでプルダウン表示
             cell.addEventListener('dblclick', (e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                hideTooltip();
+                hideTooltip(); // ツールチップを隠す
                 showCellDropdown(cell, worker, dateStr);
             });
 
+            // ホバー効果のみ（ツールチップは表示しない）
             cell.addEventListener('mouseenter', (e) => {
                 if (tasks.length > 0) {
                     cell.style.transform = 'scale(1.02)';
@@ -1822,39 +2288,53 @@
                 cell.style.transform = '';
                 cell.style.transition = '';
             });
+
+            // 手動で追加されたタスクの場合はドラッグ可能にする
+            const manualTask = tasks.find(task => task.isManualEntry);
+            if (manualTask) {
+                makeCellDraggable(cell, manualTask);
+            }
         }
 
-        // 空のセルのイベント設定
+        // 空のセルのイベント設定（ワンクリック方式）
         function setupEmptyCellEvents(cell, worker, dateStr) {
+            // シングルクリックは何もしない（タスクがないため）
             cell.addEventListener('click', (e) => {
                 e.stopPropagation();
                 e.preventDefault();
+                // 空セルなので何もしない
             });
             
+            // ダブルクリックでプルダウン表示
             cell.addEventListener('dblclick', (e) => {
                 e.stopPropagation();
                 showCellDropdown(cell, worker, dateStr);
             });
         }
 
-        // ツールチップ表示
+        // ツールチップ表示（修正版）
         function showTooltip(event, tasks) {
             const tooltip = document.getElementById('tooltip');
             
             if (tasks.length === 0) return;
             
+            // 既存のイベントリスナーを削除
             const newTooltip = tooltip.cloneNode(false);
             tooltip.parentNode.replaceChild(newTooltip, tooltip);
             
+            // ヘッダー作成
             let tooltipContent = `<div class="tooltip-header">📋 作業予定 (${tasks.length}件)</div>`;
             
+            // 各タスクの情報を表示（タイトル全量表示）
             tasks.forEach((task, index) => {
                 const timeInfo = task.originalTimeString || '';
                 const redmineUrl = task.redmineUrl || '';
                 const assignStatus = task.assignStatus || task.tsetStatus || '';
                 
+                // タスクタイトルは短縮せずに全量表示
                 const fullTitle = task.title || 'タイトルなし';
                 
+                // 作業完了またはキャンセルチケットかどうかを判定
                 const isCompletedOrCancelled = 
                     task.tsetStatus === '22.作業完全終了' || 
                     task.assignStatus === '対応完了' ||
@@ -1863,6 +2343,9 @@
                     task.assignStatus === '中止' ||
                     task.assignStatus.includes('キャンセル');
                 
+                console.log(`Task ${task.title}: tsetStatus="${task.tsetStatus}", assignStatus="${task.assignStatus}", isCompletedOrCancelled=${isCompletedOrCancelled}`);
+                
+                // 作業完了・キャンセルの場合は背景を薄いグレーに変更
                 const taskBackgroundColor = isCompletedOrCancelled ? 'rgba(128, 128, 128, 0.3)' : 'rgba(255, 255, 255, 0.6)';
                 
                 tooltipContent += `
@@ -1876,6 +2359,7 @@
                 `;
             });
             
+            // クリック案内を追加（簡潔版）
             const hasRedmineLinks = tasks.some(task => task.redmineUrl);
             if (hasRedmineLinks) {
                 tooltipContent += '<div class="tooltip-click-hint">🔗 クリックでRedmine表示</div>';
@@ -1886,15 +2370,19 @@
             finalTooltip.classList.add('show');
             isTooltipFixed = false;
             
+            // ツールチップの位置調整
             updateTooltipPosition(event);
             
+            // ツールチップ自体にマウスイベントを追加（改良版）
             finalTooltip.addEventListener('mouseenter', (e) => {
+                console.log('Mouse entered tooltip');
                 isTooltipFixed = true;
                 clearTimeout(tooltipTimeout);
                 e.stopPropagation();
             });
             
             finalTooltip.addEventListener('mouseleave', (e) => {
+                console.log('Mouse left tooltip');
                 isTooltipFixed = false;
                 tooltipTimeout = setTimeout(() => {
                     hideTooltip();
@@ -1902,11 +2390,13 @@
                 e.stopPropagation();
             });
             
+            // 各タスクにクリックイベントを追加
             finalTooltip.querySelectorAll('.tooltip-task').forEach((taskElement, index) => {
                 const task = tasks[index];
                 if (task && task.redmineUrl) {
                     taskElement.style.cursor = 'pointer';
                     taskElement.addEventListener('click', (e) => {
+                        console.log(`Clicking task: ${task.title}, URL: ${task.redmineUrl}`);
                         e.stopPropagation();
                         e.preventDefault();
                         window.open(task.redmineUrl, '_blank');
@@ -1917,7 +2407,7 @@
             });
         }
 
-        // ツールチップの位置を更新
+        // ツールチップの位置を更新（改良版）
         function updateTooltipPosition(event) {
             const tooltip = document.getElementById('tooltip');
             if (!tooltip.classList.contains('show')) return;
@@ -1926,9 +2416,11 @@
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
             const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
             
+            // デフォルトの位置（セルの右側）
             let left = rect.right + 15;
             let top = rect.top + scrollTop;
             
+            // ツールチップのサイズを取得するために一時的に表示
             tooltip.style.left = `${left}px`;
             tooltip.style.top = `${top}px`;
             tooltip.style.visibility = 'hidden';
@@ -1938,32 +2430,44 @@
                 const tooltipRect = tooltip.getBoundingClientRect();
                 const viewportHeight = window.innerHeight;
                 const viewportWidth = window.innerWidth;
-                const margin = 20;
+                const margin = 20; // 画面端からのマージン
                 
+                // 表示を元に戻す
                 tooltip.style.visibility = 'visible';
                 tooltip.style.display = '';
                 
+                // 右端チェック：ツールチップが画面右端からはみ出る場合
                 if (left + tooltipRect.width > viewportWidth - margin) {
+                    // セルの左側に表示を試す
                     left = rect.left + scrollLeft - tooltipRect.width - 15;
                     
+                    // 左側に表示してもはみ出る場合
                     if (left < margin) {
+                        // セルの上に表示
                         left = Math.max(margin, rect.left + scrollLeft);
                         top = rect.top + scrollTop - tooltipRect.height - 15;
                         
+                        // 上に表示しても画面上端からはみ出る場合
                         if (top < scrollTop + margin) {
+                            // セルの下に表示
                             top = rect.bottom + scrollTop + 15;
                         }
                         
+                        // 左右中央寄せで画面幅に収める
                         if (left + tooltipRect.width > viewportWidth - margin) {
                             left = Math.max(margin, viewportWidth - tooltipRect.width - margin);
                         }
                     }
                 }
                 
+                // 下端チェック：ツールチップが画面下端からはみ出る場合
                 if (top + tooltipRect.height > viewportHeight + scrollTop - margin) {
+                    // セルの上に表示
                     top = rect.top + scrollTop - tooltipRect.height - 15;
                     
+                    // 上に表示しても画面上端からはみ出る場合
                     if (top < scrollTop + margin) {
+                        // 画面内に収まる最適な位置に調整
                         top = Math.max(scrollTop + margin, Math.min(
                             rect.top + scrollTop,
                             viewportHeight + scrollTop - tooltipRect.height - margin
@@ -1971,18 +2475,31 @@
                     }
                 }
                 
+                // 最終的な位置設定
                 tooltip.style.left = `${Math.max(margin, left)}px`;
                 tooltip.style.top = `${Math.max(scrollTop + margin, top)}px`;
+                
+                console.log(`Tooltip positioned at: left=${left}, top=${top}, viewport=${viewportWidth}x${viewportHeight}, tooltip=${tooltipRect.width}x${tooltipRect.height}`);
             }, 10);
         }
 
-        // ツールチップ非表示
+        // Redmineチケットを開く関数
+        function openRedmineTicket(url) {
+            if (url && url.trim() !== '') {
+                window.open(url, '_blank');
+                hideTooltip(); // ツールチップを非表示
+            }
+        }
+
+        // ツールチップ非表示（改良版）
         function hideTooltip() {
             const tooltip = document.getElementById('tooltip');
             if (tooltip) {
+                console.log('Hiding tooltip');
                 tooltip.classList.remove('show');
                 isTooltipFixed = false;
                 clearTimeout(tooltipTimeout);
+                // ツールチップ内のクリックイベントをクリア
                 setTimeout(() => {
                     if (!tooltip.classList.contains('show')) {
                         tooltip.innerHTML = '';
@@ -1991,11 +2508,12 @@
             }
         }
 
-        // 統計更新
+        // 統計更新（月集計のみ）
         function updateStats() {
             const monthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
             const tasks = taskData[monthKey] || [];
             
+            // 月集計
             const totalTasks = tasks.length;
             const assignedTasks = tasks.filter(t => 
                 t.tsetStatus === '03.本アサイン' || 
@@ -2040,16 +2558,20 @@
         async function loadDataFromCSV() {
             const possibleFileNames = getCSVFileNames();
             
+            console.log('CSV読み込み開始 - 検索順序:', possibleFileNames);
             showNotification('CSVファイルを検索中...', 'info');
             
             for (const fileName of possibleFileNames) {
                 try {
+                    console.log(`ファイル検索中: ${fileName}`);
                     const csvUrl = `https://raw.githubusercontent.com/koshi7778/schedule-dashboard/main/${fileName}`;
                     
                     const response = await fetch(csvUrl);
+                    console.log(`${fileName} のレスポンス:`, response.status, response.ok);
                     
                     if (response.ok) {
                         const csvText = await response.text();
+                        console.log(`${fileName} を読み込み成功 - データサイズ:`, csvText.length);
                         
                         const result = Papa.parse(csvText, {
                             header: true,
@@ -2057,7 +2579,13 @@
                             encoding: 'UTF-8'
                         });
                         
+                        if (result.errors.length > 0) {
+                            console.log(`${fileName} のパースエラー:`, result.errors);
+                        }
+                        
                         const tickets = transformCSVToTickets(result.data);
+                        console.log(`${fileName} から変換されたチケット数:`, tickets.length);
+                        
                         const monthlyData = groupTicketsByMonth(tickets);
                         
                         taskData = monthlyData;
@@ -2066,7 +2594,11 @@
                         updateDailySchedule();
                         
                         showNotification(`${fileName} から ${tickets.length}件のチケットを読み込みました`, 'success');
+                        console.log(`最終的に使用されたファイル: ${fileName}`);
                         return;
+                        
+                    } else {
+                        console.log(`${fileName} が見つかりません (${response.status})`);
                     }
                     
                 } catch (error) {
@@ -2074,10 +2606,11 @@
                 }
             }
             
+            console.log('利用可能なCSVファイルが見つかりませんでした');
             showNotification('CSVファイルが見つかりません。', 'error');
         }
 
-        // CSV変換関数
+        // CSV変換関数（修正版）
         function transformCSVToTickets(csvData) {
             const filteredData = csvData.filter(row => {
                 const assignStatus = row['TSETアサイン状態'] || '';
@@ -2094,11 +2627,13 @@
                 return validAssignStatus || validTsetStatus;
             });
             
+            // 作業日ごとにタスクを分割
             const allTickets = [];
             
             filteredData.forEach(row => {
                 const assignedWorker = mapWorkerName(row['TSET作業者']);
                 
+                // 作業日①〜⑤をチェック
                 for (let i = 1; i <= 5; i++) {
                     const dateField = `作業日${['①', '②', '③', '④', '⑤'][i-1]}`;
                     const timeField = `作業日${['①', '②', '③', '④', '⑤'][i-1]}_時間`;
@@ -2107,18 +2642,20 @@
                     const workTimeStr = row[timeField] || '';
                     const workHours = parseFloat(workTimeStr.replace(/[^\d.]/g, '')) || 0;
                     
+                    console.log(`チケット ${row['Issue ID']}: 作業日${i} = ${workDate}, 時間 = ${workHours}, 作業者 = ${assignedWorker}`);
+                    
                     if (workDate && assignedWorker) {
                         const ticket = {
                             id: `RDM-${row['Issue ID']}-${i}`,
                             title: row['Subject'] || 'タイトルなし',
                             worker: assignedWorker,
                             date: workDate,
-                            estimatedHours: workHours > 0 ? workHours : 4,
+                            estimatedHours: workHours > 0 ? workHours : 4, // 時間が0の場合はデフォルト4時間
                             description: `顧客: ${row['お客様名'] || 'なし'}\nリモート: ${row['リモート有無'] || 'なし'}`,
                             redmineUrl: row['URL'] || '',
                             customerName: row['お客様名'] || '',
                             remoteFlag: row['リモート有無'] || '',
-                            projectName: row['プロジェクト'] || '',
+                            projectName: row['プロジェクト'] || '', // プロジェクト項目を追加
                             tsetStatus: row['TSETステータス'] || '',
                             assignStatus: row['TSETアサイン状態'] || '',
                             createdDate: row['作成日'] || '',
@@ -2126,8 +2663,37 @@
                             startDate: row['作業開始可能日'] || '',
                             dueDate: row['作業完了期限日'] || '',
                             taskType: determineTaskType(row['TSETアサイン状態'], row['Subject']),
-                            workTimeSlot: parseWorkTimeSlot(workTimeStr),
-                            originalTimeString: workTimeStr
+                            workTimeSlot: parseWorkTimeSlot(workTimeStr), // 時間文字列をそのまま渡す
+                            originalTimeString: workTimeStr // デバッグ用に元の文字列も保持
+                        };
+                        
+                        allTickets.push(ticket);
+                        console.log(`追加されたチケット:`, ticket);
+                    }
+                }
+                
+                // 作業日が設定されていない場合のフォールバック
+                if (!hasAnyWorkDate(row)) {
+                    const fallbackDate = getFirstValidWorkDate(row);
+                    if (fallbackDate && assignedWorker) {
+                        const ticket = {
+                            id: `RDM-${row['Issue ID']}`,
+                            title: row['Subject'] || 'タイトルなし',
+                            worker: assignedWorker,
+                            date: fallbackDate,
+                            estimatedHours: calculateEstimatedHours(row),
+                            description: `顧客: ${row['お客様名'] || 'なし'}\nリモート: ${row['リモート有無'] || 'なし'}`,
+                            redmineUrl: row['URL'] || '',
+                            customerName: row['お客様名'] || '',
+                            remoteFlag: row['リモート有無'] || '',
+                            projectName: row['プロジェクト'] || '', // プロジェクト項目を追加
+                            tsetStatus: row['TSETステータス'] || '',
+                            assignStatus: row['TSETアサイン状態'] || '',
+                            createdDate: row['作成日'] || '',
+                            assignHopeDate: row['アサイン希望日'] || '',
+                            startDate: row['作業開始可能日'] || '',
+                            dueDate: row['作業完了期限日'] || '',
+                            taskType: determineTaskType(row['TSETアサイン状態'], row['Subject'])
                         };
                         
                         allTickets.push(ticket);
@@ -2135,6 +2701,7 @@
                 }
             });
             
+            console.log(`変換完了: 総チケット数 = ${allTickets.length}`);
             return allTickets.filter(ticket => 
                 ticket.id !== 'RDM-' && 
                 ticket.title !== 'タイトルなし' && 
@@ -2143,9 +2710,11 @@
             );
         }
 
+        // 作業時間から時間帯を解析
         function parseWorkTimeSlot(timeStr) {
             if (!timeStr) return null;
             
+            // "16-18"のような形式を探す
             const timeMatch = timeStr.match(/(\d+)-(\d+)/);
             if (timeMatch) {
                 return {
@@ -2157,7 +2726,23 @@
             return null;
         }
 
+        function hasAnyWorkDate(row) {
+            for (let i = 1; i <= 5; i++) {
+                const dateField = `作業日${['①', '②', '③', '④', '⑤'][i-1]}`;
+                const timeField = `作業日${['①', '②', '③', '④', '⑤'][i-1]}_時間`;
+                
+                const workDate = row[dateField];
+                const workHours = parseFloat(row[timeField]) || 0;
+                
+                if (workDate && workDate.trim() !== '' && workDate !== 'null' && workHours > 0) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         function determineTaskType(assignStatus, subject) {
+            // CSVから読み込まれるタスクは全て work タイプとする
             return 'work';
         }
 
@@ -2178,6 +2763,20 @@
             return matchedWorker || cleanName;
         }
 
+        function getFirstValidWorkDate(row) {
+            for (let i = 1; i <= 5; i++) {
+                const dateField = `作業日${['①', '②', '③', '④', '⑤'][i-1]}`;
+                const date = row[dateField];
+                if (date && date.trim() !== '' && date !== 'null') {
+                    return formatDate(date);
+                }
+            }
+            
+            return formatDate(row['アサイン希望日']) || 
+                   formatDate(row['作業開始可能日']) || 
+                   '';
+        }
+
         function formatDate(dateStr) {
             if (!dateStr || dateStr.trim() === '' || dateStr === 'null') {
                 return '';
@@ -2192,6 +2791,24 @@
             } catch (error) {
                 return '';
             }
+        }
+
+        function calculateEstimatedHours(row) {
+            let totalHours = 0;
+            
+            for (let i = 1; i <= 5; i++) {
+                const timeField = `作業日${['①', '②', '③', '④', '⑤'][i-1]}_時間`;
+                const timeStr = row[timeField];
+                
+                if (timeStr && timeStr.trim() !== '' && timeStr !== 'null') {
+                    const hours = parseFloat(timeStr.replace(/[^\d.]/g, ''));
+                    if (!isNaN(hours)) {
+                        totalHours += hours;
+                    }
+                }
+            }
+            
+            return totalHours || 4;
         }
 
         function groupTicketsByMonth(tickets) {
@@ -2212,23 +2829,29 @@
 
         // 初期化
         document.addEventListener('DOMContentLoaded', function() {
+            // 今日の月を初期表示に設定
             updateMonthDisplay();
             generateTable();
             
+            // 作業者選択プルダウンを初期化（日別スケジュール用）
             initializeWorkerSelector();
+            // 日付選択プルダウンを初期化
             initializeDateSelector();
             updateDailySchedule();
             
+            // ツールチップ外クリックで閉じる機能
             document.addEventListener('click', (e) => {
                 const tooltip = document.getElementById('tooltip');
                 const isClickInsideTooltip = tooltip.contains(e.target);
                 const isClickOnCell = e.target.closest('.task-cell');
                 
+                // ツールチップ外をクリックした場合（セル以外）
                 if (!isClickInsideTooltip && !isClickOnCell && tooltip.classList.contains('show')) {
                     hideTooltip();
                 }
             });
             
+            // 1秒後にCSV自動読み込み
             setTimeout(() => {
                 loadDataFromCSV();
             }, 1000);
